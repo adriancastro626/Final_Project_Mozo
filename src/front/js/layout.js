@@ -10,6 +10,8 @@ import { Retrive1 } from "./pages/retrive1.js";
 import { Retrive2 } from "./pages/retrive2.js";
 import { Register } from "./pages/register.js";
 import { Register1 } from "./pages/register1.js";
+import { ManageOrder } from "./pages/manageorder.js";
+import { Payment } from "./pages/payment";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -45,11 +47,17 @@ const Layout = () => {
 						<Route exact path="/">
 							<Home />
 						</Route>
+                        <Route exact path="/manageorder">
+							<ManageOrder />
+						</Route>
 						<Route exact path="/demo">
 							<Demo />
 						</Route>
 						<Route exact path="/single/:theid">
 							<Single />
+						</Route>
+                        <Route exact path="/payment">
+							<Payment />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
