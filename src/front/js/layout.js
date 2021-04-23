@@ -14,7 +14,7 @@ import { ManageOrder } from "./pages/manageorder.js";
 import { Payment } from "./pages/payment";
 import injectContext from "./store/appContext";
 
-import { Navbar } from "./component/navbar";
+import { NavbarMenu } from "./component/navbar";
 import { Footer } from "./component/footer";
 
 //create your first component
@@ -27,7 +27,7 @@ const Layout = () => {
 		<div className="d-flex flex-column h-100">
 			<BrowserRouter basename={basename}>
 				<ScrollToTop>
-					<Navbar />
+					<NavbarMenu />
 					<Switch>
 						<Route exact path="/login">
 							<Login />
