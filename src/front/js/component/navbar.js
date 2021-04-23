@@ -1,22 +1,42 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Navbar, Nav } from "react-bootstrap";
 
-export const Navbar = () => {
+export const NavbarMenu = () => {
 	return (
-		<nav className="navbar navbar-light bg-light mb-3">
+		<Navbar bg="light" expand="lg">
+			<Navbar.Brand>
+				<img
+					src="/MozoHome.png"
+					width="60"
+					height="50"
+					className="d-inline-block align-top"
+					alt="React Bootstrap logo"
+				/>
+			</Navbar.Brand>
 			<Link to="/">
-				<span className="navbar-brand mb-0 h1">React Boilerplate</span>
+				<span className="navbar-brand mb-0 h1">MOZO App</span>
 			</Link>
-			<div className="ml-auto">
-				<Link to="/demo">
-					<button className="btn btn-primary">Check the Context in action</button>
-				</Link>
-			</div>
-			<div className="ml-auto">
-				<Link to="/payment">
-					<button className="btn btn-primary">Pagar ahora</button>
-				</Link>
-			</div>
-		</nav>
+			<Navbar.Toggle aria-controls="basic-navbar-nav" />
+			<Navbar.Collapse id="basic-navbar-nav">
+				<Nav className="mr-auto">
+					<Nav.Link>
+						<Link to="/manageorder">
+							<span className="navbar-brand mb-0 h1">&Oacute;rdenes</span>
+						</Link>
+					</Nav.Link>
+					<Nav.Link>
+						<Link to="/">
+							<span className="navbar-brand mb-0 h1">Men&uacute;</span>
+						</Link>
+					</Nav.Link>
+					<Nav.Link>
+						<Link to="/">
+							<span className="navbar-brand mb-0 h1">Usuarios</span>
+						</Link>
+					</Nav.Link>
+				</Nav>
+			</Navbar.Collapse>
+		</Navbar>
 	);
 };

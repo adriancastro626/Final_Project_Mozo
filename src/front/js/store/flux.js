@@ -18,12 +18,60 @@ const getState = ({ getStore, getActions, setStore }) => {
 				{
 					OrderID: 101,
 					Quantity: 5,
-					State: "En Preparacion"
+					State: "En Preparacion",
+					Notes: "Sin lechuga"
+				},
+				{
+					OrderID: 103,
+					Quantity: 2,
+					State: "Nueva",
+					Notes: "Sin repollo"
+				},
+				{
+					OrderID: 98,
+					Quantity: 1,
+					State: "Esperando recolecta",
+					Notes: "Sin salsas"
 				},
 				{
 					OrderID: 102,
 					Quantity: 3,
-					State: "Cerrada"
+					State: "Cerrada",
+					Notes: "Sin queso"
+				},
+				{
+					OrderID: 99,
+					Quantity: 2,
+					State: "Cancelada",
+					Notes: "Sin lechuga"
+				}
+			],
+			detailorders: [
+				{
+					OrderID: 101,
+					Products: [
+						{
+							Quantity: 2,
+							Product: "Hamburguesa clasica"
+						},
+						{
+							Quantity: 1,
+							Product: "Taco"
+						}
+					]
+				},
+				{
+					OrderID: 103,
+					Products: [
+						{
+							Quantity: 2,
+							Product: "Hamburguesa doble"
+						},
+						{
+							Quantity: 1,
+							Product: "Coca Cola"
+						}
+					]
 				}
 			]
 		},
