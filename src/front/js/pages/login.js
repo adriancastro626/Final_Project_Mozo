@@ -13,6 +13,13 @@ export const Login = () => {
 	const [password, setPassword] = useState("");
 
 	const handleClick = () => {
+
+    const opts = {
+        method: 'POST',
+        body: JSON.stringify({
+            
+        })
+    }
 		fetch("https://3000-tan-stork-bi7g3nze.ws-us03.gitpod.io/login");
 	};
 
