@@ -12,7 +12,7 @@ export const Login = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const token = sessionStorage.getItem("token");
-
+	console.log("This is your token", token);
 	const handleClick = () => {
 		const opts = {
 			method: "POST",
@@ -24,13 +24,14 @@ export const Login = () => {
 				password: password
 			})
 		};
-		fetch("https://3001-turquoise-alpaca-fdgfaj66.ws-us03.gitpod.io/api/token", opts)
+		fetch("https://3001-green-crayfish-xf5skpgc.ws-us03.gitpod.io/api/token", opts)
 			.then(resp => {
 				if (resp.status === 200) return resp.json();
 				else alert("Hay un error");
 			})
 			.then(data => {
-				sessionStorage.setItem(token, data.access_token);
+				console.log("This come from the backend", data);
+				sessionStorage.setItem("token", data.access_token);
 			})
 			.catch(error => {
 				console.error("Hubo un Error", error);
@@ -40,7 +41,7 @@ export const Login = () => {
 	return (
 		<Container>
 			{token && token != "" && token != undefined ? (
-				"Usted esta en linea" + token
+				"Usted esta loggeado con este token" + token
 			) : (
 				<Row className="justify-content-center pt-5 mt-5 mr-1">
 					<Col className="col-md-4 formulary">
@@ -92,8 +93,10 @@ export const Login = () => {
 								<Button className="btn btn-block signin" onClick={handleClick}>
 									Ingresar
 								</Button>
+
 								{/* </Link> */}
 							</FormGroup>
+
 							{/* <FormGroup className="mx-sm-4 pb-3 text-center">
 							<Link to="/register">
 								<Button variant="outline-primary" onClick={handleClick}>
