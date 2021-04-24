@@ -15,12 +15,15 @@ export const Login = () => {
 	const handleClick = () => {
 		const opts = {
 			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
 			body: JSON.stringify({
 				username: username,
 				password: password
 			})
 		};
-		fetch("https://3000-aqua-galliform-l2ruavcp.ws-us03.gitpod.io/api/login", opts)
+		fetch("https://3001-turquoise-alpaca-fdgfaj66.ws-us03.gitpod.io/api/token", opts)
 			.then(resp => {
 				if (resp.status === 200) return resp.json();
 				else alert("Hay un error");
@@ -80,15 +83,11 @@ export const Login = () => {
 							</Link>
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3">
-							<Link to="/">
-								<Button
-									className="btn btn-block signin"
-									onClick={() => {
-										actions.loginValidation(username, password);
-									}}>
-									Ingresar
-								</Button>
-							</Link>
+							{/* <Link to="/"> */}
+							<Button className="btn btn-block signin" onClick={handleClick}>
+								Ingresar
+							</Button>
+							{/* </Link> */}
 						</FormGroup>
 						{/* <FormGroup className="mx-sm-4 pb-3 text-center">
 							<Link to="/register">
