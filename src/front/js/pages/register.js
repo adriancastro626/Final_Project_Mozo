@@ -25,7 +25,7 @@ export const Register = () => {
 			<Row className="justify-content-center pt-5 mt-5 mr-1">
 				<Col className="col-md-4 formulary">
 					<FormGroup className="text-center pb-3">
-						<h1 className="text-dark">Registro</h1>
+						<h1 className="text-dark">Nuevo Usuario</h1>
 					</FormGroup>
 					<Form noValidate validated={validated} onClick={handleSubmit}>
 						<Form.Group controlId="formBasicUser">
@@ -56,6 +56,10 @@ export const Register = () => {
 								<BsFillLockFill /> Reconfirmar Contraseña
 							</Form.Label>
 							<Form.Control type="password" placeholder="Contraseña" required isInvalid />
+						</Form.Group>
+						<Form.Group id="formHorizontalRadios1" className="text-center">
+							<Form.Check type="radio" inline label="Administrador" />
+							<Form.Check type="radio" inline label="Colaborador" />
 						</Form.Group>
 						<Link to="/register1">
 							<FormGroup className="mx-sm-4 pb-3 text-center">

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { Container, Button, Image, Row, Form, FormGroup, Col, Card } from "react-bootstrap";
 import { BsPersonFill, BsFillLockFill } from "react-icons/bs";
@@ -13,14 +13,22 @@ export const Login = () => {
 	const [password, setPassword] = useState("");
 
 	const handleClick = () => {
-
-    const opts = {
-        method: 'POST',
-        body: JSON.stringify({
-            
-        })
-    }
-		fetch("https://3000-tan-stork-bi7g3nze.ws-us03.gitpod.io/login");
+		const opts = {
+			method: "POST",
+			body: JSON.stringify({
+				username: username,
+				password: password
+			})
+		};
+		fetch("https://3000-tan-stork-bi7g3nze.ws-us03.gitpod.io/login", opts)
+			.then(resp => {
+				if (resp.status === 200) return resp.json();
+				else alert("Hay un error");
+			})
+			.then()
+			.catch(error => {
+				console.error("Hubo un Error", error);
+			});
 	};
 
 	return (
@@ -82,13 +90,13 @@ export const Login = () => {
 								</Button>
 							</Link>
 						</FormGroup>
-						<FormGroup className="mx-sm-4 pb-3 text-center">
+						{/* <FormGroup className="mx-sm-4 pb-3 text-center">
 							<Link to="/register">
 								<Button variant="outline-primary" onClick={handleClick}>
 									Registrarse
 								</Button>{" "}
 							</Link>
-						</FormGroup>
+						</FormGroup> */}
 					</Form>
 				</Col>
 			</Row>
