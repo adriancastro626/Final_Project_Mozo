@@ -9,6 +9,19 @@ import "../../styles/demo.scss";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+
+	const handleClick = () => {
+
+    const opts = {
+        method: 'POST',
+        body: JSON.stringify({
+            
+        })
+    }
+		fetch("https://3000-tan-stork-bi7g3nze.ws-us03.gitpod.io/login");
+	};
 
 	return (
 		<Container>
@@ -37,7 +50,8 @@ export const Login = () => {
 								type="text"
 								className="form-control"
 								placeholder="Usuario"
-								onChange={e => setUser(e.target.value)}
+								value={username}
+								onChange={e => setUsername(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3">
@@ -48,7 +62,8 @@ export const Login = () => {
 								type="password"
 								className="form-control"
 								placeholder="Contraseña"
-								onChange={e => setPass(e.target.value)}
+								value={password}
+								onChange={e => setPassword(e.target.value)}
 							/>
 							<Link to="/retrive1">
 								<Button variant="link" size="sm">
@@ -69,7 +84,9 @@ export const Login = () => {
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3 text-center">
 							<Link to="/register">
-								<Button variant="outline-primary">Registrarse</Button>{" "}
+								<Button variant="outline-primary" onClick={handleClick}>
+									Registrarse
+								</Button>{" "}
 							</Link>
 						</FormGroup>
 					</Form>
