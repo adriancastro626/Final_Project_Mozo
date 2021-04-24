@@ -20,7 +20,7 @@ export const Login = () => {
 				password: password
 			})
 		};
-		fetch("https://3000-tan-stork-bi7g3nze.ws-us03.gitpod.io/login", opts)
+		fetch("https://3000-aqua-galliform-l2ruavcp.ws-us03.gitpod.io/api/login", opts)
 			.then(resp => {
 				if (resp.status === 200) return resp.json();
 				else alert("Hay un error");
@@ -84,7 +84,7 @@ export const Login = () => {
 								<Button
 									className="btn btn-block signin"
 									onClick={() => {
-										actions.loginValidation(user, pass);
+										actions.loginValidation(username, password);
 									}}>
 									Ingresar
 								</Button>
