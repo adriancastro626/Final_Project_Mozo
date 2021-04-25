@@ -80,12 +80,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
-            },
-            
-            syncTokenFromSessionStore: () => {
-                const token = sessionStorage.getItem("token");
-                if(token && toke != "" && toke != undefined) setStore({ token: data.access_token });
-            }
+			},
+
+			syncTokenFromSessionStore: () => {
+				const token = sessionStorage.getItem("token");
+				console.log("Application just loaded, sync");
+				if (token && token != "" && token != undefined) setStore({ token: token });
+			},
+
+			logout: () => {
+				sessionStorage.removeItem("token");
+				console.log("Login Out");
+				setStore({ token: null });
+			},
 
 			login: async (username, password) => {
 				const opts = {
@@ -116,8 +123,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getMessage: () => {
+				const store = getStore();
+				const opts = {
+					headers: {
+						Authorization: "Bearer " + store.token
+					}
+				};
 				// fetching data from the backend
-				fetch(process.env.BACKEND_URL + "/api/hello")
+				fetch("https://3001-green-crayfish-xf5skpgc.ws-us03.gitpod.io/api/hello", opts)
 					.then(resp => resp.json())
 					.then(data => setStore({ message: data.message }))
 					.catch(error => console.log("Error loading message from backend", error));

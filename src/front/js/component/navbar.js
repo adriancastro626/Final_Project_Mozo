@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, Button } from "react-bootstrap";
+import { Context } from "../store/appContext";
 
 export const NavbarMenu = () => {
+	const { store, actions } = useContext(Context);
 	return (
 		<Navbar bg="light" expand="lg">
 			<Navbar.Brand>
@@ -20,6 +22,17 @@ export const NavbarMenu = () => {
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />
 			<Navbar.Collapse id="basic-navbar-nav">
 				<Nav className="mr-auto">
+					<Nav.Link>
+						{!store.token ? (
+							<Link to="/login">
+								<Button className="navbar-brand mb-0 h1">Log In</Button>
+							</Link>
+						) : (
+							<Button onClick={() => actions.logout()} className="navbar-brand mb-0 h1">
+								Log out
+							</Button>
+						)}
+					</Nav.Link>
 					<Nav.Link>
 						<Link to="/manageorder">
 							<span className="navbar-brand mb-0 h1">&Oacute;rdenes</span>
