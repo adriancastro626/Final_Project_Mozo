@@ -23,3 +23,14 @@ def create_token():
 
     access_token = create_access_token(identity=username)
     return jsonify(access_token=access_token)
+
+@api.route("/hello", methods=["GET"])
+@jwt_required() #this make privete the information, just for admins
+def get_hello():
+
+    username = get_jwt_identity()
+    dictionary = {
+        "message": "hello world" + username
+    }
+    
+    return jsonify(dictionary)

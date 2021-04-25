@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			token: null,
 			message: null,
 			demo: [
 				{
@@ -81,9 +82,55 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
+			syncTokenFromSessionStore: () => {
+				const token = sessionStorage.getItem("token");
+				console.log("Application just loaded, sync");
+				if (token && token != "" && token != undefined) setStore({ token: token });
+			},
+
+			logout: () => {
+				sessionStorage.removeItem("token");
+				console.log("Login Out");
+				setStore({ token: null });
+			},
+
+			login: async (username, password) => {
+				const opts = {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						username: username,
+						password: password
+					})
+				};
+				try {
+					const resp = await fetch("https://3001-green-crayfish-xf5skpgc.ws-us03.gitpod.io/api/token", opts);
+					if (resp.status !== 200) {
+						alert("Hay un error");
+						return false;
+					}
+
+					const data = await resp.json();
+					console.log("This come from the backend", data);
+					sessionStorage.setItem("token", data.access_token);
+					setStore({ token: data.access_token });
+					return true;
+				} catch (error) {
+					console.error("There has been an error login in");
+				}
+			},
+
 			getMessage: () => {
+				const store = getStore();
+				const opts = {
+					headers: {
+						Authorization: "Bearer " + store.token
+					}
+				};
 				// fetching data from the backend
-				fetch(process.env.BACKEND_URL + "/api/hello")
+				fetch("https://3001-green-crayfish-xf5skpgc.ws-us03.gitpod.io/api/hello", opts)
 					.then(resp => resp.json())
 					.then(data => setStore({ message: data.message }))
 					.catch(error => console.log("Error loading message from backend", error));
