@@ -67,7 +67,7 @@ export const ManageOrder = () => {
 						<h1>Orden #{selection.OrderID}</h1>
 						{selection.State == "En Preparacion" ? (
 							<Badge value={selection.State} severity="info" />
-						) : selection.State == "Cerrada" ? (
+						) : selection.State == "Completada" ? (
 							<Badge value={selection.State} />
 						) : selection.State == "Cancelada" ? (
 							<Badge value={selection.State} severity="danger" />
@@ -91,16 +91,14 @@ export const ManageOrder = () => {
 				<h3>Notas de la orden</h3>
 				<InputTextarea rows={5} cols={120} value={selection.Notes} disabled />
 				{selection.State == "En Preparacion" ? (
-					<Row>
-						<Col className="text-center">
-							<Button label="Lista" className="p-button-primary" />
-							<Button label="Cancelar" className="p-button-danger" />
-						</Col>
-					</Row>
+					<Container className="d-flex justify-content-between w-100">
+						<Button label="Lista" className="p-button-primary" />
+						<Button label="Cancelar" className="p-button-danger" />
+					</Container>
 				) : selection.State == "Esperando recolecta" ? (
 					<Button label="Recolectado" className="p-button-success" />
 				) : selection.State == "Nueva" ? (
-					<Container>
+					<Container className="d-flex justify-content-between w-100">
 						<Button label="Preparar" className="p-button-info" />
 						<Button label="Cancelar" className="p-button-danger" />
 					</Container>
