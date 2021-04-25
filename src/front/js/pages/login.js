@@ -2,46 +2,27 @@ import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { Container, Button, Image, Row, Form, FormGroup, Col, Card } from "react-bootstrap";
 import { BsPersonFill, BsFillLockFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
-
 import "../../styles/demo.scss";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const history = useHistory();
 	const token = sessionStorage.getItem("token");
-	console.log("This is your token", token);
+	console.log("This is your token", store.token);
 	const handleClick = () => {
-		const opts = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				username: username,
-				password: password
-			})
-		};
-		fetch("https://3001-green-crayfish-xf5skpgc.ws-us03.gitpod.io/api/token", opts)
-			.then(resp => {
-				if (resp.status === 200) return resp.json();
-				else alert("Hay un error");
-			})
-			.then(data => {
-				console.log("This come from the backend", data);
-				sessionStorage.setItem("token", data.access_token);
-			})
-			.catch(error => {
-				console.error("Hubo un Error", error);
-			});
+		actions.login(username, password);
 	};
+
+	if (store.token && store.token != "" && store.token != undefined) history.push("/");
 
 	return (
 		<Container>
-			{token && token != "" && token != undefined ? (
-				"Usted esta loggeado con este token" + token
+			{store.token && store.token != "" && store.token != undefined ? (
+				"Usted esta loggeado con este token" + store.token
 			) : (
 				<Row className="justify-content-center pt-5 mt-5 mr-1">
 					<Col className="col-md-4 formulary">
