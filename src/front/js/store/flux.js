@@ -37,7 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				{
 					OrderID: 102,
 					Quantity: 3,
-					State: "Cerrada",
+					State: "Completada",
 					Notes: "Sin queso"
 				},
 				{
@@ -73,6 +73,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 							Product: "Coca Cola"
 						}
 					]
+				}
+			],
+			cart: [
+				{
+					Quantity: 2,
+					Product: "Hamburguesa doble",
+					Price: 2000,
+					Discount: 500
+				},
+				{
+					Quantity: 1,
+					Product: "Coca Cola",
+					Price: 1500,
+					Discount: 350
 				}
 			]
 		},

@@ -12,6 +12,7 @@ import { Register } from "./pages/register.js";
 import { Register1 } from "./pages/register1.js";
 import { ManageOrder } from "./pages/manageorder.js";
 import { Payment } from "./pages/payment";
+import { Cart } from "./pages/cart";
 import injectContext from "./store/appContext";
 
 import { NavbarMenu } from "./component/navbar";
@@ -58,6 +59,9 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/payment">
 							<Payment />
+						</Route>
+						<Route exact path="/cart">
+							<Cart />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
