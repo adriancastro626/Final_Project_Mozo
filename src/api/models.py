@@ -5,11 +5,21 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'user'
     UserID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(100), unique=True, nullable=False)
-    Password = db.Column(db.String(30), nullable=False)
-    Email = db.Column(db.String(180), unique=True, nullable=False)
+    UserName = db.Column(db.String(100), unique=True, nullable=False)
+    Email = db.Column(db.String(130), unique=True, nullable=False)
+    Password = db.Column(db.String(180), nullable=False)
     TypeID = db.Column(db.Integer, db.ForeignKey("usertypes.TypeID"), nullable=False)
     usertypes = db.relationship('UserTypes')  
+
+    def __ref__(self):
+        return '<User %r>' % self.username
+    
+    def serialize(self):
+        return {
+            "UserID": self.UserID,
+            "UserName": self.UserName,
+            "Email": self.Email            
+        }
 
 class UserTypes(db.Model):
     __tablename__ = 'usertypes'

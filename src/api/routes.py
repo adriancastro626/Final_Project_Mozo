@@ -34,3 +34,12 @@ def get_hello():
     }
     
     return jsonify(dictionary)
+
+@api.route("/user", methods=["GET"])
+def createUser():
+
+    response_body = {
+        "msg": "Hello World"
+    }
+
+    return jsonify(response_body), 200
