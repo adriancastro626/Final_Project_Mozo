@@ -32,11 +32,8 @@ export const ManageOrder = () => {
 	const [selectiondetail, setSelectionDetail] = useState("");
 
 	useEffect(() => {
-		// actions.getAllOrders(value);
-		//actions.getToken();
-		//if (!store.login) {
-		//	history.push("/");
-		//}
+		actions.getAllOrders();
+		console.log("entre a orders");
 	}, []);
 
 	const goBack = () => {

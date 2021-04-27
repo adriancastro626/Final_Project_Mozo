@@ -52,6 +52,20 @@ class Order(db.Model):
     ClientName = db.Column(db.String(100), nullable=True)
     ordertype = db.relationship('OrderType')  
 
+    def serialize(self):
+        return {
+            "OrderID": self.OrderID,
+            "OrderTypeID": self.OrderTypeID,
+            "Notes": self.Notes,
+            "State": self.State
+        }
+    
+    def getAllOrders():
+        all_orders = Order.query.all()
+        all_orders = list(map(lambda x: x.serialize(), all_orders))
+        return all_orders
+
+
 class OrderDetail(db.Model):
     __tablename__ = 'orderdetail'
     OrderDetailID = db.Column(db.Integer, primary_key=True)
