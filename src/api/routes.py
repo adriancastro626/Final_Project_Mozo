@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Order, OrderType
+from api.models import db, User, Order, OrderType,OrderDetail
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -88,3 +88,27 @@ def deleteUser(user_id):
 #@jwt_required()
 def get_AllOrders():      
     return jsonify(Order.getAllOrders()), 200
+<<<<<<< HEAD
+
+@api.route('/orderdetail/<int:id>', methods=['GET'])
+def get_OrderDetail(id):  
+    return jsonify(OrderDetail.getOrderDetail(id)), 200
+
+@api.route('/changeorderstate/<int:id>', methods=['POST'])
+#@jwt_required()
+def changeOrderState(id):
+    values = request.json
+    print("Request", values)    
+    orderid = values["OrderID"]
+    state = values["State"]
+    findOrder = Order.query.filter_by(OrderID= orderid).first()
+    findOrder.State = state
+    db.session.commit()
+    response_body = {
+        "status": "Ok"
+    }
+    status_code = 200 
+    
+    return jsonify(response_body),200
+=======
+>>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4

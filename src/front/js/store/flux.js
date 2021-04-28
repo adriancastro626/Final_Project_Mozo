@@ -3,7 +3,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: null,
 			message: null,
+<<<<<<< HEAD
+			baseURL: "https://3001-brown-raccoon-x4d08dlc.ws-us03.gitpod.io/api",
+=======
 			baseURL: "https://3001-plum-wombat-xh4fhyx8.ws-us03.gitpod.io/api",
+>>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4
 			orders: [
 				// {
 				// 	OrderID: 101,
@@ -13,32 +17,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// }
 			],
 			detailorders: [
-				{
-					OrderID: 101,
-					Products: [
-						{
-							Quantity: 2,
-							Product: "Hamburguesa clasica"
-						},
-						{
-							Quantity: 1,
-							Product: "Taco"
-						}
-					]
-				},
-				{
-					OrderID: 103,
-					Products: [
-						{
-							Quantity: 2,
-							Product: "Hamburguesa doble"
-						},
-						{
-							Quantity: 1,
-							Product: "Coca Cola"
-						}
-					]
-				}
+				// {
+				// 	OrderID: 1,
+				// 	Products: [
+				// 		{
+				// 			Quantity: 2,
+				// 			Product: "Hamburguesa clasica"
+				// 		},
+				// 		{
+				// 			Quantity: 1,
+				// 			Product: "Taco"
+				// 		}
+				// 	]
+				// },
 			],
 			cart: [
 				{
@@ -131,6 +122,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => {
 						console.log("respuesta", data);
 						setStore({ orders: data });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			getOrderDetail: orderid => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre al get order details ", orderid);
+				fetch(`${store.baseURL}/orderdetail/${orderid}`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					}
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						console.log("respuesta", data);
+						setStore({ detailorders: data });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			changeOrderState: (orderid, newstate) => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre al change order state ");
+				fetch(`${store.baseURL}/changeorderstate/${orderid}`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					},
+					body: JSON.stringify({ OrderID: orderid, State: newstate })
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						console.log("respuesta", data);
+						setStore({ detailorders: data });
 					})
 
 					.catch(err => {
