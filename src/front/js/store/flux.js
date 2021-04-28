@@ -3,49 +3,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: null,
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			],
+			baseURL: "https://3001-plum-wombat-xh4fhyx8.ws-us03.gitpod.io/api",
 			orders: [
-				{
-					OrderID: 101,
-					Quantity: 5,
-					State: "En Preparacion",
-					Notes: "Sin lechuga"
-				},
-				{
-					OrderID: 103,
-					Quantity: 2,
-					State: "Nueva",
-					Notes: "Sin repollo"
-				},
-				{
-					OrderID: 98,
-					Quantity: 1,
-					State: "Esperando recolecta",
-					Notes: "Sin salsas"
-				},
-				{
-					OrderID: 102,
-					Quantity: 3,
-					State: "Completada",
-					Notes: "Sin queso"
-				},
-				{
-					OrderID: 99,
-					Quantity: 2,
-					State: "Cancelada",
-					Notes: "Sin lechuga"
-				}
+				// {
+				// 	OrderID: 101,
+				// 	Quantity: 5,
+				// 	State: "En Preparacion",
+				// 	Notes: "Sin lechuga"
+				// }
 			],
 			detailorders: [
 				{
@@ -120,10 +85,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 				};
 				try {
-					const resp = await fetch(
-						"https://3001-turquoise-crocodile-vp9cmk5h.ws-us03.gitpod.io/api/token",
-						opts
-					);
+					const resp = await fetch("https://3001-plum-wombat-xh4fhyx8.ws-us03.gitpod.io/api/token", opts);
 					if (resp.status !== 200) {
 						alert("Hay un error");
 						return false;
@@ -152,19 +114,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => setStore({ message: data.message }))
 					.catch(error => console.log("Error loading message from backend", error));
 			},
-			changeColor: (index, color) => {
-				//get the store
+			getAllOrders: () => {
 				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre al get orders");
+				fetch(`${store.baseURL}/manageorder`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					}
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						console.log("respuesta", data);
+						setStore({ orders: data });
+					})
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
+					.catch(err => {
+						console.log("error", err);
+					});
 			}
 		}
 	};

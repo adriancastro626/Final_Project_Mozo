@@ -8,11 +8,11 @@ class User(db.Model):
     UserName = db.Column(db.String(100), unique=True, nullable=False)
     Email = db.Column(db.String(130), unique=True, nullable=False)
     Password = db.Column(db.String(180), nullable=False)
-    TypeID = db.Column(db.Integer, db.ForeignKey("usertypes.TypeID"), nullable=False)
-    usertypes = db.relationship('UserTypes')  
+    TypeID = db.Column(db.String, db.ForeignKey("usertypes.TypeID"), nullable=True)
+    # usertypes = db.relationship('UserTypes')  
 
     def __ref__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.UserName
     
     def serialize(self):
         return {
@@ -24,7 +24,16 @@ class User(db.Model):
 class UserTypes(db.Model):
     __tablename__ = 'usertypes'
     TypeID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(10), unique=True, nullable=False)
+    Position = db.Column(db.String(10), unique=True, nullable=False)
+    tipoUsuario = db.relationship('User', lazy=True)
+
+    def __ref__(self):
+        return '<UserTypes %r>' % self.Position
+    
+    def serialize(self):
+        return {
+            "Position": self.Position                      
+        }
 
 class OrderType(db.Model):
     __tablename__ = 'ordertype'
