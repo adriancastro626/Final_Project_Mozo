@@ -35,6 +35,55 @@ def get_hello():
     
     return jsonify(dictionary)
 
+@api.route("/user", methods=["GET"])
+def allUsers():
+
+    users = User.query.all()
+    all_Users = list(map(lambda x: x.serialize(), users))
+
+    return jsonify(all_Users), 200
+
+@api.route("/user", methods=["POST"])
+def createUsers():
+
+    request_body_user = request.get_json()
+
+    newUser = User(UserName=request_body_user["Username"], Email=request_body_user["Email"], Password=request_body_user["Password"])
+    db.session.add(newUser)
+    db.session.commit()
+        
+    return jsonify(request_body_user), 200
+
+@api.route("/user/<int:user_id>", methods=["PUT"])
+def editUser(user_id):
+
+    request_body_user = request.get_json()
+
+    updateUser = User.query.get(user_id)
+    if updateUser is None:
+        raise APIException('User not found', status_code=404)
+
+    if "Username" in request_body_user:
+        updateUser.Username = request_body_user["Username"]
+    if "Email" in request_body_user:
+        updateUser.Email = request_body_user["Email"]
+    if "Password" in request_body_user:
+        updateUser.Password = request_body_user["Password"]    
+    db.session.commit()
+        
+    return jsonify(request_body_user), 200
+
+@api.route("/user/<int:user_id>", methods=["DELETE"])
+def deleteUser(user_id):
+
+    delUser = User.query.get(user_id)
+    if delUser is None:
+        raise APIException('Usuario no encontrado', status_code=404)
+    db.session.delete(delUser)
+    db.session.commit()
+
+    return jsonify("Usuario Eliminado"), 200
+
 @api.route('/manageorder', methods=['GET'])
 #@jwt_required()
 def get_AllOrders():      

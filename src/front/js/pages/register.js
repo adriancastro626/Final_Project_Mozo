@@ -53,7 +53,7 @@ export const Register = () => {
 						<Form.Group controlId="formBasicPassword">
 							<Form.Label>
 								{" "}
-								<BsFillLockFill /> Reconfirmar Contraseña
+								<BsFillLockFill /> Confirmar Contraseña
 							</Form.Label>
 							<Form.Control type="password" placeholder="Contraseña" required isInvalid />
 						</Form.Group>

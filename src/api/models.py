@@ -5,16 +5,35 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'user'
     UserID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(100), unique=True, nullable=False)
-    Password = db.Column(db.String(30), nullable=False)
-    Email = db.Column(db.String(180), unique=True, nullable=False)
-    TypeID = db.Column(db.Integer, db.ForeignKey("usertypes.TypeID"), nullable=False)
-    usertypes = db.relationship('UserTypes')  
+    UserName = db.Column(db.String(100), unique=True, nullable=False)
+    Email = db.Column(db.String(130), unique=True, nullable=False)
+    Password = db.Column(db.String(180), nullable=False)
+    TypeID = db.Column(db.String, db.ForeignKey("usertypes.TypeID"), nullable=True)
+    # usertypes = db.relationship('UserTypes')  
+
+    def __ref__(self):
+        return '<User %r>' % self.UserName
+    
+    def serialize(self):
+        return {
+            "UserID": self.UserID,
+            "UserName": self.UserName,
+            "Email": self.Email            
+        }
 
 class UserTypes(db.Model):
     __tablename__ = 'usertypes'
     TypeID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(10), unique=True, nullable=False)
+    Position = db.Column(db.String(10), unique=True, nullable=False)
+    tipoUsuario = db.relationship('User', lazy=True)
+
+    def __ref__(self):
+        return '<UserTypes %r>' % self.Position
+    
+    def serialize(self):
+        return {
+            "Position": self.Position                      
+        }
 
 class OrderType(db.Model):
     __tablename__ = 'ordertype'
@@ -51,20 +70,6 @@ class Order(db.Model):
     Total = db.Column(db.Numeric(18,2), nullable=False)
     ClientName = db.Column(db.String(100), nullable=True)
     ordertype = db.relationship('OrderType')  
-
-    def serialize(self):
-        return {
-            "OrderID": self.OrderID,
-            "OrderTypeID": self.OrderTypeID,
-            "Notes": self.Notes,
-            "State": self.State
-        }
-    
-    def getAllOrders():
-        all_orders = Order.query.all()
-        all_orders = list(map(lambda x: x.serialize(), all_orders))
-        return all_orders
-
 
 class OrderDetail(db.Model):
     __tablename__ = 'orderdetail'
