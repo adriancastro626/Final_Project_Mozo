@@ -3,7 +3,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: null,
 			message: null,
+<<<<<<< HEAD
 			baseURL: "https://3001-brown-raccoon-x4d08dlc.ws-us03.gitpod.io/api",
+=======
+			baseURL: "https://3001-plum-wombat-xh4fhyx8.ws-us03.gitpod.io/api",
+>>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4
 			orders: [
 				// {
 				// 	OrderID: 101,
@@ -72,7 +76,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 				};
 				try {
-					const resp = await fetch("https://3001-green-crayfish-xf5skpgc.ws-us03.gitpod.io/api/token", opts);
+					const resp = await fetch("https://3001-plum-wombat-xh4fhyx8.ws-us03.gitpod.io/api/token", opts);
 					if (resp.status !== 200) {
 						alert("Hay un error");
 						return false;
@@ -96,7 +100,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				};
 				// fetching data from the backend
-				fetch("https://3001-green-crayfish-xf5skpgc.ws-us03.gitpod.io/api/hello", opts)
+				fetch("https://3001-turquoise-crocodile-vp9cmk5h.ws-us03.gitpod.io/api/hello", opts)
 					.then(resp => resp.json())
 					.then(data => setStore({ message: data.message }))
 					.catch(error => console.log("Error loading message from backend", error));
