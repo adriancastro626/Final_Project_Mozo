@@ -72,7 +72,6 @@ class Order(db.Model):
     ClientName = db.Column(db.String(100), nullable=True)
     ordertype = db.relationship('OrderType')  
 
-<<<<<<< HEAD
     def serialize(self):
         return {
             "OrderID": self.OrderID,
@@ -88,8 +87,6 @@ class Order(db.Model):
         return all_orders
 
 
-=======
->>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4
 class OrderDetail(db.Model):
     __tablename__ = 'orderdetail'
     OrderDetailID = db.Column(db.Integer, primary_key=True)
