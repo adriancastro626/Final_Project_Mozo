@@ -8,7 +8,7 @@ class User(db.Model):
     UserName = db.Column(db.String(100), unique=True, nullable=False)
     Email = db.Column(db.String(130), unique=True, nullable=False)
     Password = db.Column(db.String(180), nullable=False)
-    TypeID = db.Column(db.String, db.ForeignKey("usertypes.TypeID"), nullable=True)
+    TypeID = db.Column(db.Integer, db.ForeignKey("usertypes.TypeID"), nullable=True)
     # usertypes = db.relationship('UserTypes')  
 
     def __ref__(self):
