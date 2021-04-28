@@ -24,16 +24,15 @@ export const ManageOrder = () => {
 
 	const [dialog, setDialog] = useState(false);
 	const handleShow = () => {
+		actions.getOrderDetail(selection.OrderID);
 		setDialog(true);
 	};
 	const handleHide = () => setDialog(false);
 
 	const [selection, setSelection] = useState("");
-	const [selectiondetail, setSelectionDetail] = useState("");
 
 	useEffect(() => {
 		actions.getAllOrders();
-		console.log("entre a orders");
 	}, []);
 
 	const goBack = () => {
@@ -47,13 +46,21 @@ export const ManageOrder = () => {
 
 	const onRowSelect = event => {
 		setSelection(event.data);
-		const selectedorderdetail = store.detailorders.find(element => element.OrderID == selection.OrderID);
-		setSelectionDetail(selectedorderdetail);
-		console.log("selectiondetail", selectedorderdetail);
 		console.log("selection", selection);
 	};
 
-	console.log("orders", store.orders);
+	const [NewState, setNewState] = useState(selection ? selection.State : "");
+	const [dialogOrderState, setDialogOrderState] = useState(false);
+	const handleShowOrderState = newstate => {
+		actions.changeOrderState(selection.OrderID, newstate);
+		setNewState(newstate);
+		setDialogOrderState(true);
+	};
+	const handleHideOrderState = () => {
+		setDialogOrderState(false);
+		setDialog(false);
+		actions.getAllOrders();
+	};
 
 	return (
 		<Container>
@@ -80,7 +87,7 @@ export const ManageOrder = () => {
 					<h1>Debe seleccionar una orden</h1>
 				)}
 				<br />
-				<DataTable value={selectiondetail ? selectiondetail.Products : ""}>
+				<DataTable value={store.detailorders ? store.detailorders.Products : ""}>
 					<Column field="Quantity" header="Cant de Productos" />
 					<Column field="Product" header="Producto" />
 				</DataTable>
@@ -96,11 +103,33 @@ export const ManageOrder = () => {
 					<Button label="Recolectado" className="p-button-success" />
 				) : selection.State == "Nueva" ? (
 					<Container className="d-flex justify-content-between w-100">
-						<Button label="Preparar" className="p-button-info" />
+						<Button
+							label="Preparar"
+							className="p-button-info"
+							onClick={() => {
+								handleShowOrderState("En Preparacion");
+							}}
+						/>
 						<Button label="Cancelar" className="p-button-danger" />
 					</Container>
 				) : (
 					""
+				)}
+			</Dialog>
+			<Dialog
+				header="Cambio de estado de la orden"
+				visible={dialogOrderState}
+				style={{ width: "50vw" }}
+				onHide={handleHideOrderState}>
+				{selection ? (
+					<div>
+						<h1>Orden #{selection.OrderID}</h1>
+						<h3>
+							La orden cambi&oacute; de {selection.State} a {NewState}
+						</h3>
+					</div>
+				) : (
+					<h1>Debe seleccionar una orden</h1>
 				)}
 			</Dialog>
 			<Container className="border rounded">
@@ -120,7 +149,7 @@ export const ManageOrder = () => {
 						bodyStyle={{ textAlign: "center", overflow: "visible" }}
 					/>
 					<Column field="OrderID" header="# Orden" sortable />
-					<Column field="Quantity" header="Cant de Productos" sortable />
+					<Column field="TotalQuantity" header="Cant de Productos" sortable />
 					<Column field="State" header="Estado" sortable />
 				</DataTable>
 			</Container>

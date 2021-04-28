@@ -43,6 +43,7 @@ class Order(db.Model):
     OrderTypeID = db.Column(db.Integer, db.ForeignKey("ordertype.OrderTypeID"), nullable=False)
     OrderDate = db.Column(db.DateTime, nullable=False)
     State = db.Column(db.String(15), nullable=False)
+    TotalQuantity = db.Column(db.Integer, nullable=False)
     EstimatedTime = db.Column(db.Integer, nullable=True)
     Notes = db.Column(db.String(500), nullable=True)
     SubTotal = db.Column(db.Numeric(18,2), nullable=False)
@@ -57,7 +58,8 @@ class Order(db.Model):
             "OrderID": self.OrderID,
             "OrderTypeID": self.OrderTypeID,
             "Notes": self.Notes,
-            "State": self.State
+            "State": self.State,
+            "TotalQuantity": self.TotalQuantity
         }
     
     def getAllOrders():
@@ -78,3 +80,19 @@ class OrderDetail(db.Model):
     Total = db.Column(db.Numeric(18,2), nullable=False)
     order = db.relationship('Order')  
     product = db.relationship('Product')  
+
+    def serialize(self):
+        product_Detail = Product.query.filter_by(ProductID=self.ProductID).first()
+        return {
+            "Quantity": self.Quantity,
+            "Product": product_Detail.Name
+        }
+    
+    def getOrderDetail(id):
+        order_detail = OrderDetail.query.filter_by(OrderID=id)
+        order_detail = list(map(lambda x: x.serialize(), order_detail))
+        order_detail = {
+            "OrderID": id,
+            "Products": order_detail
+        }
+        return order_detail
