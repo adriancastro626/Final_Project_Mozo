@@ -88,7 +88,6 @@ def deleteUser(user_id):
 #@jwt_required()
 def get_AllOrders():      
     return jsonify(Order.getAllOrders()), 200
-<<<<<<< HEAD
 
 @api.route('/orderdetail/<int:id>', methods=['GET'])
 def get_OrderDetail(id):  
@@ -110,5 +109,3 @@ def changeOrderState(id):
     status_code = 200 
     
     return jsonify(response_body),200
-=======
->>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4
