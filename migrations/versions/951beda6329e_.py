@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<< HEAD:migrations/versions/b2ed7db61b78_.py
-Revision ID: b2ed7db61b78
+Revision ID: 951beda6329e
 Revises: 
-Create Date: 2021-04-28 00:30:34.243187
-=======
-Revision ID: 59abfb67091a
-Revises: 
-Create Date: 2021-04-28 03:30:55.099660
->>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4:migrations/versions/59abfb67091a_.py
+Create Date: 2021-04-29 00:15:40.789459
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<< HEAD:migrations/versions/b2ed7db61b78_.py
-revision = 'b2ed7db61b78'
-=======
-revision = '59abfb67091a'
->>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4:migrations/versions/59abfb67091a_.py
+revision = '951beda6329e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -75,16 +65,6 @@ def upgrade():
     )
     op.create_table('user',
     sa.Column('UserID', sa.Integer(), nullable=False),
-<<<<<<< HEAD:migrations/versions/b2ed7db61b78_.py
-    sa.Column('Name', sa.String(length=100), nullable=False),
-    sa.Column('Password', sa.String(length=30), nullable=False),
-    sa.Column('Email', sa.String(length=180), nullable=False),
-    sa.Column('TypeID', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['TypeID'], ['usertypes.TypeID'], ),
-    sa.PrimaryKeyConstraint('UserID'),
-    sa.UniqueConstraint('Email'),
-    sa.UniqueConstraint('Name')
-=======
     sa.Column('UserName', sa.String(length=100), nullable=False),
     sa.Column('Email', sa.String(length=130), nullable=False),
     sa.Column('Password', sa.String(length=180), nullable=False),
@@ -93,7 +73,6 @@ def upgrade():
     sa.PrimaryKeyConstraint('UserID'),
     sa.UniqueConstraint('Email'),
     sa.UniqueConstraint('UserName')
->>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4:migrations/versions/59abfb67091a_.py
     )
     op.create_table('orderdetail',
     sa.Column('OrderDetailID', sa.Integer(), nullable=False),

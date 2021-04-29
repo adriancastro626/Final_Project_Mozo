@@ -44,6 +44,7 @@ def allUsers():
     return jsonify(all_Users), 200
 
 @api.route("/user", methods=["POST"])
+@jwt_required() #this make privete the information, just for admins
 def createUsers():
 
     request_body_user = request.get_json()
@@ -55,6 +56,7 @@ def createUsers():
     return jsonify(request_body_user), 200
 
 @api.route("/user/<int:user_id>", methods=["PUT"])
+@jwt_required() #this make privete the information, just for admins
 def editUser(user_id):
 
     request_body_user = request.get_json()
@@ -74,6 +76,7 @@ def editUser(user_id):
     return jsonify(request_body_user), 200
 
 @api.route("/user/<int:user_id>", methods=["DELETE"])
+@jwt_required() #this make privete the information, just for admins
 def deleteUser(user_id):
 
     delUser = User.query.get(user_id)
@@ -84,31 +87,14 @@ def deleteUser(user_id):
 
     return jsonify("Usuario Eliminado"), 200
 
+@api.route("/forgot", methods=["GET, POST"])
+def retrivePassword():
+    error = None
+    message = None
+    
+
+
 @api.route('/manageorder', methods=['GET'])
 #@jwt_required()
 def get_AllOrders():      
     return jsonify(Order.getAllOrders()), 200
-<<<<<<< HEAD
-
-@api.route('/orderdetail/<int:id>', methods=['GET'])
-def get_OrderDetail(id):  
-    return jsonify(OrderDetail.getOrderDetail(id)), 200
-
-@api.route('/changeorderstate/<int:id>', methods=['POST'])
-#@jwt_required()
-def changeOrderState(id):
-    values = request.json
-    print("Request", values)    
-    orderid = values["OrderID"]
-    state = values["State"]
-    findOrder = Order.query.filter_by(OrderID= orderid).first()
-    findOrder.State = state
-    db.session.commit()
-    response_body = {
-        "status": "Ok"
-    }
-    status_code = 200 
-    
-    return jsonify(response_body),200
-=======
->>>>>>> 15466b33f58463e519c3a2932479320abebc9ce4
