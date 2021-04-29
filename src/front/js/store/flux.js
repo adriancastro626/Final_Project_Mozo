@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: null,
 			message: null,
-			baseURL: "https://3001-brown-raccoon-x4d08dlc.ws-us03.gitpod.io/api",
+			baseURL: `${process.env.BACKEND_URL}/api`,
 			orders: [
 				// {
 				// 	OrderID: 101,
@@ -117,6 +117,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						console.log("respuesta", data);
+						// let estados = []
 						setStore({ orders: data });
 					})
 
@@ -150,7 +151,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			changeOrderState: (orderid, newstate) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
-				console.log("entre al change order state ");
+				console.log("entre al change order state ", newstate);
 				fetch(`${store.baseURL}/changeorderstate/${orderid}`, {
 					method: "POST",
 					headers: {
