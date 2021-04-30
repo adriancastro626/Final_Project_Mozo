@@ -4,6 +4,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			token: null,
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
+			login: false,
+			UserName: "",
+			signUp: false,
 			orders: [
 				// {
 				// 	OrderID: 101,
@@ -86,6 +89,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.error("There has been an error login in");
 				}
+			},
+
+			signUp: (Username, Email, Password) => {
+				const store = getStore();
+
+				fetch(`${store.baseURL}/user`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						Usuario: Username,
+						Email: Email,
+						Password: Password
+					})
+				})
+					.then(resp => {
+						//console.log("respuesta", resp.json());
+						return resp.json();
+					})
+					.then(data => {
+						//setStore({ token: data.results || data.result });
+
+						setStore({ user: true });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
 			},
 
 			getMessage: () => {

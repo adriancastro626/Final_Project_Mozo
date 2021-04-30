@@ -1,15 +1,26 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Container, Button, Image, Row, Form, FormGroup, Col } from "react-bootstrap";
 import { BsEnvelope, BsPeopleCircle, BsFillLockFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
-
+import { Login } from "./login";
 import "../../styles/demo.scss";
 
 export const Register = () => {
+	const { store, actions } = useContext(Context);
+	const [Username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const [validated, setValidated] = useState(false);
-
+	const history = useHistory();
+	useEffect(() => {
+		console.log("estoy en el useEffect");
+		if (store.signUp) {
+			alert("Username was created successfully");
+			history.push("/");
+		}
+	});
 	const handleSubmit = event => {
 		const form = event.currentTarget;
 		if (form.checkValidity() === false) {
@@ -19,6 +30,25 @@ export const Register = () => {
 
 		setValidated(true);
 	};
+
+	// export const Register = () => {
+	//     const { store, actions } = useContext(Context);
+	//     const [username, setUsername] = useState("");
+	//     const [Email, setEmail] = useState("");
+	//     const [Password, setPassword] = useState("");
+	//     const [validated, setValidated] = useState(false);
+	//     const history = useHistory();
+	//     const token = sessionStorage.getItem("token");
+
+	// 	const handleSubmit = event => {
+	// 		const form = event.currentTarget;
+	// 		if (form.checkValidity() === false) {
+	// 			event.preventDefault();
+	// 			event.stopPropagation();
+	// 		}
+
+	// 		setValidated(true);
+	// 	};
 
 	return (
 		<Container>
@@ -33,14 +63,26 @@ export const Register = () => {
 								{" "}
 								<BsPeopleCircle /> Nombre Usuario
 							</Form.Label>
-							<Form.Control type="text" placeholder="Usuario" required isInvalid />
+							<Form.Control
+								type="text"
+								placeholder="Usuario"
+								onChange={e => setUsername(e.target.value)}
+								required
+								isInvalid
+							/>
 						</Form.Group>
 						<Form.Group controlId="formBasicEmail">
 							<Form.Label>
 								{" "}
 								<BsEnvelope /> Correo Electronico
 							</Form.Label>
-							<Form.Control type="email" placeholder="Correo" required isInvalid />
+							<Form.Control
+								type="email"
+								placeholder="Correo"
+								onChange={e => setEmail(e.target.value)}
+								required
+								isInvalid
+							/>
 							<Form.Text className="text-muted">Nunca compartiremos su correo, con nadie más.</Form.Text>
 						</Form.Group>
 						<Form.Group controlId="formBasicPassword">
@@ -48,7 +90,13 @@ export const Register = () => {
 								{" "}
 								<BsFillLockFill /> Contraseña
 							</Form.Label>
-							<Form.Control type="password" placeholder="Contraseña" required isInvalid />
+							<Form.Control
+								type="password"
+								placeholder="Contraseña"
+								onChange={e => setPassword(e.target.value)}
+								required
+								isInvalid
+							/>
 						</Form.Group>
 						<Form.Group controlId="formBasicPassword">
 							<Form.Label>
@@ -63,7 +111,12 @@ export const Register = () => {
 						</Form.Group>
 						<Link to="/register1">
 							<FormGroup className="mx-sm-4 pb-3 text-center">
-								<Button variant="outline-success" type="submit">
+								<Button
+									variant="outline-success"
+									type="submit"
+									onClick={() => {
+										actions.signUp(Username, email, password);
+									}}>
 									Crear Usuario
 								</Button>
 							</FormGroup>

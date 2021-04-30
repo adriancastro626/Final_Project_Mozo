@@ -44,12 +44,12 @@ def allUsers():
     return jsonify(all_Users), 200
 
 @api.route("/user", methods=["POST"])
-@jwt_required() #this make privete the information, just for admins
+# @jwt_required() #this make privete the information, just for admins
 def createUsers():
 
     request_body_user = request.get_json()
 
-    newUser = User(UserName=request_body_user["Username"], Email=request_body_user["Email"], Password=request_body_user["Password"])
+    newUser = User(UserName=request_body_user["Usuario"], Email=request_body_user["Email"], Password=request_body_user["Password"])
     db.session.add(newUser)
     db.session.commit()
         
