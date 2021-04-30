@@ -109,3 +109,44 @@ def changeOrderState(id):
     status_code = 200 
     
     return jsonify(response_body),200
+
+@api.route('/neworder', methods=['POST'])
+#@jwt_required()
+def newOrder():
+    values = request.json
+
+    neworder = Order(OrderTypeID= values["OrderTypeID"], 
+    OrderDate= values["OrderDate"], 
+    State= values["State"], 
+    TotalQuantity= values["TotalQuantity"],
+    EstimatedTime= 20,
+    Notes= values["Notes"],
+    SubTotal= values["SubTotal"],
+    Discount= values["Discount"],
+    Tax= values["Tax"],
+    Total= values["Total"],
+    ClientName= values["ClientName"])
+
+    db.session.add(neworder)
+    db.session.commit()
+
+    cart = values["Cart"]
+
+    for i in cart: 
+        neworderdetail = OrderDetail(OrderID=  neworder.OrderID, 
+        ProductID= i["ProductID"], 
+        Quantity= i["Quantity"],
+        SubTotal= i["SubTotal"],
+        Discount=i["Discount"],
+        Tax= i["Tax"],
+        Total= i["Total"])
+        db.session.add(neworderdetail)
+        db.session.commit()
+
+    response_body = {
+        "status": "Ok",
+        "NewOrderID": neworder.OrderID
+    }
+    status_code = 200 
+    
+    return jsonify(response_body),200

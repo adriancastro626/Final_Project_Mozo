@@ -60,7 +60,7 @@ class Order(db.Model):
     __tablename__ = 'order'
     OrderID = db.Column(db.Integer, primary_key=True)
     OrderTypeID = db.Column(db.Integer, db.ForeignKey("ordertype.OrderTypeID"), nullable=False)
-    OrderDate = db.Column(db.DateTime, nullable=False)
+    OrderDate = db.Column(db.DateTime, nullable=True)
     State = db.Column(db.String(50), nullable=False)
     TotalQuantity = db.Column(db.Integer, nullable=False)
     EstimatedTime = db.Column(db.Integer, nullable=True)
