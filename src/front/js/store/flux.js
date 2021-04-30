@@ -63,32 +63,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ token: null });
 			},
 
-			login: async (username, password) => {
-				const opts = {
+			login: (Username, Password) => {
+				const store = getStore();
+
+				fetch(`${store.baseURL}/login`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
-						username: username,
-						password: password
+						Usuario: Username,
+						Password: Password
 					})
-				};
-				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/token`, opts);
-					if (resp.status !== 200) {
-						alert("Hay un error");
-						return false;
-					}
+				})
+					.then(resp => {
+						//console.log("respuesta", resp.json());
+						return resp.json();
+					})
+					.then(data => {
+						//setStore({ token: data.results || data.result });
 
-					const data = await resp.json();
-					console.log("This come from the backend", data);
-					sessionStorage.setItem("token", data.access_token);
-					setStore({ token: data.access_token });
-					return true;
-				} catch (error) {
-					console.error("There has been an error login in");
-				}
+						sessionStorage.setItem("token", data.access_token);
+						setStore({ Usuario: Username });
+						console.log(Username);
+						window.location.reload();
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
 			},
 
 			signUp: (Username, Email, Password) => {

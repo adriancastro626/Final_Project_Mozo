@@ -91,10 +91,13 @@ def deleteUser(user_id):
 def retrivePassword():
     error = None
     message = None
-    
-
 
 @api.route('/manageorder', methods=['GET'])
 #@jwt_required()
 def get_AllOrders():      
     return jsonify(Order.getAllOrders()), 200
+
+@api.route('/login', methods=['GET', 'POST'])
+def acceso():
+    {}
+    return 
