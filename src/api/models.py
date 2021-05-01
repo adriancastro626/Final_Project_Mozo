@@ -65,8 +65,8 @@ class Order(db.Model):
     __tablename__ = 'order'
     OrderID = db.Column(db.Integer, primary_key=True)
     OrderTypeID = db.Column(db.Integer, db.ForeignKey("ordertype.OrderTypeID"), nullable=False)
-    OrderDate = db.Column(db.DateTime, nullable=False)
-    State = db.Column(db.String(15), nullable=False)
+    OrderDate = db.Column(db.DateTime, nullable=True)
+    State = db.Column(db.String(50), nullable=False)
     TotalQuantity = db.Column(db.Integer, nullable=False)
     EstimatedTime = db.Column(db.Integer, nullable=True)
     Notes = db.Column(db.String(500), nullable=True)
@@ -87,7 +87,17 @@ class Order(db.Model):
         }
     
     def getAllOrders():
-        all_orders = Order.query.all()
+     #   all_orders = Order.query.order_by(Order.State).all()        .
+        all_orders =  Order.query.order_by(db.case(
+            [
+                (Order.State == 'En Preparacion', 'En Preparacion'),
+                (Order.State == 'Nueva', 'Nueva'),
+                (Order.State == 'Esperando recolecta', 'Esperando recolecta'),
+                (Order.State == 'Completada', 'Completada'),
+                (Order.State == 'Cancelada', 'Cancelada'),
+            ]
+        )).all()
+
         all_orders = list(map(lambda x: x.serialize(), all_orders))
         return all_orders
 

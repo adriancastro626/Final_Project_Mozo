@@ -24,10 +24,17 @@ export const Cart = () => {
 	const { store, actions } = useContext(Context);
 	console.log("mistore", store);
 
+	const [Notes, setNotes] = useState("");
+	let utotProducts = 0;
+	let utotPrices = 0;
+	let utotDiscount = 0;
+	let utotTax = 0;
+	let utotSubTotal = 0;
+	let utottotTotal = 0;
 	const totProducts = () => {
 		let total = 0;
 		store.cart.map(element => (total += element.Quantity));
-
+		utotProducts = total;
 		return total;
 	};
 
@@ -38,28 +45,28 @@ export const Cart = () => {
 	const totPrices = () => {
 		let total = 0;
 		store.cart.map(element => (total += element.Price));
-
+		utotPrices = total;
 		return total;
 	};
 
 	const totDiscount = () => {
 		let total = 0;
 		store.cart.map(element => (total += element.Discount));
-
+		utotDiscount = total;
 		return total;
 	};
 
 	const totTax = () => {
 		let total = 0;
 		total = (13 / 100) * (totPrices() - totDiscount());
-
+		utotTax = total;
 		return total;
 	};
 
 	const totSubTotal = () => {
 		let total = 0;
 		total = totPrices() - totDiscount();
-
+		utotSubTotal = total;
 		return total;
 	};
 
@@ -67,6 +74,7 @@ export const Cart = () => {
 		let total = 0;
 		total = totTax() + totPrices();
 		total = total - totDiscount();
+		utottotTotal = total;
 		return total;
 	};
 
@@ -97,6 +105,17 @@ export const Cart = () => {
 
 	const [dialog, setDialog] = useState(false);
 	const handleShow = () => {
+		actions.newOrder(
+			"Nueva",
+			Notes,
+			new Date(),
+			utotProducts,
+			utotPrices,
+			utotDiscount,
+			utotTax,
+			utotSubTotal,
+			utottotTotal
+		);
 		setDialog(true);
 	};
 	const handleHide = () => {
@@ -132,7 +151,7 @@ export const Cart = () => {
 			</Row>
 			<Row>
 				<h5>Requerimientos especiales</h5>
-				<textarea className="form-control" rows="3" />
+				<textarea className="form-control" rows="3" onChange={e => setNotes(e.target.value)} />
 			</Row>
 			<br />
 			<Container className="d-flex align-items-center flex-column">
@@ -149,8 +168,10 @@ export const Cart = () => {
 				</Row>
 			</Container>
 			<br />
-			<Dialog header="Orden" visible={dialog} style={{ width: "50vw" }} onHide={handleHide}>
-				<h1>Su orden es la #0000</h1>
+			<Dialog header="Orden creada" visible={dialog} style={{ width: "50vw" }} onHide={handleHide}>
+				<h1>Su orden es la #{store.NewOrderID}</h1>
+				<br />
+				<h1>Gracias por su compra!</h1>
 				<br />
 				<h6>Tiempo estimado de preparaci&oacute;n: 20 minutos</h6>
 			</Dialog>

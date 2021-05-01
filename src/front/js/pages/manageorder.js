@@ -96,11 +96,29 @@ export const ManageOrder = () => {
 				<InputTextarea rows={5} cols={120} value={selection.Notes} disabled />
 				{selection.State == "En Preparacion" ? (
 					<Container className="d-flex justify-content-between w-100">
-						<Button label="Lista" className="p-button-primary" />
-						<Button label="Cancelar" className="p-button-danger" />
+						<Button
+							label="Lista"
+							className="p-button-primary"
+							onClick={() => {
+								handleShowOrderState("Esperando recolecta");
+							}}
+						/>
+						<Button
+							label="Cancelar"
+							className="p-button-danger"
+							onClick={() => {
+								handleShowOrderState("Cancelada");
+							}}
+						/>
 					</Container>
 				) : selection.State == "Esperando recolecta" ? (
-					<Button label="Recolectado" className="p-button-success" />
+					<Button
+						label="Recolectado"
+						className="p-button-success"
+						onClick={() => {
+							handleShowOrderState("Completada");
+						}}
+					/>
 				) : selection.State == "Nueva" ? (
 					<Container className="d-flex justify-content-between w-100">
 						<Button
@@ -110,7 +128,13 @@ export const ManageOrder = () => {
 								handleShowOrderState("En Preparacion");
 							}}
 						/>
-						<Button label="Cancelar" className="p-button-danger" />
+						<Button
+							label="Cancelar"
+							className="p-button-danger"
+							onClick={() => {
+								handleShowOrderState("Cancelada");
+							}}
+						/>
 					</Container>
 				) : (
 					""
@@ -125,7 +149,20 @@ export const ManageOrder = () => {
 					<div>
 						<h1>Orden #{selection.OrderID}</h1>
 						<h3>
-							La orden cambi&oacute; de {selection.State} a {NewState}
+							La orden cambi&oacute; de <strong>{selection.State}</strong> a&nbsp;
+							{NewState == "En Preparacion" ? (
+								<Badge value={NewState} severity="info" size="large" />
+							) : NewState == "Completada" ? (
+								<Badge value={NewState} size="large" />
+							) : NewState == "Cancelada" ? (
+								<Badge value={NewState} severity="danger" size="large" />
+							) : NewState == "Esperando recolecta" ? (
+								<Badge value={NewState} severity="success" size="large" />
+							) : NewState == "Nueva" ? (
+								<Badge value={NewState} severity="warning" size="large" />
+							) : (
+								""
+							)}
 						</h3>
 					</div>
 				) : (

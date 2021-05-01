@@ -19,19 +19,29 @@ import "../../styles/demo.scss";
 
 //     if (store.token && store.token != "" && store.token != undefined) history.push("/");
 
+// export const Login = () => {
+// 	const { store, actions } = useContext(Context);
+// 	const [Username, setUsername] = useState("");
+// 	const [Password, setPassword] = useState("");
+// 	const history = useHistory();
+
+// 	useEffect(() => {
+// 		actions.syncTokenFromSessionStore();
+// 		if (store.login) {
+// 			history.push("/home");
+// 			actions.login(Username, Password);
+// 		}
+// 	}, []);
+
 export const Login = () => {
 	const { store, actions } = useContext(Context);
-	const [Username, setUsername] = useState("");
-	const [Password, setPassword] = useState("");
-	const history = useHistory();
+	const [Username, setUsername] = useState(null);
+	const [Password, setPassword] = useState(null);
 
-	useEffect(() => {
-		actions.syncTokenFromSessionStore();
-		if (store.login) {
-			history.push("/home");
-			actions.login(Username, Password);
-		}
-	}, []);
+	console.log("This is your token: ", store.token);
+	const handleClick = () => {
+		actions.login(Username, Password);
+	};
 
 	return (
 		<Container>
@@ -82,11 +92,7 @@ export const Login = () => {
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3">
 							{/* <Link to="/"> */}
-							<Button
-								className="btn btn-block signin"
-								onClick={() => {
-									actions.login(Username, Password);
-								}}>
+							<Button className="btn btn-block signin" onClick={handleClick}>
 								Ingresar
 							</Button>
 

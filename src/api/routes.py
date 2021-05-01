@@ -14,15 +14,15 @@ api = Blueprint('api', __name__)
 
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
-@api.route("/token", methods=["POST"])
-def create_token():
-    username = request.json.get("username", None)
-    password = request.json.get("password", None)
-    if username != "test" or password != "test":
-        return jsonify({"msg": "Bad username or password"}), 401
+# @api.route("/token", methods=["POST"])
+# def create_token():
+#     username = request.json.get("username", None)
+#     password = request.json.get("password", None)
+#     if username != "test" or password != "test":
+#         return jsonify({"msg": "Bad username or password"}), 401
 
-    access_token = create_access_token(identity=username)
-    return jsonify(access_token=access_token)
+#     access_token = create_access_token(identity=username)
+#     return jsonify(access_token=access_token)
 
 @api.route("/hello", methods=["GET"])
 @jwt_required() #this make privete the information, just for admins
@@ -34,6 +34,20 @@ def get_hello():
     }
     
     return jsonify(dictionary)
+
+@api.route("/login", methods=["POST"])
+def create_token():
+    username = request.json.get("Usuario", None)
+    password = request.json.get("Password", None)
+    # Query your database for username and password
+    user = User.query.filter_by(UserName=username).first()
+    if user is None:
+        # the user was not found on the database
+        return jsonify({"msg": "Bad username or password"}), 401
+    
+    # create a new token with the user id inside
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token)
 
 @api.route("/user", methods=["GET"])
 def allUsers():
@@ -97,7 +111,64 @@ def retrivePassword():
 def get_AllOrders():      
     return jsonify(Order.getAllOrders()), 200
 
-@api.route('/login', methods=['GET', 'POST'])
-def acceso():
-    {}
-    return 
+@api.route('/orderdetail/<int:id>', methods=['GET'])
+def get_OrderDetail(id):  
+    return jsonify(OrderDetail.getOrderDetail(id)), 200
+
+@api.route('/changeorderstate/<int:id>', methods=['POST'])
+#@jwt_required()
+def changeOrderState(id):
+    values = request.json
+    print("Request", values)    
+    orderid = values["OrderID"]
+    state = values["State"]
+    findOrder = Order.query.filter_by(OrderID= orderid).first()
+    findOrder.State = state
+    db.session.commit()
+    response_body = {
+        "status": "Ok"
+    }
+    status_code = 200 
+    
+    return jsonify(response_body),200
+
+@api.route('/neworder', methods=['POST'])
+#@jwt_required()
+def newOrder():
+    values = request.json
+
+    neworder = Order(OrderTypeID= values["OrderTypeID"], 
+    OrderDate= values["OrderDate"], 
+    State= values["State"], 
+    TotalQuantity= values["TotalQuantity"],
+    EstimatedTime= 20,
+    Notes= values["Notes"],
+    SubTotal= values["SubTotal"],
+    Discount= values["Discount"],
+    Tax= values["Tax"],
+    Total= values["Total"],
+    ClientName= values["ClientName"])
+
+    db.session.add(neworder)
+    db.session.commit()
+
+    cart = values["Cart"]
+
+    for i in cart: 
+        neworderdetail = OrderDetail(OrderID=  neworder.OrderID, 
+        ProductID= i["ProductID"], 
+        Quantity= i["Quantity"],
+        SubTotal= i["SubTotal"],
+        Discount=i["Discount"],
+        Tax= i["Tax"],
+        Total= i["Total"])
+        db.session.add(neworderdetail)
+        db.session.commit()
+
+    response_body = {
+        "status": "Ok",
+        "NewOrderID": neworder.OrderID
+    }
+    status_code = 200 
+    
+    return jsonify(response_body),200

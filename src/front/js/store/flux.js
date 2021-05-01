@@ -33,17 +33,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 			cart: [
 				{
 					Quantity: 2,
+					ProductID: 1,
 					Product: "Hamburguesa doble",
 					Price: 2000,
-					Discount: 500
+					Discount: 500,
+					SubTotal: 1500,
+					Tax: 130,
+					Total: 1630
 				},
 				{
 					Quantity: 1,
+					ProductID: 2,
 					Product: "Coca Cola",
 					Price: 1500,
-					Discount: 350
+					Discount: 350,
+					SubTotal: 1000,
+					Tax: 0,
+					Total: 1330
 				}
-			]
+			],
+			NewOrderID: 0
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -52,21 +61,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			syncTokenFromSessionStore: () => {
-				const token = sessionStorage.getItem("token");
+				const token = localStorage.getItem("token");
 				console.log("Application just loaded, sync");
 				if (token && token != "" && token != undefined) setStore({ token: token });
 			},
 
 			logout: () => {
-				sessionStorage.removeItem("token");
+				localStorage.removeItem("token");
 				console.log("Login Out");
 				setStore({ token: null });
 			},
 
-			login: (Username, Password) => {
+			login: async (Username, Password) => {
 				const store = getStore();
 
-				fetch(`${store.baseURL}/login`, {
+				await fetch(`${store.baseURL}/login`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -77,21 +86,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 				})
 					.then(resp => {
-						//console.log("respuesta", resp.json());
+						if (resp.status !== 200) {
+							alert("There was an error!!");
+							return false;
+						}
 						return resp.json();
 					})
 					.then(data => {
-						//setStore({ token: data.results || data.result });
-
-						sessionStorage.setItem("token", data.access_token);
-						setStore({ Usuario: Username });
-						console.log(Username);
+						console.log("This came from the backend ", data);
+						localStorage.setItem("token", data.access_token);
+						setStore({ access_token: data.access_token });
 						window.location.reload();
 					})
-
-					.catch(err => {
-						console.log("error", err);
-					});
+					.catch(error => console.error("There has been an error login in!!", error));
 			},
 
 			signUp: (Username, Email, Password) => {
@@ -151,7 +158,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						console.log("respuesta", data);
 						setStore({ orders: data });
 					})
 
@@ -174,7 +180,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						console.log("respuesta", data);
 						setStore({ detailorders: data });
 					})
 
@@ -185,7 +190,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			changeOrderState: (orderid, newstate) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
-				console.log("entre al change order state ");
+				console.log("entre al change order state ", newstate);
 				fetch(`${store.baseURL}/changeorderstate/${orderid}`, {
 					method: "POST",
 					headers: {
@@ -198,8 +203,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						console.log("respuesta", data);
 						setStore({ detailorders: data });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			newOrder: (
+				state,
+				notes,
+				orderdate,
+				utotProducts,
+				utotPrices,
+				utotDiscount,
+				utotTax,
+				utotSubTotal,
+				utottotTotal
+			) => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre a newOrder ", orderdate);
+				fetch(`${store.baseURL}/neworder`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					},
+					body: JSON.stringify({
+						OrderTypeID: 1,
+						OrderDate: orderdate,
+						State: state,
+						TotalQuantity: utotProducts,
+						EstimatedTime: 20,
+						Notes: notes,
+						SubTotal: utotPrices,
+						Discount: utotDiscount,
+						Tax: utotTax,
+						Total: utottotTotal,
+						ClientName: "ClientName",
+						Cart: store.cart
+					})
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ NewOrderID: data.NewOrderID });
 					})
 
 					.catch(err => {
