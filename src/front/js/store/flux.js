@@ -4,6 +4,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			token: null,
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
+			login: false,
+			UserName: "",
+			signUp: false,
 			orders: [
 				// {
 				// 	OrderID: 101,
@@ -58,43 +61,73 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			syncTokenFromSessionStore: () => {
-				const token = sessionStorage.getItem("token");
+				const token = localStorage.getItem("token");
 				console.log("Application just loaded, sync");
 				if (token && token != "" && token != undefined) setStore({ token: token });
 			},
 
 			logout: () => {
-				sessionStorage.removeItem("token");
+				localStorage.removeItem("token");
 				console.log("Login Out");
 				setStore({ token: null });
 			},
 
-			login: async (username, password) => {
-				const opts = {
+			login: async (Username, Password) => {
+				const store = getStore();
+
+				await fetch(`${store.baseURL}/login`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
-						username: username,
-						password: password
+						Usuario: Username,
+						Password: Password
 					})
-				};
-				try {
-					const resp = await fetch("https://3001-plum-wombat-xh4fhyx8.ws-us03.gitpod.io/api/token", opts);
-					if (resp.status !== 200) {
-						alert("Hay un error");
-						return false;
-					}
+				})
+					.then(resp => {
+						if (resp.status !== 200) {
+							alert("There was an error!!");
+							return false;
+						}
+						return resp.json();
+					})
+					.then(data => {
+						console.log("This came from the backend ", data);
+						localStorage.setItem("token", data.access_token);
+						setStore({ access_token: data.access_token });
+						window.location.reload();
+					})
+					.catch(error => console.error("There has been an error login in!!", error));
+			},
 
-					const data = await resp.json();
-					console.log("This come from the backend", data);
-					sessionStorage.setItem("token", data.access_token);
-					setStore({ token: data.access_token });
-					return true;
-				} catch (error) {
-					console.error("There has been an error login in");
-				}
+			signUp: (Username, Email, Password) => {
+				const store = getStore();
+
+				fetch(`${store.baseURL}/user`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						Usuario: Username,
+						Email: Email,
+						Password: Password
+					})
+				})
+					.then(resp => {
+						//console.log("respuesta", resp.json());
+						return resp.json();
+					})
+					.then(data => {
+						//setStore({ token: data.results || data.result });
+
+						setStore({ user: true });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
 			},
 
 			getMessage: () => {
@@ -105,7 +138,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				};
 				// fetching data from the backend
-				fetch("https://3001-turquoise-crocodile-vp9cmk5h.ws-us03.gitpod.io/api/hello", opts)
+				fetch(`${process.env.BACKEND_URL}api/hello`, opts)
 					.then(resp => resp.json())
 					.then(data => setStore({ message: data.message }))
 					.catch(error => console.log("Error loading message from backend", error));

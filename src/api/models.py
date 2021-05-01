@@ -20,6 +20,11 @@ class User(db.Model):
             "UserName": self.UserName,
             "Email": self.Email            
         }
+    
+    # def getAllUsers():
+    #     all_users = User.query.all()
+    #     all_users = list(map(lambda x: x.serialize(), all_users))
+    #     return all_users
 
 class UserTypes(db.Model):
     __tablename__ = 'usertypes'
