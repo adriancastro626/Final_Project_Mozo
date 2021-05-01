@@ -56,20 +56,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
 
 			syncTokenFromSessionStore: () => {
 				const token = localStorage.getItem("token");
 				console.log("Application just loaded, sync");
 				if (token && token != "" && token != undefined) setStore({ token: token });
-			},
-
-			logout: () => {
-				localStorage.removeItem("token");
-				console.log("Login Out");
-				setStore({ token: null });
 			},
 
 			login: async (Username, Password) => {
@@ -99,6 +90,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						window.location.reload();
 					})
 					.catch(error => console.error("There has been an error login in!!", error));
+			},
+
+			logout: () => {
+				localStorage.removeItem("token");
+				console.log("Login Out");
+				setStore({ token: null });
 			},
 
 			signUp: (Username, Email, Password) => {
