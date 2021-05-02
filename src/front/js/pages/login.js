@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Container, Button, Image, Row, Form, FormGroup, Col, Card } from "react-bootstrap";
 import { BsPersonFill, BsFillLockFill } from "react-icons/bs";
@@ -6,42 +7,19 @@ import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/demo.scss";
 
-// export const Login = () => {
-// 	const { store, actions } = useContext(Context);
-// 	const [username, setUsername] = useState("");
-// 	const [password, setPassword] = useState("");
-// 	const history = useHistory();
-// 	const token = sessionStorage.getItem("token");
-// 	console.log("This is your token", store.token);
-// 	const handleClick = () => {
-// 		actions.login(username, password);
-// 	};
-
-//     if (store.token && store.token != "" && store.token != undefined) history.push("/");
-
-// export const Login = () => {
-// 	const { store, actions } = useContext(Context);
-// 	const [Username, setUsername] = useState("");
-// 	const [Password, setPassword] = useState("");
-// 	const history = useHistory();
-
-// 	useEffect(() => {
-// 		actions.syncTokenFromSessionStore();
-// 		if (store.login) {
-// 			history.push("/home");
-// 			actions.login(Username, Password);
-// 		}
-// 	}, []);
-
 export const Login = () => {
 	const { store, actions } = useContext(Context);
 	const [Username, setUsername] = useState(null);
 	const [Password, setPassword] = useState(null);
+	const history = useHistory();
 
 	console.log("This is your token: ", store.token);
 	const handleClick = () => {
 		actions.login(Username, Password);
-		history.push("/home");
+
+		if (store.token) {
+			history.push("/home");
+		}
 	};
 
 	return (
@@ -92,21 +70,11 @@ export const Login = () => {
 							</Link>
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3">
-							{/* <Link to="/"> */}
+							{/* {setUsername ? <Redirect to="/home" /> : "Incorrecto"} */}
 							<Button className="btn btn-block signin" onClick={handleClick}>
 								Ingresar
 							</Button>
-
-							{/* </Link> */}
 						</FormGroup>
-
-						{/* <FormGroup className="mx-sm-4 pb-3 text-center">
-							<Link to="/register">
-								<Button variant="outline-primary" onClick={handleClick}>
-									Registrarse
-								</Button>{" "}
-							</Link>
-						</FormGroup> */}
 					</Form>
 				</Col>
 			</Row>

@@ -60,7 +60,12 @@ export const NavbarMenu = () => {
 			model={items}
 			end={
 				<Link to="/">
-					<Button label="Logout" icon="pi pi-fw pi-power-off" className="p-button-danger" />{" "}
+					<Button
+						label="Logout"
+						icon="pi pi-fw pi-power-off"
+						className="p-button-danger"
+						onClick={() => actions.logout()}
+					/>{" "}
 				</Link>
 			}
 			start={
