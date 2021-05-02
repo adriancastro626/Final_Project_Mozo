@@ -39,7 +39,7 @@ export const NavbarMenu = () => {
 						</Link>
 					</Nav.Link>
 					<Nav.Link>
-						<Link to="/">
+						<Link to="/managemenu">
 							<span className="navbar-brand mb-0 h1">Men&uacute;</span>
 						</Link>
 					</Nav.Link>

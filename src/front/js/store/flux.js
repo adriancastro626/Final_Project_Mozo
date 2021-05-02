@@ -4,6 +4,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			token: null,
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
+			response: null,
+			products: [],
 			login: false,
 			UserName: "",
 			signUp: false,
@@ -249,6 +251,118 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ NewOrderID: data.NewOrderID });
 					})
 
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			getAllProducts: () => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre al get products");
+				fetch(`${store.baseURL}/managemenu`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					}
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						//LOOP THE ARRAY TO CHANGE ALL THE PRODUCTS STATES JUST FOR THE DATATABLE READING
+						for (var i = 0; i < data.length; i++) {
+							if (data[i].Available == true) {
+								data[i].Available = "Disponible";
+							} else {
+								data[i].Available = "No Disponible";
+							}
+						}
+						setStore({ products: data });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			updateProduct: (productid, category, name, price, description, imageurl, state) => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre a updateproduct ");
+
+				fetch(`${store.baseURL}/updateproduct`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					},
+					body: JSON.stringify({
+						ProductID: productid,
+						Category: category,
+						Name: name,
+						Price: price,
+						Description: description,
+						ImageURL: imageurl,
+						Available: state
+					})
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			newProduct: (category, name, price, description, imageurl, state) => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre a newproduct ");
+
+				fetch(`${store.baseURL}/newproduct`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					},
+					body: JSON.stringify({
+						Category: category,
+						Name: name,
+						Price: price,
+						Description: description,
+						ImageURL: imageurl,
+						Available: state
+					})
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			deleteProduct: productid => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre a deleteproduct ");
+
+				fetch(`${store.baseURL}/deleteproduct/${productid}`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					}
+				})
+					.then(resp => {
+						return resp.json();
+					})
 					.catch(err => {
 						console.log("error", err);
 					});

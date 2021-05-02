@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Order, OrderType,OrderDetail
+from api.models import db, User, Order, OrderType,OrderDetail, Product, Category
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -172,3 +172,84 @@ def newOrder():
     status_code = 200 
     
     return jsonify(response_body),200
+
+@api.route('/managemenu', methods=['GET'])
+#@jwt_required()
+def get_AllProducts():      
+    return jsonify(Product.getAllProducts()), 200
+
+@api.route('/newproduct', methods=['POST'])
+#@jwt_required()
+def newProduct():
+    values = request.json
+
+    category = values["Category"]
+    if(category):
+        findCategory = Category.query.filter_by(Name= category).first()        
+    else:
+        findCategory = Category.query.filter_by(Name= "Todas").first()
+
+    newproduct = Product(CategoryID= findCategory.CategoryID, 
+    Name= values["Name"], 
+    Price=  values["Price"] , 
+    Description=  values["Description"],
+    ImageURL=  values["ImageURL"] ,
+    Notes= values["Notes"],
+    Available= values["Available"])
+
+    db.session.add(newproduct)
+    db.session.commit()
+    response_body = {
+        "status": "OK"
+    }
+    status_code = 200 
+    
+    return jsonify(response_body),200
+
+@api.route('/updateproduct', methods=['POST'])
+#@jwt_required()
+def updateProduct():
+    values = request.json
+    productid = values["ProductID"]
+    category = values["Category"]
+    name = values["Name"] 
+    price = values["Price"] 
+    description = values["Description"]
+    imageurl = values["ImageURL"] 
+    available = values["Available"]
+
+    findProduct = Product.query.filter_by(ProductID= productid).first()
+    if(category):
+        findCategory = Category.query.filter_by(Name= category).first()        
+    else:
+        findCategory = Category.query.filter_by(Name= "Todas").first()
+
+    findProduct.CategoryID = findCategory.CategoryID
+    findProduct.Name = name
+    findProduct.Price = price
+    findProduct.Description = description
+    findProduct.ImageURL = imageurl
+    findProduct.Available = available
+    db.session.commit()
+    response_body = {
+        "status": "OK"
+    }
+    status_code = 200 
+    
+    return jsonify(response_body),200
+
+@api.route("/deleteproduct/<int:producid>", methods=["POST"])
+def deleteProduct(producid):
+    delProduct = Product.query.get(producid)
+    if delProduct is None:
+        raise APIException('Producto no existe', status_code=404)
+    
+    delProduct.Available = False
+    db.session.commit()
+
+    response_body = {
+        "status": "OK"
+    }
+
+    return jsonify(response_body), 200
+
