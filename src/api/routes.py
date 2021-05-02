@@ -194,7 +194,6 @@ def newProduct():
     Price=  values["Price"] , 
     Description=  values["Description"],
     ImageURL=  values["ImageURL"] ,
-    Notes= values["Notes"],
     Available= values["Available"])
 
     db.session.add(newproduct)

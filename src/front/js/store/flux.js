@@ -285,10 +285,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			updateProduct: (productid, category, name, price, description, imageurl, state) => {
+			updateProduct: (productid, category, name, price, description, imageurl, available) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a updateproduct ");
+				let state = null;
+				if (available == "Disponible") state = true;
+				else state = false;
 
 				fetch(`${store.baseURL}/updateproduct`, {
 					method: "POST",
@@ -317,10 +320,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			newProduct: (category, name, price, description, imageurl, state) => {
+			newProduct: (category, name, price, description, imageurl, available) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a newproduct ");
+				let state = null;
+				if (available == "Disponible") state = true;
+				else state = false;
 
 				fetch(`${store.baseURL}/newproduct`, {
 					method: "POST",
