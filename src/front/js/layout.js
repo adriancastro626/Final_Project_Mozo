@@ -12,6 +12,7 @@ import { Register } from "./pages/register.js";
 import { Register1 } from "./pages/register1.js";
 import { ManageOrder } from "./pages/manageorder.js";
 import { ManageMenu } from "./pages/managemenu.js";
+import { Frontmenu } from "./pages/frontmenu.js";
 import { Payment } from "./pages/payment";
 import { Cart } from "./pages/cart";
 import injectContext from "./store/appContext";
@@ -31,8 +32,11 @@ const Layout = () => {
 				<ScrollToTop>
 					<NavbarMenu />
 					<Switch>
-						<Route exact path="/login">
+						<Route exact path="/">
 							<Login />
+						</Route>
+						<Route exact path="/frontmenu">
+							<Frontmenu />
 						</Route>
 						<Route exact path="/register">
 							<Register />
@@ -46,7 +50,7 @@ const Layout = () => {
 						<Route exact path="/retrive2">
 							<Retrive2 />
 						</Route>
-						<Route exact path="/">
+						<Route exact path="/home">
 							<Home />
 						</Route>
 						<Route exact path="/manageorder">

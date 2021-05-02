@@ -14,15 +14,15 @@ api = Blueprint('api', __name__)
 
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
-@api.route("/token", methods=["POST"])
-def create_token():
-    username = request.json.get("username", None)
-    password = request.json.get("password", None)
-    if username != "test" or password != "test":
-        return jsonify({"msg": "Bad username or password"}), 401
+# @api.route("/token", methods=["POST"])
+# def create_token():
+#     username = request.json.get("username", None)
+#     password = request.json.get("password", None)
+#     if username != "test" or password != "test":
+#         return jsonify({"msg": "Bad username or password"}), 401
 
-    access_token = create_access_token(identity=username)
-    return jsonify(access_token=access_token)
+#     access_token = create_access_token(identity=username)
+#     return jsonify(access_token=access_token)
 
 @api.route("/hello", methods=["GET"])
 @jwt_required() #this make privete the information, just for admins
@@ -35,6 +35,20 @@ def get_hello():
     
     return jsonify(dictionary)
 
+@api.route("/login", methods=["POST"])
+def create_token():
+    username = request.json.get("Usuario", None)
+    password = request.json.get("Password", None)
+    # Query your database for username and password
+    user = User.query.filter_by(UserName=username).first()
+    if user is None:
+        # the user was not found on the database
+        return jsonify({"msg": "Bad username or password"}), 401
+    
+    # create a new token with the user id inside
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token)
+
 @api.route("/user", methods=["GET"])
 def allUsers():
 
@@ -44,17 +58,19 @@ def allUsers():
     return jsonify(all_Users), 200
 
 @api.route("/user", methods=["POST"])
+# @jwt_required() #this make privete the information, just for admins
 def createUsers():
 
     request_body_user = request.get_json()
 
-    newUser = User(UserName=request_body_user["Username"], Email=request_body_user["Email"], Password=request_body_user["Password"])
+    newUser = User(UserName=request_body_user["Usuario"], Email=request_body_user["Email"], Password=request_body_user["Password"])
     db.session.add(newUser)
     db.session.commit()
         
     return jsonify(request_body_user), 200
 
 @api.route("/user/<int:user_id>", methods=["PUT"])
+@jwt_required() #this make privete the information, just for admins
 def editUser(user_id):
 
     request_body_user = request.get_json()
@@ -74,6 +90,7 @@ def editUser(user_id):
     return jsonify(request_body_user), 200
 
 @api.route("/user/<int:user_id>", methods=["DELETE"])
+@jwt_required() #this make privete the information, just for admins
 def deleteUser(user_id):
 
     delUser = User.query.get(user_id)
@@ -83,6 +100,11 @@ def deleteUser(user_id):
     db.session.commit()
 
     return jsonify("Usuario Eliminado"), 200
+
+@api.route("/forgot", methods=["GET, POST"])
+def retrivePassword():
+    error = None
+    message = None
 
 @api.route('/manageorder', methods=['GET'])
 #@jwt_required()
