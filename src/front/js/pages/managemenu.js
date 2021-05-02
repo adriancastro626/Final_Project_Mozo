@@ -17,11 +17,13 @@ import { element } from "prop-types";
 import { Container, Col, Image, FormGroup, Form, Dropdown } from "react-bootstrap";
 
 import { RadioButton } from "primereact/radiobutton";
+import { Toolbar } from "primereact/toolbar";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 import { Toast } from "primereact/toast";
 import genericImage from "../../img/defaultFood.png";
+import "../../styles/managemenu.scss";
 
 export const ManageMenu = () => {
 	// let { value } = useParams();
@@ -58,7 +60,7 @@ export const ManageMenu = () => {
 		setDescription(selection.Description);
 		setPrice(selection.Price);
 		setImageURL(selection.ImageURL);
-		setState(selection.Available == "Disponible" ? true : false);
+		setAvailable(selection.Available);
 	};
 
 	const [name, setName] = useState(selection.Name);
@@ -73,10 +75,9 @@ export const ManageMenu = () => {
 		setCategory(e.value);
 	};
 
-	const [state, setState] = useState("");
-	const onStateChange = () => {
-		if (state) setState(false);
-		else setState(true);
+	const [available, setAvailable] = useState(selection.Available);
+	const onAvailableChange = e => {
+		setAvailable(e.value);
 	};
 	const toast = useRef(null);
 	const saveProduct = () => {
@@ -86,9 +87,9 @@ export const ManageMenu = () => {
 		console.log("price ", price);
 		console.log("description ", description);
 		console.log("imageurl ", imageurl);
-		console.log("state ", state);
+		console.log("available ", available);
 		if (action == "Update") {
-			actions.updateProduct(selection.ProductID, category, name, price, description, imageurl, state);
+			actions.updateProduct(selection.ProductID, category, name, price, description, imageurl, available);
 			setResponse(store.response);
 			console.log(store.response, " response");
 			if (store.response == "OK") {
@@ -99,6 +100,7 @@ export const ManageMenu = () => {
 					life: 3000
 				});
 				handleHide();
+				actions.getAllProducts();
 			} else {
 				toast.current.show({
 					severity: "error",
@@ -108,7 +110,15 @@ export const ManageMenu = () => {
 				});
 			}
 		} else {
-			actions.newProduct(category, name, price, description, imageurl, state);
+			actions.newProduct(category, name, price, description, imageurl, available);
+			actions.getAllProducts();
+			toast.current.show({
+				severity: "success",
+				summary: "Registro Correcto",
+				detail: "El producto ha sido agregado",
+				life: 3000
+			});
+			handleHide();
 		}
 	};
 
@@ -120,9 +130,23 @@ export const ManageMenu = () => {
 	);
 
 	const editProduct = product => {
+		console.log("product selec", product);
 		setAction("Update");
 		setSelection(product);
+		setAvailable(selection.Available);
+		setCategory(selection.Category);
 		console.log("selec", selection);
+		setDialog(true);
+	};
+
+	const newProduct = () => {
+		setAction("New");
+		setCategory("");
+		setName("");
+		setDescription("");
+		setPrice("");
+		setImageURL("");
+		setAvailable("");
 		setDialog(true);
 	};
 
@@ -164,6 +188,7 @@ export const ManageMenu = () => {
 	const deleteProduct = () => {
 		console.log("entre a delproduct");
 		actions.deleteProduct(selection.ProductID);
+		actions.getAllProducts();
 		toast.current.show({
 			severity: "success",
 			summary: "Actualizacion Correcta",
@@ -171,7 +196,24 @@ export const ManageMenu = () => {
 			life: 3000
 		});
 		hideDeleteProductDialog();
-		actions.getAllProducts();
+	};
+
+	const leftToolbarButton = () => {
+		return (
+			<React.Fragment>
+				<Button label="Nuevo" icon="pi pi-plus" className="p-button-success p-mr-2" onClick={newProduct} />
+			</React.Fragment>
+		);
+	};
+
+	const imageBody = rowData => {
+		return (
+			<img
+				src={`${rowData.ImageURL}`}
+				onError={e => (e.target.src = `${genericImage}`)}
+				className="product-image"
+			/>
+		);
 	};
 
 	return (
@@ -225,7 +267,7 @@ export const ManageMenu = () => {
 								name="category"
 								value="Todas"
 								onChange={onCategoryChange}
-								checked={category === "Todas"}
+								checked={category === "Todas" ? true : false}
 							/>
 							<label htmlFor="categorytodas">Todas</label>
 						</div>
@@ -235,7 +277,7 @@ export const ManageMenu = () => {
 								name="category"
 								value="Desayuno"
 								onChange={onCategoryChange}
-								checked={category === "Desayuno"}
+								checked={category === "Desayuno" ? true : false}
 							/>
 							<label htmlFor="categorydesayuno">Desayuno</label>
 						</div>
@@ -245,7 +287,7 @@ export const ManageMenu = () => {
 								name="category"
 								value="Almuerzo"
 								onChange={onCategoryChange}
-								checked={category === "Almuerzo"}
+								checked={category === "Almuerzo" ? true : false}
 							/>
 							<label htmlFor="categoryalmuerzo">Almuerzo</label>
 						</div>
@@ -255,7 +297,7 @@ export const ManageMenu = () => {
 								name="category"
 								value="Otros"
 								onChange={onCategoryChange}
-								checked={category === "Otros"}
+								checked={category === "Otros" ? true : false}
 							/>
 							<label htmlFor="categoryotros">Otros</label>
 						</div>
@@ -284,11 +326,28 @@ export const ManageMenu = () => {
 					/>
 				</div>
 				<div className="p-field">
-					<br />
-					<Checkbox inputId="cb1" onChange={onStateChange} checked={state} />
-					<label htmlFor="cb1" className="p-checkbox-label">
-						{state ? "Disponible" : "No Disponible"}
-					</label>
+					<div className="p-formgrid p-grid">
+						<div className="p-field-radiobutton p-col-6">
+							<RadioButton
+								inputId="availabletrue"
+								name="available"
+								value="Disponible"
+								onChange={onAvailableChange}
+								checked={available === "Disponible" ? true : false}
+							/>
+							<label htmlFor="availabletrue">Disponible</label>
+						</div>
+						<div className="p-field-radiobutton p-col-6">
+							<RadioButton
+								inputId="availablefalse"
+								name="available"
+								value="No Disponible"
+								onChange={onAvailableChange}
+								checked={available === "No Disponible" ? true : false}
+							/>
+							<label htmlFor="availablefalse">No Disponible</label>
+						</div>
+					</div>
 				</div>
 			</Dialog>
 			<Dialog
@@ -305,16 +364,23 @@ export const ManageMenu = () => {
 					</span>
 				</div>
 			</Dialog>
-			<Container className="border rounded">
+			<Container>
 				<Row>
 					<Col className="text-center">
 						<h1>PRODUCTOS</h1>
 					</Col>
 					<br />
 				</Row>
-			</Container>
-			<Container>
-				<DataTable value={store.products} selectionMode="single" dataKey="id" onRowSelect={onRowSelect}>
+				<Toolbar className="p-mb-4" left={leftToolbarButton} />
+
+				<DataTable
+					className="datatable-scroll"
+					scrollable
+					scrollHeight="400px"
+					value={store.products}
+					selectionMode="single"
+					dataKey="id"
+					onRowSelect={onRowSelect}>
 					<Column
 						headerStyle={{ width: "8em", textAlign: "center" }}
 						bodyStyle={{ textAlign: "center", overflow: "visible" }}
@@ -322,6 +388,7 @@ export const ManageMenu = () => {
 						body={actionsButtons}
 					/>
 					<Column field="ProductID" header="# Producto" sortable />
+					<Column header="Imagen" body={imageBody} />
 					<Column field="Name" header="Nombre" sortable />
 					<Column field="Available" header="Estado" sortable />
 				</DataTable>

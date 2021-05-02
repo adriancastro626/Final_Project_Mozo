@@ -71,7 +71,7 @@ class Product(db.Model):
             "Price": float(self.Price),
             "Description": self.Description,
             "ImageURL": self.ImageURL,
-            "Available": self.Available  
+            "Available": self.Available,
         }
 
     def getAllProducts():
