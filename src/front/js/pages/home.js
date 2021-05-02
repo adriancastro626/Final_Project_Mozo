@@ -2,18 +2,20 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import MOZOImageUrl from "../../img/MozoHome.png";
 import "../../styles/home.scss";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button } from "primereact/button";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
+	const history = useHistory();
 
-	useEffect(
-		() => {
-			if (store.token && store.token != "" && store.token != undefined) actions.getMessage();
-		},
-		[store.token]
-	);
+	useEffect(() => {
+		console.log(store);
+
+		if (!store.token) {
+			history.push("/");
+		}
+	}, []);
 
 	return (
 		<div className="cont s--inactive">

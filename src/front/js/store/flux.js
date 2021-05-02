@@ -65,10 +65,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (token && token != "" && token != undefined) setStore({ token: token });
 			},
 
-			login: async (Username, Password) => {
+			login: (Username, Password) => {
 				const store = getStore();
 
-				await fetch(`${store.baseURL}/login`, {
+				fetch(`${store.baseURL}/login`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -80,7 +80,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(resp => {
 						if (resp.status !== 200) {
-							alert("There was an error!!");
+							alert("Usuario ó Contraseña Invalida");
 							return false;
 						}
 						return resp.json();
@@ -88,7 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => {
 						console.log("This came from the backend ", data);
 						localStorage.setItem("token", data.access_token);
-						setStore({ access_token: data.access_token });
+						setStore({ token: data.access_token });
 						window.location.reload();
 					})
 					.catch(error => console.error("There has been an error login in!!", error));
@@ -129,41 +129,41 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
-			getMessage: () => {
-				const store = getStore();
-				const opts = {
-					headers: {
-						Authorization: "Bearer " + store.token
-					}
-				};
-				// fetching data from the backend
-				fetch(`${process.env.BACKEND_URL}api/hello`, opts)
-					.then(resp => resp.json())
-					.then(data => setStore({ message: data.message }))
-					.catch(error => console.log("Error loading message from backend", error));
-			},
-			getAllOrders: () => {
-				const store = getStore();
-				let token = store.token; //localStorage.getItem("token");
-				console.log("entre al get orders");
-				fetch(`${store.baseURL}/manageorder`, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json"
-						//Authorization: `Bearer	${token}`
-					}
-				})
-					.then(resp => {
-						return resp.json();
-					})
-					.then(data => {
-						setStore({ orders: data });
-					})
+			// getMessage: () => {
+			// 	const store = getStore();
+			// 	const opts = {
+			// 		headers: {
+			// 			Authorization: "Bearer " + store.token
+			// 		}
+			// 	};
+			// 	// fetching data from the backend
+			// 	fetch(`${process.env.BACKEND_URL}api/hello`, opts)
+			// 		.then(resp => resp.json())
+			// 		.then(data => setStore({ message: data.message }))
+			// 		.catch(error => console.log("Error loading message from backend", error));
+			// },
+			// getAllOrders: () => {
+			// 	const store = getStore();
+			// 	let token = store.token; //localStorage.getItem("token");
+			// 	console.log("entre al get orders");
+			// 	fetch(`${store.baseURL}/manageorder`, {
+			// 		method: "GET",
+			// 		headers: {
+			// 			"Content-Type": "application/json"
+			// 			//Authorization: `Bearer	${token}`
+			// 		}
+			// 	})
+			// 		.then(resp => {
+			// 			return resp.json();
+			// 		})
+			// 		.then(data => {
+			// 			setStore({ orders: data });
+			// 		})
 
-					.catch(err => {
-						console.log("error", err);
-					});
-			},
+			// 		.catch(err => {
+			// 			console.log("error", err);
+			// 		});
+			// },
 			getOrderDetail: orderid => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");

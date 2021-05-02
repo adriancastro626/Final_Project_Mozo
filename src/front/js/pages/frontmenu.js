@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import { Container, Button, Image, Card, CardDeck, Carousel } from "react-bootstrap";
+import { Container, Button, Image, Card, CardDeck, Carousel, Badge } from "react-bootstrap";
 import { BsEnvelope, BsPeopleCircle, BsFillLockFill } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
@@ -14,7 +14,7 @@ export const Frontmenu = () => {
 	return (
 		<Container>
 			<h1 className="mr-auto text-center">MOZO MENU</h1>
-			<Container>
+			{/* <Container>
 				<Carousel fade>
 					<Carousel.Item>
 						<img
@@ -23,8 +23,8 @@ export const Frontmenu = () => {
 							alt="First slide"
 						/>
 						<Carousel.Caption>
-							<h3>First slide label</h3>
-							<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+							<h3>{name}</h3>
+							<p>{description}</p>
 						</Carousel.Caption>
 					</Carousel.Item>
 					<Carousel.Item>
@@ -52,155 +52,19 @@ export const Frontmenu = () => {
 						</Carousel.Caption>
 					</Carousel.Item>
 				</Carousel>
-			</Container>
+			</Container> */}
 			<div>
 				<CardDeck>
 					<Card>
 						<Card.Img variant="top" src="holder.js/100px160" />
 						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This is a wider card with supporting text below as a natural lead-in to additional
-								content. This content is a little bit longer.
-							</Card.Text>
+							<Card.Title>Hamburguesa</Card.Title>
+							<Card.Text>Description del menu</Card.Text>
 						</Card.Body>
 						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-					<Card>
-						<Card.Img variant="top" src="holder.js/100px160" />
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This card has supporting text below as a natural lead-in to additional content.{" "}
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-					<Card>
-						<Card.Img variant="top" src="holder.js/100px160" />
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This is a wider card with supporting text below as a natural lead-in to additional
-								content. This card has even longer content than the first to show that equal height
-								action.
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-				</CardDeck>
-			</div>
-			<div>
-				<CardDeck>
-					<Card>
-						<Card.Img variant="top" src="holder.js/100px160" />
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This is a wider card with supporting text below as a natural lead-in to additional
-								content. This content is a little bit longer.
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-					<Card>
-						<Card.Img variant="top" src="holder.js/100px160" />
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This card has supporting text below as a natural lead-in to additional content.{" "}
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-					<Card>
-						<Card.Img variant="top" src="holder.js/100px160" />
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This is a wider card with supporting text below as a natural lead-in to additional
-								content. This card has even longer content than the first to show that equal height
-								action.
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-				</CardDeck>
-			</div>
-			<div>
-				<CardDeck>
-					<Card>
-						<Card.Img variant="top" src="holder.js/100px160" />
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This is a wider card with supporting text below as a natural lead-in to additional
-								content. This content is a little bit longer.
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-					<Card>
-						<Card.Img
-							variant="top"
-							src="https://gestion.pe/resizer/oWSznkwiGqV77fm6k24azqhaONk=/580x330/smart/filters:format(jpeg):quality(75)/arc-anglerfish-arc2-prod-elcomercio.s3.amazonaws.com/public/Y5LTDOYJTJGKJGNE5LEQRIO7TE.jpg"
-						/>
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This card has supporting text below as a natural lead-in to additional content.{" "}
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-					<Card>
-						<Card.Img
-							variant="top"
-							src="https://cdn.recetas360.com/wp-content/uploads/2020/03/como-hacer-el-pollo-kfc.jpeg"
-						/>
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This is a wider card with supporting text below as a natural lead-in to additional
-								content. This card has even longer content than the first to show that equal height
-								action.
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
-						</Card.Footer>
-					</Card>
-				</CardDeck>
-			</div>
-			<div>
-				<CardDeck>
-					<Card>
-						<Card.Img variant="top" src="holder.js/100px160" />
-						<Card.Body>
-							<Card.Title>Card title</Card.Title>
-							<Card.Text>
-								This is a wider card with supporting text below as a natural lead-in to additional
-								content. This content is a little bit longer.
-							</Card.Text>
-						</Card.Body>
-						<Card.Footer>
-							<small className="text-muted">Last updated 3 mins ago</small>
+							<Badge pill variant="primary">
+								Disponibilidad
+							</Badge>{" "}
 						</Card.Footer>
 					</Card>
 					<Card>
