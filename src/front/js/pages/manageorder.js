@@ -12,6 +12,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Badge } from "primereact/badge";
 import { InputTextarea } from "primereact/inputtextarea";
+import { InputText } from "primereact/inputtext";
 
 import { element } from "prop-types";
 import { Container, Col, Image } from "react-bootstrap";
@@ -21,6 +22,7 @@ export const ManageOrder = () => {
 	const history = useHistory();
 	const { store, actions } = useContext(Context);
 	const [orders, setOrders] = useState([]);
+	const [globalFilter, setGlobalFilter] = useState(null);
 
 	const [dialog, setDialog] = useState(false);
 	const handleShow = () => {
@@ -61,6 +63,15 @@ export const ManageOrder = () => {
 		setDialog(false);
 		actions.getAllOrders();
 	};
+
+	const header = (
+		<div className="table-header">
+			<span className="p-input-icon-left">
+				<i className="pi pi-search" />
+				<InputText type="search" onInput={e => setGlobalFilter(e.target.value)} placeholder="Buscar" />
+			</span>
+		</div>
+	);
 
 	return (
 		<Container>
@@ -169,16 +180,24 @@ export const ManageOrder = () => {
 					<h1>Debe seleccionar una orden</h1>
 				)}
 			</Dialog>
-			<Container className="border rounded">
+			<Container>
 				<Row>
 					<Col className="text-center">
 						<h1>&Oacute;RDENES</h1>
 					</Col>
 					<br />
 				</Row>
-			</Container>
-			<Container className="card">
-				<DataTable value={store.orders} selectionMode="single" dataKey="id" onRowSelect={onRowSelect}>
+				<DataTable
+					className="datatable-scroll"
+					scrollable
+					scrollHeight="400px"
+					value={store.orders}
+					selectionMode="single"
+					dataKey="id"
+					onRowSelect={onRowSelect}
+					header={header}
+					globalFilter={globalFilter}
+					emptyMessage="No se encontraron datos">
 					<Column
 						header="Ver"
 						body={ViewDataColumn}
@@ -191,7 +210,7 @@ export const ManageOrder = () => {
 				</DataTable>
 			</Container>
 			<br />
-			<Link to="/">
+			<Link to="/home">
 				<Button variant="primary">Ir al inicio</Button>
 			</Link>
 		</Container>
