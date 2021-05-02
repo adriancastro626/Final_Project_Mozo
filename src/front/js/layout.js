@@ -11,6 +11,7 @@ import { Retrive2 } from "./pages/retrive2.js";
 import { Register } from "./pages/register.js";
 import { Register1 } from "./pages/register1.js";
 import { ManageOrder } from "./pages/manageorder.js";
+import { ManageMenu } from "./pages/managemenu.js";
 import { Payment } from "./pages/payment";
 import { Cart } from "./pages/cart";
 import injectContext from "./store/appContext";
@@ -50,6 +51,9 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/manageorder">
 							<ManageOrder />
+						</Route>
+						<Route exact path="/managemenu">
+							<ManageMenu />
 						</Route>
 						<Route exact path="/demo">
 							<Demo />

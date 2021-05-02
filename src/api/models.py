@@ -56,6 +56,24 @@ class Product(db.Model):
     Available = db.Column(db.Boolean(), nullable=False)
     category = db.relationship('Category')  
 
+    def serialize(self):
+        category = Category.query.filter_by(CategoryID=self.CategoryID).first()
+        return {
+            "ProductID": self.ProductID,
+            "CategoryID": self.CategoryID,
+            "Category": category.Name,
+            "Name": self.Name,
+            "Price": float(self.Price),
+            "Description": self.Description,
+            "ImageURL": self.ImageURL,
+            "Available": self.Available  
+        }
+
+    def getAllProducts():
+        all_products = Product.query.order_by(Product.Available).all()        
+        all_products = list(map(lambda x: x.serialize(), all_products))
+        return all_products
+
 class Order(db.Model):
     __tablename__ = 'order'
     OrderID = db.Column(db.Integer, primary_key=True)

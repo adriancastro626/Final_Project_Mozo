@@ -15,7 +15,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 import { element } from "prop-types";
 import { Container, Col, Image, FormGroup, Form, Table } from "react-bootstrap";
-
+<script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer />;
 export const Cart = () => {
 	const history = useHistory();
 	const goBack = () => {
