@@ -45,7 +45,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				},
 				{
 					Quantity: 1,
-					ProductID: 2,
+					ProductID: 6,
 					Product: "Coca Cola",
 					Price: 1500,
 					Discount: 350,

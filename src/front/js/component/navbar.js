@@ -1,55 +1,79 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Nav, Button } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import { Context } from "../store/appContext";
+import { Menubar } from "primereact/menubar";
+import { Container } from "react-bootstrap";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import genericImage from "../../img/defaultFood.png";
 
 export const NavbarMenu = () => {
 	const { store, actions } = useContext(Context);
+	const items = [
+		{
+			label: "Menu",
+			icon: "pi pi-fw pi-book",
+			items: [
+				{
+					label: "Ver",
+					icon: "pi pi-fw pi-search",
+					url: (window.location.hash = "/frontmenu")
+				},
+				{
+					label: "Administrar",
+					icon: "pi pi-fw pi-pencil",
+					url: (window.location.hash = "/managemenu")
+				}
+			]
+		},
+		{
+			label: "Usuarios",
+			icon: "pi pi-fw pi-user",
+			items: [
+				{
+					label: "Nuevo",
+					icon: "pi pi-fw pi-user-plus",
+					url: (window.location.hash = "/register")
+				},
+				{
+					label: "Administrar",
+					icon: "pi pi-fw pi-users",
+					url: (window.location.hash = "/manageuser")
+				}
+			]
+		},
+		{
+			label: "Ordenes",
+			icon: "pi pi-fw pi-calendar",
+			items: [
+				{
+					label: "Administrar",
+					icon: "pi pi-fw pi-pencil",
+					url: (window.location.hash = "/manageorder")
+				}
+			]
+		}
+	];
 	return (
-		<Navbar bg="light" expand="lg">
-			<Navbar.Brand>
-				<img
-					src="/MozoHome.png"
-					width="60"
-					height="50"
-					className="d-inline-block align-top"
-					alt="React Bootstrap logo"
-				/>
-			</Navbar.Brand>
-			<Link to="/">
-				<span className="navbar-brand mb-0 h1">MOZO App</span>
-			</Link>
-			<Navbar.Toggle aria-controls="basic-navbar-nav" />
-			<Navbar.Collapse id="basic-navbar-nav">
-				<Nav className="mr-auto">
-					<Nav.Link>
-						{!store.token ? (
-							<Link to="/login">
-								<Button className="navbar-brand mb-0 h1">Log In</Button>
-							</Link>
-						) : (
-							<Button onClick={() => actions.logout()} className="navbar-brand mb-0 h1">
-								Log out
-							</Button>
-						)}
-					</Nav.Link>
-					<Nav.Link>
-						<Link to="/manageorder">
-							<span className="navbar-brand mb-0 h1">&Oacute;rdenes</span>
-						</Link>
-					</Nav.Link>
-					<Nav.Link>
-						<Link to="/managemenu">
-							<span className="navbar-brand mb-0 h1">Men&uacute;</span>
-						</Link>
-					</Nav.Link>
-					<Nav.Link>
-						<Link to="/register">
-							<span className="navbar-brand mb-0 h1">Usuarios</span>
-						</Link>
-					</Nav.Link>
-				</Nav>
-			</Navbar.Collapse>
-		</Navbar>
+		<Menubar
+			model={items}
+			end={
+				<Link to="/">
+					<Button label="Logout" icon="pi pi-fw pi-power-off" className="p-button-danger" />{" "}
+				</Link>
+			}
+			start={
+				<Link to="/home">
+					<img
+						alt="logo"
+						src={`${genericImage}`}
+						onError={e => (e.target.src = `${genericImage}`)}
+						height="40"
+						className="p-mr-2"
+					/>
+				</Link>
+			}
+		/>
 	);
 };

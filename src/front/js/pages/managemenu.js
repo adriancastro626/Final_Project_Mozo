@@ -394,7 +394,7 @@ export const ManageMenu = () => {
 				</DataTable>
 			</Container>
 			<br />
-			<Link to="/">
+			<Link to="/home">
 				<Button variant="primary">Ir al inicio</Button>
 			</Link>
 		</Container>

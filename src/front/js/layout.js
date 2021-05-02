@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 
 import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
-import { Single } from "./pages/single";
 import { Login } from "./pages/login.js";
 import { Retrive1 } from "./pages/retrive1.js";
 import { Retrive2 } from "./pages/retrive2.js";
@@ -15,9 +13,10 @@ import { ManageMenu } from "./pages/managemenu.js";
 import { Frontmenu } from "./pages/frontmenu.js";
 import { Payment } from "./pages/payment";
 import { Cart } from "./pages/cart";
-import injectContext from "./store/appContext";
+import injectContext, { Context } from "./store/appContext";
 
 import { NavbarMenu } from "./component/navbar";
+import { NavbarLogin } from "./component/navbar2";
 import { Footer } from "./component/footer";
 
 //create your first component
@@ -25,12 +24,12 @@ const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
 	// you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
 	const basename = process.env.BASENAME || "";
-
+	const { store, actions } = useContext(Context);
 	return (
 		<div className="d-flex flex-column h-100">
 			<BrowserRouter basename={basename}>
 				<ScrollToTop>
-					<NavbarMenu />
+					{store.login ? <NavbarMenu /> : <NavbarLogin />}
 					<Switch>
 						<Route exact path="/">
 							<Login />
@@ -58,12 +57,6 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/managemenu">
 							<ManageMenu />
-						</Route>
-						<Route exact path="/demo">
-							<Demo />
-						</Route>
-						<Route exact path="/single/:theid">
-							<Single />
 						</Route>
 						<Route exact path="/payment">
 							<Payment />
