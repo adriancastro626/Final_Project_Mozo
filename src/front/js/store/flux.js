@@ -6,7 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			baseURL: `${process.env.BACKEND_URL}/api`,
 			response: null,
 			products: [],
-			login: false,
+			login: "gineth",
 			UserName: "",
 			signUp: false,
 			orders: [

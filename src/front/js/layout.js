@@ -25,19 +25,22 @@ const Layout = () => {
 	// you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
 	const basename = process.env.BASENAME || "";
 	const { store, actions } = useContext(Context);
+
 	return (
 		<div className="d-flex flex-column h-100">
 			<BrowserRouter basename={basename}>
 				<ScrollToTop>
-					{store.login ? <NavbarMenu /> : <NavbarLogin />}
 					<Switch>
 						<Route exact path="/">
+							<NavbarLogin />
 							<Login />
 						</Route>
 						<Route exact path="/frontmenu">
+							<NavbarLogin />
 							<Frontmenu />
 						</Route>
 						<Route exact path="/register">
+							{store.login ? <NavbarMenu /> : <NavbarLogin />}
 							<Register />
 						</Route>
 						<Route exact path="/register1">
@@ -53,15 +56,18 @@ const Layout = () => {
 							<Home />
 						</Route>
 						<Route exact path="/manageorder">
+							{store.login ? <NavbarMenu /> : <NavbarLogin />}
 							<ManageOrder />
 						</Route>
 						<Route exact path="/managemenu">
+							{store.login ? <NavbarMenu /> : <NavbarLogin />}
 							<ManageMenu />
 						</Route>
 						<Route exact path="/payment">
 							<Payment />
 						</Route>
 						<Route exact path="/cart">
+							{store.login ? <NavbarMenu /> : <NavbarLogin />}
 							<Cart />
 						</Route>
 						<Route>
