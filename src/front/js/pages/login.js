@@ -16,8 +16,8 @@ export const Login = () => {
 	console.log("This is your token: ", store.token);
 	const handleClick = () => {
 		actions.login(Username, Password);
-
-		if (store.token) {
+		console.log("store ", store);
+		if (!store.token) {
 			history.push("/home");
 		}
 	};

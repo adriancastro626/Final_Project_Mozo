@@ -80,7 +80,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(resp => {
 						if (resp.status !== 200) {
-							alert("Usuario ó Contraseña Invalida");
+							//alert("Usuario ó Contraseña Invalida");
 							return false;
 						}
 						return resp.json();
@@ -89,7 +89,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("This came from the backend ", data);
 						localStorage.setItem("token", data.access_token);
 						setStore({ token: data.access_token });
-						window.location.reload();
+						console.log("store ", store);
+						//window.location.reload();
 					})
 					.catch(error => console.error("There has been an error login in!!", error));
 			},

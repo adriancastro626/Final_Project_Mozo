@@ -15,6 +15,9 @@ export const Home = () => {
 		if (!store.token) {
 			history.push("/");
 		}
+		// else {
+		// 	history.push("/home");
+		// }
 	}, []);
 
 	return (
