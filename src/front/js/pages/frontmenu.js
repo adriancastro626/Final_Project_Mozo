@@ -27,9 +27,17 @@ export const Frontmenu = () => {
 										<Card.Text>{element.Description}</Card.Text>
 									</Card.Body>
 									<Card.Footer>
-										<Badge pill variant="primary">
-											Disponibilidad
-										</Badge>{" "}
+										<div className="text-center pb-0">
+											<Badge pill variant="primary">
+												{element.Available}
+											</Badge>{" "}
+											<Badge variant="light">{element.Price}</Badge>{" "}
+										</div>
+										<div className="text-center pb-0">
+											<Button variant="success" size="sm">
+												Agregar
+											</Button>{" "}
+										</div>
 									</Card.Footer>
 								</Card>
 						  ))
