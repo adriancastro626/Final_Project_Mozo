@@ -8,29 +8,30 @@ class User(db.Model):
     UserName = db.Column(db.String(100), unique=True, nullable=False)
     Email = db.Column(db.String(130), unique=True, nullable=False)
     Password = db.Column(db.String(180), nullable=False)
-    TypeID = db.Column(db.Integer, db.ForeignKey("usertypes.TypeID"), nullable=True)
-    # usertypes = db.relationship('UserTypes')  
+    TypeID = db.Column(db.Integer, db.ForeignKey("usertypes.TypeID"), nullable=False)
+    usertypes = db.relationship('UserTypes')  
 
     def __ref__(self):
         return '<User %r>' % self.UserName
     
     def serialize(self):
+        usertype = UserTypes.query.filter_by(TypeID=self.TypeID).first()
         return {
             "UserID": self.UserID,
             "UserName": self.UserName,
-            "Email": self.Email            
+            "Email": self.Email,
+            "Type": usertype.Position         
         }
     
-    # def getAllUsers():
-    #     all_users = User.query.all()
-    #     all_users = list(map(lambda x: x.serialize(), all_users))
-    #     return all_users
+    def getAllUsers():
+        all_users = User.query.all()
+        all_users = list(map(lambda x: x.serialize(), all_users))
+        return all_users
 
 class UserTypes(db.Model):
     __tablename__ = 'usertypes'
     TypeID = db.Column(db.Integer, primary_key=True)
-    Position = db.Column(db.String(10), unique=True, nullable=False)
-    tipoUsuario = db.relationship('User', lazy=True)
+    Position = db.Column(db.String(20), unique=True, nullable=False)
 
     def __ref__(self):
         return '<UserTypes %r>' % self.Position

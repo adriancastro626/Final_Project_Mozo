@@ -10,6 +10,7 @@ import { Register } from "./pages/register.js";
 import { Register1 } from "./pages/register1.js";
 import { ManageOrder } from "./pages/manageorder.js";
 import { ManageMenu } from "./pages/managemenu.js";
+import { ManageUser } from "./pages/manageuser.js";
 import { Frontmenu } from "./pages/frontmenu.js";
 import { Payment } from "./pages/payment";
 import { Cart } from "./pages/cart";
@@ -58,6 +59,10 @@ const Layout = () => {
 						<Route exact path="/manageorder">
 							{store.login ? <NavbarMenu /> : <NavbarLogin />}
 							<ManageOrder />
+						</Route>
+						<Route exact path="/manageuser">
+							{store.login ? <NavbarMenu /> : <NavbarLogin />}
+							<ManageUser />
 						</Route>
 						<Route exact path="/managemenu">
 							{store.login ? <NavbarMenu /> : <NavbarLogin />}
