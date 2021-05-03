@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import {
-	Container,
-	Button,
-	Row,
-	Form,
-	FormGroup,
-	Col,
-} from "react-bootstrap";
+import { Container, Button, Row, Form, FormGroup, Col } from "react-bootstrap";
 
 export const Retrive = () => {
 	let { token } = useParams();
@@ -27,7 +20,7 @@ export const Retrive = () => {
 				<Col className="col-md-4 formulary">
 					<Form action="">
 						<FormGroup className="text-center pb-3">
-							<h1 className="text-light">Reestablecer Contraseña</h1>
+							<h1>Reestablecer Contraseña</h1>
 						</FormGroup>
 
 						<FormGroup className="mx-sm-4 pb-3">
