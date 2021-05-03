@@ -3,14 +3,10 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import {
 	Container,
 	Button,
-	InputGroup,
-	FormControl,
 	Row,
 	Form,
 	FormGroup,
 	Col,
-	Carousel,
-	Image
 } from "react-bootstrap";
 
 export const Retrive = () => {
@@ -31,20 +27,20 @@ export const Retrive = () => {
 				<Col className="col-md-4 formulary">
 					<Form action="">
 						<FormGroup className="text-center pb-3">
-							<h1 className="text-light">Restore Password</h1>
+							<h1 className="text-light">Reestablecer Contraseña</h1>
 						</FormGroup>
 
 						<FormGroup className="mx-sm-4 pb-3">
 							<input
 								type="password"
 								className="form-control"
-								placeholder="New Password"
+								placeholder="Nueva contraseña"
 								onChange={e => setPass(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3">
 							<Button className="btn btn-block signin" onClick={() => reset_Password()}>
-								Restore
+								Reestablecer
 							</Button>
 						</FormGroup>
 					</Form>
