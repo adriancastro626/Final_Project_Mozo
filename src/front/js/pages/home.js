@@ -12,10 +12,14 @@ export const Home = () => {
 	// useEffect(() => {
 	// 	console.log(store);
 
-	// 	if (!store.token) {
-	// 		history.push("/");
-	// 	}
-	// }, []);
+		if (!store.token) {
+			history.push("/");
+		}
+		// else {
+		// 	history.push("/home");
+		// }
+	}, []);
+
 
 	return (
 		<div className="cont s--inactive">
