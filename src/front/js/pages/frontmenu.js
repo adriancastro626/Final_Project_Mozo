@@ -11,6 +11,7 @@ export const Frontmenu = () => {
 
 	useEffect(() => {
 		actions.getAllProducts();
+		actions.newOrder();
 	}, []);
 
 	return (
@@ -34,7 +35,12 @@ export const Frontmenu = () => {
 											<Badge variant="light">{element.Price}</Badge>{" "}
 										</div>
 										<div className="text-center pb-0">
-											<Button variant="success" size="sm">
+											<Button
+												variant="success"
+												size="sm"
+												onClick={() => {
+													actions.newOrder(index);
+												}}>
 												Agregar
 											</Button>{" "}
 										</div>

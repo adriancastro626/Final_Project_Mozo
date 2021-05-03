@@ -14,6 +14,7 @@ export const NavbarMenu = () => {
 		{
 			label: "Menu",
 			icon: "pi pi-fw pi-book",
+
 			items: [
 				{
 					label: "Ver",

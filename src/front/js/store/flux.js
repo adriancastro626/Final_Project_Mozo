@@ -128,42 +128,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-
-			// getMessage: () => {
-			// 	const store = getStore();
-			// 	const opts = {
-			// 		headers: {
-			// 			Authorization: "Bearer " + store.token
-			// 		}
-			// 	};
-			// 	// fetching data from the backend
-			// 	fetch(`${process.env.BACKEND_URL}api/hello`, opts)
-			// 		.then(resp => resp.json())
-			// 		.then(data => setStore({ message: data.message }))
-			// 		.catch(error => console.log("Error loading message from backend", error));
-			// },
-			// getAllOrders: () => {
-			// 	const store = getStore();
-			// 	let token = store.token; //localStorage.getItem("token");
-			// 	console.log("entre al get orders");
-			// 	fetch(`${store.baseURL}/manageorder`, {
-			// 		method: "GET",
-			// 		headers: {
-			// 			"Content-Type": "application/json"
-			// 			//Authorization: `Bearer	${token}`
-			// 		}
-			// 	})
-			// 		.then(resp => {
-			// 			return resp.json();
-			// 		})
-			// 		.then(data => {
-			// 			setStore({ orders: data });
-			// 		})
-
-			// 		.catch(err => {
-			// 			console.log("error", err);
-			// 		});
-			// },
 			getOrderDetail: orderid => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
@@ -209,6 +173,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
+			// addCart: index => {
+			// 	const store = getStore();
+
+			// 	let obj = store.cart.find(obj => obj.name == store.orders[index].name);
+
+			// 	if (obj == undefined) {
+			// 		store.cart.push(store.orders[index]);
+			// 		setStore(store);
+			// 		localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
+			// 	}
+			// },
 			newOrder: (
 				state,
 				notes,
