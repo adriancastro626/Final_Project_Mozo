@@ -9,13 +9,13 @@ export const Home = () => {
 	const { store, actions } = useContext(Context);
 	const history = useHistory();
 
-	useEffect(() => {
-		console.log(store);
+	// useEffect(() => {
+	// 	console.log(store);
 
-		if (!store.token) {
-			history.push("/");
-		}
-	}, []);
+	// 	if (!store.token) {
+	// 		history.push("/");
+	// 	}
+	// }, []);
 
 	return (
 		<div className="cont s--inactive">
