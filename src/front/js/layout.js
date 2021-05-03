@@ -5,7 +5,7 @@ import ScrollToTop from "./component/scrollToTop";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login.js";
 import { Retrive1 } from "./pages/retrive1.js";
-import { Retrive2 } from "./pages/retrive2.js";
+import { Retrive } from "./pages/retrive2.js";
 import { Register } from "./pages/register.js";
 import { Register1 } from "./pages/register1.js";
 import { ManageOrder } from "./pages/manageorder.js";
@@ -50,8 +50,8 @@ const Layout = () => {
 						<Route exact path="/retrive1">
 							<Retrive1 />
 						</Route>
-						<Route exact path="/retrive2">
-							<Retrive2 />
+						<Route exact path="/retrive/:token">
+							<Retrive />
 						</Route>
 						<Route exact path="/home">
 							<Home />

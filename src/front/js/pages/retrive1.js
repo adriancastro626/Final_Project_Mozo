@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Container, Button, Image, Form, Modal } from "react-bootstrap";
 import { BsFillUnlockFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { Context } from "../store/appContext";
 
 export const Retrive1 = () => {
 	const { store, actions } = useContext(Context);
+	const [email, setEmail] = useState(null);
 
 	return (
 		<Container>
@@ -22,15 +23,25 @@ export const Retrive1 = () => {
 							<Form.Label className="mb-0">
 								<BsFillUnlockFill /> Ingrese su Correo ó nombre de Usuario
 							</Form.Label>
-							<Form.Control type="email" placeholder="Ingrese Correo ó Usuario" required isInvalid />
+							<Form.Control
+								type="email"
+								onChange={e => setEmail(e.target.value)}
+								placeholder="Ingrese Correo ó Usuario"
+								required
+								isInvalid
+							/>
 						</Form.Group>
 					</Form>
 				</Modal.Body>
 
 				<Modal.Footer className="justify-content-center">
-					<Link to="/retrive2">
-						<Button variant="outline-dark">Recuperar Contraseña</Button>
-					</Link>
+					<Button
+						variant="outline-dark"
+						onClick={() => {
+							actions.retrievePassword(email);
+						}}>
+						Recuperar Contraseña
+					</Button>
 				</Modal.Footer>
 			</Modal.Dialog>
 		</Container>

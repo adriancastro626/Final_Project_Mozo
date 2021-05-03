@@ -1,33 +1,55 @@
-import React, { useContext } from "react";
-import { Container, Button, Image, Form, Modal } from "react-bootstrap";
-import { BsFillUnlockFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import { Context } from "../store/appContext";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useParams, useHistory } from "react-router-dom";
+import {
+	Container,
+	Button,
+	InputGroup,
+	FormControl,
+	Row,
+	Form,
+	FormGroup,
+	Col,
+	Carousel,
+	Image
+} from "react-bootstrap";
 
-export const Retrive2 = () => {
-	const { store, actions } = useContext(Context);
-
+export const Retrive = () => {
+	let { token } = useParams();
+	console.log("estoy en resetpassword func", token);
+	useEffect(() => {
+		fetch(`https://3001-lime-rooster-trsy6393.ws-us03.gitpod.io/confirm_email/${token}`)
+			.then(resp => {
+				return resp.json();
+			})
+			.then(resp => {
+				console.log(resp);
+			});
+	}, []);
 	return (
 		<Container>
-			<Modal.Dialog>
-				<Modal.Header closeButton>
-					<Modal.Title>Recuperar Contraseña</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group controlId="formBasicEmail font-weight-bold">
-							<Form.Label className="mb-0">
-								Un mensaje con su contraseña ha sido envidado, por favor revise su correo.
-							</Form.Label>
-						</Form.Group>
+			<Row className="justify-content-center pt-5 mt-5 mr-1">
+				<Col className="col-md-4 formulary">
+					<Form action="">
+						<FormGroup className="text-center pb-3">
+							<h1 className="text-light">Restore Password</h1>
+						</FormGroup>
+
+						<FormGroup className="mx-sm-4 pb-3">
+							<input
+								type="password"
+								className="form-control"
+								placeholder="New Password"
+								onChange={e => setPass(e.target.value)}
+							/>
+						</FormGroup>
+						<FormGroup className="mx-sm-4 pb-3">
+							<Button className="btn btn-block signin" onClick={() => reset_Password()}>
+								Restore
+							</Button>
+						</FormGroup>
 					</Form>
-				</Modal.Body>
-				<Modal.Footer className="justify-content-center">
-					<Link to="/login">
-						<Button variant="outline-primary">Volver a Inicio de Sesión</Button>
-					</Link>
-				</Modal.Footer>
-			</Modal.Dialog>
+				</Col>
+			</Row>
 		</Container>
 	);
 };

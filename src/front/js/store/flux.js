@@ -3,6 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
+			mailURL: "https://3001-lime-rooster-trsy6393.ws-us03.gitpod.io",
 			response: null,
 			products: [],
 			users: [],
@@ -434,6 +435,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					.catch(err => {
 						console.log("error", err);
+					});
+			},
+			retrievePassword: email => {
+				const store = getStore();
+				console.log("mail ", email);
+				fetch(`${store.mailURL}/restore`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					},
+					body: JSON.stringify({
+						Email: email
+					})
+				})
+					.then(res => {
+						if (!res.ok) {
+							// the "the throw Error will send the error to the "catch"
+							throw Error("Could not fetch the data for that resource");
+						}
+						return res.json();
+					})
+
+					.catch(err => {
+						console.error(err.message);
 					});
 			}
 		}
