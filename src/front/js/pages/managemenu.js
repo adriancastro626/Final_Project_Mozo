@@ -45,6 +45,10 @@ export const ManageMenu = () => {
 
 	useEffect(() => {
 		actions.getAllProducts();
+		actions.getToken();
+		if (!store.login) {
+			history.push("/");
+		}
 	}, []);
 
 	const goBack = () => {

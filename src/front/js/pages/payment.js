@@ -7,8 +7,6 @@ import { Context } from "../store/appContext";
 import paypalImageUrl from "../../img/logopaypal.png";
 import xImageUrl from "../../img/x.jpg";
 
-import "../../styles/demo.scss";
-
 export const Payment = () => {
 	const { store, actions } = useContext(Context);
 

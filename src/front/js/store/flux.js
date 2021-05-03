@@ -1,14 +1,12 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			token: null,
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
 			response: null,
 			products: [],
-			login: "gineth",
-			UserName: "",
-			signUp: false,
+			users: [],
+			login: false,
 			orders: [
 				// {
 				// 	OrderID: 101,
@@ -57,17 +55,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			NewOrderID: 0
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-
-			syncTokenFromSessionStore: () => {
-				const token = localStorage.getItem("token");
-				console.log("Application just loaded, sync");
-				if (token && token != "" && token != undefined) setStore({ token: token });
+			getToken: () => {
+				let store = getStore();
+				let token = localStorage.getItem("token");
+				if (token && token.length > 0 && token != "undefined") {
+					setStore({ login: true });
+				} else {
+					setStore({ login: false });
+				}
 			},
-
 			login: (Username, Password) => {
 				const store = getStore();
-
 				fetch(`${store.baseURL}/login`, {
 					method: "POST",
 					headers: {
@@ -80,30 +78,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(resp => {
 						if (resp.status !== 200) {
-							//alert("Usuario ó Contraseña Invalida");
 							return false;
 						}
 						return resp.json();
 					})
 					.then(data => {
-						console.log("This came from the backend ", data);
 						localStorage.setItem("token", data.access_token);
-						setStore({ token: data.access_token });
-						console.log("store ", store);
-						//window.location.reload();
+						//setStore({ token: data.access_token });
+						window.location.reload();
 					})
 					.catch(error => console.error("There has been an error login in!!", error));
 			},
 
 			logout: () => {
-				localStorage.removeItem("token");
-				console.log("Login Out");
+				let store = getStore();
+				setStore({ login: false });
 				setStore({ token: null });
+				localStorage.removeItem("token");
 			},
 
-			signUp: (Username, Email, Password) => {
+			signUp: (Username, Email, Password, Type) => {
 				const store = getStore();
-
+				console.log(Type, " mitype");
 				fetch(`${store.baseURL}/user`, {
 					method: "POST",
 					headers: {
@@ -112,7 +108,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({
 						Usuario: Username,
 						Email: Email,
-						Password: Password
+						Password: Password,
+						Type: Type
 					})
 				})
 					.then(resp => {
@@ -120,9 +117,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp.json();
 					})
 					.then(data => {
-						//setStore({ token: data.results || data.result });
-
 						setStore({ user: true });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			getAllOrders: () => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre al get orders");
+				fetch(`${store.baseURL}/manageorder`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					}
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ orders: data });
 					})
 
 					.catch(err => {
@@ -345,6 +362,76 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(resp => {
 						return resp.json();
 					})
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			getAllUsers: () => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre al get users");
+				fetch(`${store.baseURL}/user`, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					}
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ users: data });
+					})
+
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			deleteUser: userid => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre a deleteuser ");
+
+				fetch(`${store.baseURL}/user/${userid}`, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					}
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.catch(err => {
+						console.log("error", err);
+					});
+			},
+			updateUser: (userid, name, email, type) => {
+				const store = getStore();
+				let token = store.token; //localStorage.getItem("token");
+				console.log("entre a updateuser");
+
+				fetch(`${store.baseURL}/updateuser`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					},
+					body: JSON.stringify({
+						UserID: userid,
+						UserName: name,
+						Email: email,
+						Type: type
+					})
+				})
+					.then(resp => {
+						return resp.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
+					})
+
 					.catch(err => {
 						console.log("error", err);
 					});

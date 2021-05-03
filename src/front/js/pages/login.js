@@ -1,29 +1,39 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Container, Button, Image, Row, Form, FormGroup, Col, Card } from "react-bootstrap";
 import { BsPersonFill, BsFillLockFill } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
-import "../../styles/demo.scss";
+import { Toast } from "primereact/toast";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
 	const [Username, setUsername] = useState(null);
 	const [Password, setPassword] = useState(null);
 	const history = useHistory();
+	const toast = useRef(null);
 
-	console.log("This is your token: ", store.token);
-	const handleClick = () => {
-		actions.login(Username, Password);
-		console.log("store ", store);
-		if (!store.token) {
+	useEffect(() => {
+		console.log("mi store", store);
+		actions.getToken();
+		if (store.login) {
 			history.push("/home");
 		}
-	};
+		let token = localStorage.getItem("token");
+		if (token == "undefined") {
+			toast.current.show({
+				severity: "error",
+				summary: "Error de autenticación",
+				detail: "Usuario y/o contraseña incorrectos",
+				life: 3000
+			});
+		}
+	}, []);
 
 	return (
 		<Container>
+			<Toast ref={toast} />
 			<Row className="justify-content-center pt-5 mt-5 mr-1">
 				<Col className="col-md-4 formulary">
 					<Form action="">
@@ -66,12 +76,16 @@ export const Login = () => {
 							<Link to="/retrive1">
 								<Button variant="link" size="sm">
 									¿Olvidó Contraseña?
-								</Button>{" "}
+								</Button>
 							</Link>
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3">
 							{/* {setUsername ? <Redirect to="/home" /> : "Incorrecto"} */}
-							<Button className="btn btn-block signin" onClick={handleClick}>
+							<Button
+								className="btn btn-block signin"
+								onClick={() => {
+									actions.login(Username, Password);
+								}}>
 								Ingresar
 							</Button>
 						</FormGroup>

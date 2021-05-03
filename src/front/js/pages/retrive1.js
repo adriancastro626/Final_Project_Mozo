@@ -4,8 +4,6 @@ import { BsFillUnlockFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
-import "../../styles/demo.scss";
-
 export const Retrive1 = () => {
 	const { store, actions } = useContext(Context);
 

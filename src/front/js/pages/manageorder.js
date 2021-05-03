@@ -35,6 +35,10 @@ export const ManageOrder = () => {
 
 	useEffect(() => {
 		actions.getAllOrders();
+		actions.getToken();
+		if (!store.login) {
+			history.push("/");
+		}
 	}, []);
 
 	const goBack = () => {

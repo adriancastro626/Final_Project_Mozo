@@ -4,7 +4,6 @@ import { Container, Button, Image, Card, CardDeck, Carousel, Badge } from "react
 import { BsEnvelope, BsPeopleCircle, BsFillLockFill } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
-import "../../styles/demo.scss";
 
 export const Frontmenu = () => {
 	const { store, actions } = useContext(Context);

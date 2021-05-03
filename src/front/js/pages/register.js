@@ -5,22 +5,25 @@ import { BsEnvelope, BsPeopleCircle, BsFillLockFill } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Login } from "./login";
-import "../../styles/demo.scss";
 
 export const Register = () => {
 	const { store, actions } = useContext(Context);
 	const [Username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
+	const [type, setType] = useState("");
 	const [password, setPassword] = useState("");
 	const [validated, setValidated] = useState(false);
 	const history = useHistory();
 	useEffect(() => {
-		console.log("estoy en el useEffect");
 		if (store.signUp) {
-			alert("Username was created successfully");
+			alert("El usuario ha sido creado exitosamente");
 			history.push("/");
 		}
-	});
+		actions.getToken();
+		if (!store.login) {
+			history.push("/");
+		}
+	}, []);
 	const handleSubmit = event => {
 		const form = event.currentTarget;
 		if (form.checkValidity() === false) {
@@ -68,7 +71,6 @@ export const Register = () => {
 								placeholder="Usuario"
 								onChange={e => setUsername(e.target.value)}
 								required
-								isInvalid
 							/>
 						</Form.Group>
 						<Form.Group controlId="formBasicEmail">
@@ -81,7 +83,6 @@ export const Register = () => {
 								placeholder="Correo"
 								onChange={e => setEmail(e.target.value)}
 								required
-								isInvalid
 							/>
 							<Form.Text className="text-muted">Nunca compartiremos su correo, con nadie más.</Form.Text>
 						</Form.Group>
@@ -95,7 +96,6 @@ export const Register = () => {
 								placeholder="Contraseña"
 								onChange={e => setPassword(e.target.value)}
 								required
-								isInvalid
 							/>
 						</Form.Group>
 						<Form.Group controlId="formBasicPassword">
@@ -103,11 +103,25 @@ export const Register = () => {
 								{" "}
 								<BsFillLockFill /> Confirmar Contraseña
 							</Form.Label>
-							<Form.Control type="password" placeholder="Contraseña" required isInvalid />
+							<Form.Control type="password" placeholder="Contraseña" required />
 						</Form.Group>
 						<Form.Group id="formHorizontalRadios1" className="text-center">
-							<Form.Check type="radio" inline label="Administrador" />
-							<Form.Check type="radio" inline label="Colaborador" />
+							<Form.Check
+								type="radio"
+								inline
+								value="Administrador"
+								label="Administrador"
+								name="UserType"
+								onChange={e => setType(e.target.value)}
+							/>
+							<Form.Check
+								type="radio"
+								inline
+								value="Colaborador"
+								label="Colaborador"
+								name="UserType"
+								onChange={e => setType(e.target.value)}
+							/>
 						</Form.Group>
 						<Link to="/register1">
 							<FormGroup className="mx-sm-4 pb-3 text-center">
@@ -115,7 +129,7 @@ export const Register = () => {
 									variant="outline-success"
 									type="submit"
 									onClick={() => {
-										actions.signUp(Username, email, password);
+										actions.signUp(Username, email, password, type);
 									}}>
 									Crear Usuario
 								</Button>
@@ -124,6 +138,10 @@ export const Register = () => {
 					</Form>
 				</Col>
 			</Row>
+			<br />
+			<Link to="/home">
+				<Button variant="primary">Ir al inicio</Button>
+			</Link>
 		</Container>
 	);
 };
