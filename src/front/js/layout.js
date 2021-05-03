@@ -13,6 +13,7 @@ import { ManageMenu } from "./pages/managemenu.js";
 import { ManageUser } from "./pages/manageuser.js";
 import { Frontmenu } from "./pages/frontmenu.js";
 import { Payment } from "./pages/payment";
+import { PayPalCapture } from "./pages/paypalcapture";
 import { Cart } from "./pages/cart";
 import injectContext, { Context } from "./store/appContext";
 
@@ -70,6 +71,9 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/payment">
 							<Payment />
+						</Route>
+						<Route exact path="/paypalcapture">
+							<PayPalCapture />
 						</Route>
 						<Route exact path="/cart">
 							{store.login ? <NavbarMenu /> : <NavbarLogin />}
