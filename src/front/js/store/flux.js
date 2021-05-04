@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
-			mailURL: "https://3001-amethyst-gamefowl-pv9rlg08.ws-us03.gitpod.io",
+			mailURL: "https://3001-scarlet-goldfish-7hkit1oj.ws-us03.gitpod.io",
 			response: null,
 			products: [],
 			users: [],
@@ -437,7 +437,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			retrievePassword: email => {
+			sendEmailRetrievePassword: email => {
 				const store = getStore();
 				console.log("mail ", email);
 				fetch(`${store.mailURL}/restore`, {
@@ -448,6 +448,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 					body: JSON.stringify({
 						Email: email
+					})
+				})
+					.then(res => {
+						if (!res.ok) {
+							// the "the throw Error will send the error to the "catch"
+							throw Error("Could not fetch the data for that resource");
+						}
+						return res.json();
+					})
+
+					.catch(err => {
+						console.error(err.message);
+					});
+			},
+			updatePassword: (mailToken, newpassword) => {
+				const store = getStore();
+				fetch(`${store.mailURL}/resetpass/${mailToken}`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+						//Authorization: `Bearer	${token}`
+					},
+					body: JSON.stringify({
+						Password: newpassword
 					})
 				})
 					.then(res => {

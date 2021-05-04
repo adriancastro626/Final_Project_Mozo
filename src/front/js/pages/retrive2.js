@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Container, Button, Row, Form, FormGroup, Col } from "react-bootstrap";
+import { Context } from "../store/appContext";
 
 export const Retrive = () => {
+	const { store, actions } = useContext(Context);
 	let { token } = useParams();
+	const [password, setPassword] = useState(null);
 	console.log("estoy en resetpassword func", token);
-	useEffect(() => {
-		fetch(`https://3001-lime-rooster-trsy6393.ws-us03.gitpod.io/confirm_email/${token}`)
-			.then(resp => {
-				return resp.json();
-			})
-			.then(resp => {
-				console.log(resp);
-			});
-	}, []);
 	return (
 		<Container>
 			<Row className="justify-content-center pt-5 mt-5 mr-1">
@@ -28,11 +22,13 @@ export const Retrive = () => {
 								type="password"
 								className="form-control"
 								placeholder="Nueva contraseña"
-								onChange={e => setPass(e.target.value)}
+								onChange={e => setPassword(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup className="mx-sm-4 pb-3">
-							<Button className="btn btn-block signin" onClick={() => reset_Password()}>
+							<Button
+								className="btn btn-block signin"
+								onClick={() => actions.updatePassword(token, password)}>
 								Reestablecer
 							</Button>
 						</FormGroup>
