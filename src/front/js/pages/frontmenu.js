@@ -10,7 +10,6 @@ export const Frontmenu = () => {
 
 	useEffect(() => {
 		actions.getAllProducts();
-		actions.newOrder();
 	}, []);
 
 	return (
@@ -38,7 +37,7 @@ export const Frontmenu = () => {
 												variant="success"
 												size="sm"
 												onClick={() => {
-													actions.newOrder(index);
+													actions.getCarrito(index);
 												}}>
 												Agregar
 											</Button>{" "}

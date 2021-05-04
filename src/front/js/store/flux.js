@@ -169,6 +169,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
+			getCarrito: index => {
+				const store = getStore();
+
+				let obj = store.cart.find(obj => obj.name == store.record[index].name);
+
+				if (obj == undefined) {
+					store.cart.push(store.orders[index]);
+					setStore(store);
+					localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
+				}
+			},
+			deleteCarrito: index => {
+				const store = getStore();
+				store.cart.splice(index, 1);
+				setStore(store);
+				localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
+			},
 			changeOrderState: (orderid, newstate) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
@@ -192,17 +209,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			// addCart: index => {
-			// 	const store = getStore();
-
-			// 	let obj = store.cart.find(obj => obj.name == store.orders[index].name);
-
-			// 	if (obj == undefined) {
-			// 		store.cart.push(store.orders[index]);
-			// 		setStore(store);
-			// 		localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
-			// 	}
-			// },
 			newOrder: (
 				state,
 				notes,
