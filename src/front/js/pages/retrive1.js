@@ -38,7 +38,7 @@ export const Retrive1 = () => {
 					<Button
 						variant="outline-dark"
 						onClick={() => {
-							actions.retrievePassword(email);
+							actions.sendEmailRetrievePassword(email);
 						}}>
 						Recuperar Contraseña
 					</Button>

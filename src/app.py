@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db,User
 from api.routes import api
 from api.admin import setup_admin
 from flask_jwt_extended import JWTManager
@@ -35,8 +35,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db)
 db.init_app(app)
 
+#DONT FORGET TO INCLUDE IN THE ENV FILE
+#SENDGRID_API_KEY = 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 
+
 #MAIL CONFIG
-app.config['SECRET_KEY'] = 'top-secret!'
+app.config['SECRET_KEY'] = 'MOZOAppesgenial:)'
 app.config['MAIL_SERVER'] = 'smtp.sendgrid.net'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -50,12 +53,12 @@ app.config['MAIL_MAX_EMAILS'] = None
 app.config['MAIL_ASCII_ATTACHMENTS'] = False
 
 mail = Mail(app)
-s = URLSafeTimedSerializer('Thisisasecret!')
+s = URLSafeTimedSerializer('MOZOAppesgenial:)')
 @app.route('/restore', methods=['POST'])
 def index():
     
     email = request.json.get('Email')
-    token = s.dumps(email, salt='email-confirm')
+    token = s.dumps(email, salt='resetPassword')
 
     msg = Message('Reestablecer contraseña', recipients=[email])
 
@@ -128,7 +131,7 @@ def index():
     </table>
    
 </body>
-</html>""".format(link="https://3000-amethyst-gamefowl-pv9rlg08.ws-us03.gitpod.io/retrive/"+ token)
+</html>""".format(link="https://3000-scarlet-goldfish-7hkit1oj.ws-us03.gitpod.io/retrive/"+ token)
     mail.send(msg)
 
     return jsonify({
@@ -136,15 +139,28 @@ def index():
 
     } ),200
 
-@app.route('/confirm_email/<token>')
-def confirm_email(token):
+@app.route('/resetpass/<token>', methods=["POST"])
+def reset_with_token(token):
     try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)
-        
+        email = s.loads(token, salt='resetPassword', max_age=3600)
     except SignatureExpired:
         return jsonify({"msg": "Token no valido", "valid":False}), 401
 
-    return jsonify({"email": email, "valid":True}), 200
+        values = request.json
+        user = User.query.filter_by(Email=email).first()
+        print(user)
+        user.Password = values["Password"]
+        db.session.commit()
+        response_body = {
+        "status": "OK"
+        ,"msg":"Contraseña actualizada"
+        }
+    # except:
+    #     response_body = {
+    #     "status": "ERROR"
+    #     ,"msg":"El link para reestablecer la contraseña es inválido o ha expirado."
+    #     }   
+    return jsonify("response_body"), 200
 
 # if __name__ == 'main':
 #     app.run()
