@@ -8,6 +8,9 @@ from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+import flexpolyline as fp
+from flask_cors import cross_origin
+
 
 #create Flask app
 api = Blueprint('api', __name__)
@@ -261,3 +264,16 @@ def deleteProduct(producid):
     }
 
     return jsonify(response_body), 200
+
+@api.route("/map/route", methods=["POST"])
+@cross_origin()
+def decodeRouteMap():
+    values = request.json
+    route = values["route"]
+    print(route)
+    decode = fp.decode(route)
+    return jsonify({"route": decode}), 200
+
+
+
+

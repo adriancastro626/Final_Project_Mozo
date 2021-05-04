@@ -15,6 +15,7 @@ import { Frontmenu } from "./pages/frontmenu.js";
 import { Payment } from "./pages/payment";
 import { PayPalCapture } from "./pages/paypalcapture";
 import { Cart } from "./pages/cart";
+import { Location } from "./pages/location";
 import injectContext, { Context } from "./store/appContext";
 
 import { NavbarMenu } from "./component/navbar";
@@ -78,6 +79,9 @@ const Layout = () => {
 						<Route exact path="/cart">
 							{store.login ? <NavbarMenu /> : <NavbarLogin />}
 							<Cart />
+						</Route>
+						<Route exact path="/map">
+							<Location />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
