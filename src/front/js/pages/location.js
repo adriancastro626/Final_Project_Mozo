@@ -13,7 +13,7 @@ export const Location = () => {
 	}
 
 	function getRoute(data) {
-		fetch("https://3001-violet-macaw-moa7sc2l.ws-us03.gitpod.io/api/map/route", {
+		fetch("https://3001-brown-leopon-6o012zu9.ws-us03.gitpod.io/api/map/route", {
 			method: "POST",
 			body: JSON.stringify({ route: data.routes[0].sections[0].polyline })
 		})
