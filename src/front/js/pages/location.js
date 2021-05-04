@@ -29,7 +29,19 @@ export const Location = () => {
 
 	React.useEffect(() => {
 		let route = getData();
+		console.log(shape);
 	}, []);
 
-	return <h1>hola</h1>;
+	return (
+		<HEREMap
+			appId="daDrH0hWlmLM1BLR0gjb"
+			appCode="mozo"
+			apikey="-YqnrrQhW24iqpRz-kWZla58JMkeRy68qYfd0bw2CNw"
+			center={{ lat: 10.998666, lng: -63.79841 }}
+			zoom={12}>
+			<Marker lat={10.998666} lng={-63.79841} />
+			<Marker lat={10.998666} lng={-63.79841} />
+			<RouteLine shape={shape} strokeColor="#48dad0" lineWidth={4} />
+		</HEREMap>
+	);
 };
