@@ -57,14 +57,14 @@ def index():
     email = request.json.get('Email')
     token = s.dumps(email, salt='email-confirm')
 
-    msg = Message('Reset Password', recipients=[email])
+    msg = Message('Reestablecer contraseña', recipients=[email])
 
     msg.html =msg.html = """<!doctype html>
 <html lang="en-US">
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-    <title>Reset Password Email Template</title>
-    <meta name="description" content="Reset Password Email Template.">
+    <title>Reestablecer Contraseña</title>
+    <meta name="description" content="Reestablecer contrasena">
     
 </head>
 <body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
@@ -80,9 +80,7 @@ def index():
                     </tr>
                     <tr>
                         <td style="text-align:center;">
-                          <a href="https://rakeshmandal.com" title="logo" target="_blank">
-                            <img width="60" src="https://i.ibb.co/hL4XZp2/android-chrome-192x192.png" title="logo" alt="logo">
-                          </a>
+                            <img width="60" src="https://i.ibb.co/HqSTWms/defaultvulture-1.png" title="logo" alt="logo">
                         </td>
                     </tr>
                     <tr>
@@ -97,18 +95,15 @@ def index():
                                 </tr>
                                 <tr>
                                     <td style="padding:0 35px;">
-                                        <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">You have
-                                            requested to reset your password</h1>
+                                        <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">Ha solicitado reestablecer la contraseña</h1>
                                         <span
                                             style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
                                         <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                            We cannot simply send you your old password. A unique link to reset your
-                                            password has been generated for you. To reset your password, click the
-                                            following link and follow the instructions.
+                                            Por favor, para reestablecer la contraseña, haga click en el siguiente botón y siga las instrucciones
                                         </p>
                                         <a href="{link}"
-                                            style="background:#20e277; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
-                                            Password</a>
+                                            style="background:#20e277; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reestablacer Contraseña
+                                            </a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -121,7 +116,7 @@ def index():
                     </tr>
                     <tr>
                         <td style="text-align:center;">
-                            <p style="font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;">&copy; <strong>www.rakeshmandal.com</strong></p>
+                            <p style="font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;">&copy; <strong>Mozo App</strong></p>
                         </td>
                     </tr>
                     <tr>
@@ -133,7 +128,7 @@ def index():
     </table>
    
 </body>
-</html>""".format(link="https://3000-lime-rooster-trsy6393.ws-us03.gitpod.io/api/retrive/"+ token)
+</html>""".format(link="https://3000-amethyst-gamefowl-pv9rlg08.ws-us03.gitpod.io/retrive/"+ token)
     mail.send(msg)
 
     return jsonify({
@@ -147,7 +142,7 @@ def confirm_email(token):
         email = s.loads(token, salt='email-confirm', max_age=3600)
         
     except SignatureExpired:
-        return jsonify({"msg": "Token is not valid", "valid":False}), 401
+        return jsonify({"msg": "Token no valido", "valid":False}), 401
 
     return jsonify({"email": email, "valid":True}), 200
 

@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
-			mailURL: "https://3001-lime-rooster-trsy6393.ws-us03.gitpod.io",
+			mailURL: "https://3001-amethyst-gamefowl-pv9rlg08.ws-us03.gitpod.io",
 			response: null,
 			products: [],
 			users: [],
