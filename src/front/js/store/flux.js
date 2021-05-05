@@ -169,6 +169,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
+			addCarrito: (Quantity, ProductID, Name, Price) => {
+				const store = getStore();
+				let sub = Price * Quantity;
+				let impuesto = sub * 0.13;
+				let bill = impuesto + sub;
+
+				let carrito = [
+					{
+						Quantity: Quantity,
+						ProductID: ProductID,
+						Product: Name,
+						Price: Price,
+						Discount: 0,
+						SubTotal: Price * Quantity,
+						Tax: impuesto,
+						Total: bill
+					}
+				];
+				console.log(carrito);
+
+				store.cart.push(carrito);
+				setStore(store);
+				localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
+				console.log(store);
+			},
+			//eliminar favorito
 			deleteCarrito: index => {
 				const store = getStore();
 				store.cart.splice(index, 1);
@@ -365,7 +391,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getAllUsers: () => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
-				console.log("entre al get users");
 				fetch(`${store.baseURL}/user`, {
 					method: "GET",
 					headers: {
@@ -387,7 +412,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			deleteUser: userid => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
-				console.log("entre a deleteuser ");
 
 				fetch(`${store.baseURL}/user/${userid}`, {
 					method: "DELETE",
