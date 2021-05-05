@@ -80,7 +80,7 @@
 		"jquery": "^3.6.0",
 		"popper.js": "^1.16.1",
 		"primeicons": "^4.1.0",
-		"primereact": "^6.2.1",
+		"primereact": "^6.3.1",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-bootstrap": "^1.5.2",
