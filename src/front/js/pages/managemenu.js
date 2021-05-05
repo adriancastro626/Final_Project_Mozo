@@ -81,6 +81,7 @@ export const ManageMenu = () => {
 
 	const [available, setAvailable] = useState(selection.Available);
 	const onAvailableChange = e => {
+		selection.Available = e.value;
 		setAvailable(e.value);
 	};
 	const toast = useRef(null);
@@ -104,7 +105,6 @@ export const ManageMenu = () => {
 					life: 3000
 				});
 				handleHide();
-				actions.getAllProducts();
 			} else {
 				toast.current.show({
 					severity: "error",
@@ -115,7 +115,6 @@ export const ManageMenu = () => {
 			}
 		} else {
 			actions.newProduct(category, name, price, description, imageurl, available);
-			actions.getAllProducts();
 			toast.current.show({
 				severity: "success",
 				summary: "Registro Correcto",
@@ -137,14 +136,19 @@ export const ManageMenu = () => {
 		console.log("product selec", product);
 		setAction("Update");
 		setSelection(product);
-		setAvailable(selection.Available);
-		setCategory(selection.Category);
+		setAvailable(product.Available);
+		setCategory(product.Category);
+		setName(product.Name);
+		setDescription(product.Description);
+		setPrice(product.Price);
+		setImageURL(product.ImageURL);
 		console.log("selec", selection);
 		setDialog(true);
 	};
 
 	const newProduct = () => {
 		setAction("New");
+		setSelection("");
 		setCategory("");
 		setName("");
 		setDescription("");
@@ -172,6 +176,7 @@ export const ManageMenu = () => {
 	};
 
 	const confirmDeleteProduct = product => {
+		setSelection(product);
 		setDialogDelete(true);
 	};
 
@@ -192,7 +197,6 @@ export const ManageMenu = () => {
 	const deleteProduct = () => {
 		console.log("entre a delproduct");
 		actions.deleteProduct(selection.ProductID);
-		actions.getAllProducts();
 		toast.current.show({
 			severity: "success",
 			summary: "Actualizacion Correcta",

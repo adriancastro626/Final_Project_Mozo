@@ -274,7 +274,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			updateProduct: (productid, category, name, price, description, imageurl, available) => {
+			updateProduct: async (productid, category, name, price, description, imageurl, available) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a updateproduct ");
@@ -282,7 +282,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (available == "Disponible") state = true;
 				else state = false;
 
-				fetch(`${store.baseURL}/updateproduct`, {
+				await fetch(`${store.baseURL}/updateproduct`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -308,8 +308,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllProducts();
 			},
-			newProduct: (category, name, price, description, imageurl, available) => {
+			newProduct: async (category, name, price, description, imageurl, available) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a newproduct ");
@@ -317,7 +318,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (available == "Disponible") state = true;
 				else state = false;
 
-				fetch(`${store.baseURL}/newproduct`, {
+				await fetch(`${store.baseURL}/newproduct`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -342,6 +343,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllProducts();
 			},
 			deleteProduct: productid => {
 				const store = getStore();
@@ -361,6 +363,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+
+				getActions().getAllProducts();
 			},
 			getAllUsers: () => {
 				const store = getStore();
