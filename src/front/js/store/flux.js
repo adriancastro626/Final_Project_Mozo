@@ -169,17 +169,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			getCarrito: index => {
-				const store = getStore();
-
-				let obj = store.cart.find(obj => obj.name == store.record[index].name);
-
-				if (obj == undefined) {
-					store.cart.push(store.orders[index]);
-					setStore(store);
-					localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
-				}
-			},
 			deleteCarrito: index => {
 				const store = getStore();
 				store.cart.splice(index, 1);
