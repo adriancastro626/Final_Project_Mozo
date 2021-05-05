@@ -58,7 +58,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			PayToken: "",
 			PayHRef: "",
 			PayStatus: "",
-			TipoCambio: ""
+			TipoCambio: "",
+			APagar: "",
+			APagarUSD: ""
 		},
 		actions: {
 			getToken: () => {
@@ -540,6 +542,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getPayPalOrder: async () => {
 				const store = getStore();
+
+				const Cambio = localStorage.getItem("TipoCambio");
+
+				let pagar = localStorage.getItem("APagar");
+
+				let pagarUSD = pagar / Cambio;
+				pagarUSD = pagarUSD.toFixed(2);
+				console.log("Pago Colones", pagar);
+				console.log("Pago Tipo Cambio", pagarUSD);
+				console.log("Pago PayPal", pagarUSD);
+				//pagar = pagar.toFixed(2);
 				await fetch("https://api.sandbox.paypal.com/v1/oauth2/token", {
 					method: "POST",
 					headers: {
@@ -571,7 +584,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 									{
 										amount: {
 											currency_code: "USD",
-											value: "10"
+											value: pagarUSD
 										}
 									}
 								],
@@ -613,6 +626,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			removePayPal: () => {
 				localStorage.removeItem("PayToken");
 				localStorage.removeItem("PayOrderId");
+				//		localStorage.removeItem("APagar");
 			},
 			getPayPalStatus: async () => {
 				const store = getStore();
@@ -650,6 +664,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 								console.log("Response data (formatted)", JSON.stringify(data, null, 4));
 								estado = await data.status;
 								setStore({ PayStatus: estado });
+								//	await localStorage.removeItem("APagar");
 							})
 							.catch(err => {
 								console.log({ ...err });
@@ -659,6 +674,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log({ ...err });
 					});
 			},
+
+			//fdfdfdfdfdf
+			//removeAPagar: () => {
+			//		localStorage.removeItem("APagar");
+			//		localStorage.removeItem("TipoCambio");
+			//	},
+
+			getPago: utottotTotal => {
+				//  setStore({ APagar: utottotTotal });
+				localStorage.setItem("APagar", utottotTotal);
+			},
+
 			getTipoCambio: async () => {
 				fetch("https://tipodecambio.paginasweb.cr/api", {
 					method: "GET"
@@ -672,6 +699,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
 						let cambio = await data.compra;
 						setStore({ TipoCambio: cambio });
+						localStorage.setItem("TipoCambio", cambio);
 						console.log("Tipo de cambio:", cambio);
 					})
 					.catch(err => {

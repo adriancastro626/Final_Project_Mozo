@@ -11,7 +11,7 @@ export function PayPalOrder() {
 	return (
 		<Container>
 			<div>
-				<Button href={store.PayHRef} target="_blank" variant="outline-warning">
+				<Button href={store.PayHRef} variant="outline-warning">
 					Pagar con <Image src={PaypalUrl} />
 				</Button>
 			</div>

@@ -10,18 +10,18 @@ export function Payment() {
 	useEffect(() => {
 		actions.getTipoCambio();
 	}, []);
-	let Cobro = 6000;
+	let Cobro = localStorage.getItem("APagar");
+
 	const Cambio = store.TipoCambio;
 	let pagar = Cobro / Cambio;
 	pagar = pagar.toFixed(2);
 	return (
-		<Container>
+		<Container className="border border-danger rounded">
 			<Row className="justify-content-center pt-3 mt-3 mr-1">
 				<Col className="col-md-5 formulary">
 					<Form action="">
 						<FormGroup className="text-center pb-3">
-							<h1 className="text-dark">PAGO DE LA ORDEN</h1>
-							<h3 className="text-dark">{store.NewOrderID}</h3>
+							<h1 className="text-dark">REALICE SU PAGO</h1>
 						</FormGroup>
 						<FormGroup className="text-center mx-sm-4 pb-3">
 							<h6>Por un monto de:</h6>
@@ -33,8 +33,8 @@ export function Payment() {
 							<PayPalOrder />
 						</FormGroup>
 						<FormGroup className="text-center mx-sm-4 pb-3">
-							<Link to="/">
-								<Button variant="outline-danger">Regresar sin pagar</Button>
+							<Link to="/cart">
+								<Button variant="outline-danger">Regresar a mi Pedido</Button>
 							</Link>
 						</FormGroup>
 					</Form>
