@@ -131,7 +131,7 @@ def index():
     </table>
    
 </body>
-</html>""".format(link="https://3000-scarlet-goldfish-7hkit1oj.ws-us03.gitpod.io/retrive/"+ token)
+</html>""".format(link="https://3000-brown-cat-m3a3qt0l.ws-us03.gitpod.io/retrive/"+ token)
     mail.send(msg)
 
     return jsonify({
@@ -146,15 +146,15 @@ def reset_with_token(token):
     except SignatureExpired:
         return jsonify({"msg": "Token no valido", "valid":False}), 401
 
-        values = request.json
-        user = User.query.filter_by(Email=email).first()
-        print(user)
-        user.Password = values["Password"]
-        db.session.commit()
-        response_body = {
-        "status": "OK"
-        ,"msg":"Contraseña actualizada"
-        }
+    values = request.json
+    user = User.query.filter_by(Email=email).first()
+    print(user)
+    user.Password = values["Password"]
+    db.session.commit()
+    response_body = {
+    "status": "OK"
+    ,"msg":"Contraseña actualizada"
+    }
     # except:
     #     response_body = {
     #     "status": "ERROR"
