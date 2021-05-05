@@ -77,9 +77,8 @@ const Layout = () => {
 							<PayPalCapture />
 						</Route>
 						<Route exact path="/cart">
-							{
-								//{store.login ? <NavbarMenu /> : <NavbarLogin />}
-							}
+							{store.login ? <NavbarMenu /> : <NavbarLogin />}
+
 							<Cart />
 						</Route>
 						<Route>
