@@ -57,7 +57,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			PayOrderId: "",
 			PayToken: "",
 			PayHRef: "",
-			PayStatus: ""
+			PayStatus: "",
+			TipoCambio: ""
 		},
 		actions: {
 			getToken: () => {
@@ -578,6 +579,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 									shipping_preference: "NO_SHIPPING",
 									return_url:
 										"https://3000-chocolate-haddock-rigzpe3r.ws-us03.gitpod.io/paypalcapture",
+
+									//OJO este url
+
 									cancel_url: ""
 								}
 							})
@@ -650,6 +654,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 							.catch(err => {
 								console.log({ ...err });
 							});
+					})
+					.catch(err => {
+						console.log({ ...err });
+					});
+			},
+			getTipoCambio: async () => {
+				fetch("https://tipodecambio.paginasweb.cr/api", {
+					method: "GET"
+				})
+					.then(function(response) {
+						console.log("Response object", response);
+						return response.json();
+					})
+					.then(async data => {
+						console.log("Response data", data);
+						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+						let cambio = await data.compra;
+						setStore({ TipoCambio: cambio });
+						console.log("Tipo de cambio:", cambio);
 					})
 					.catch(err => {
 						console.log({ ...err });

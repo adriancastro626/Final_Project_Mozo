@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PayPalOrder from "./paypalorder";
 import { Context } from "../store/appContext";
 
@@ -6,10 +6,14 @@ import { Container, Button, Row, Form, FormGroup, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export function Payment() {
-	const { store } = useContext(Context);
+	const { store, actions } = useContext(Context);
+	useEffect(() => {
+		actions.getTipoCambio();
+	}, []);
 	let Cobro = 6000;
-	const Cambio = 600;
+	const Cambio = store.TipoCambio;
 	let pagar = Cobro / Cambio;
+	pagar = pagar.toFixed(2);
 	return (
 		<Container>
 			<Row className="justify-content-center pt-3 mt-3 mr-1">
