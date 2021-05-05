@@ -53,7 +53,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					Total: 1330
 				}
 			],
-			NewOrderID: 0
+			NewOrderID: 1,
+
+			PayOrderId: "",
+			PayToken: "",
+			PayHRef: "",
+			PayStatus: ""
 		},
 		actions: {
 			getToken: () => {
@@ -90,7 +95,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.catch(error => console.error("There has been an error login in!!", error));
 			},
-
+			removePayPal: () => {
+				localStorage.removeItem("PayToken");
+				localStorage.removeItem("PayOrderId");
+			},
 			logout: () => {
 				let store = getStore();
 				setStore({ login: false });
@@ -460,6 +468,129 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					.catch(err => {
 						console.error(err.message);
+					});
+			},
+			getPayPalOrder: async () => {
+				const store = getStore();
+				await fetch("https://api.sandbox.paypal.com/v1/oauth2/token", {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Accept-Language": "en_US",
+						"Content-Type": "application/x-www-form-urlencoded",
+						Authorization:
+							"Basic " +
+							btoa(
+								"ARuLXWvNlzWJ0yGtZ7NwK9VkmpV9Uf632YlZP8iL0qSPSQZjB9v6aFpznzW9S9z1RzF-hFqdeN4pcNqM:EMWPNB72gCPBFCgfrw095iGVmMGozc9zTeYQlyi2bKNSeoekwMRW_Q8OZVPDljADUvnXjP5ZevxklbRT"
+							)
+					},
+					body: "grant_type=client_credentials"
+				})
+					.then(response => response.json())
+					.then(async data => {
+						console.log(data.access_token);
+						let accessToken = data.access_token;
+						setStore({ PayToken: accessToken });
+						localStorage.setItem("PayToken", accessToken);
+						console.log(store);
+						let createOrder = {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: "Bearer " + accessToken
+							},
+							body: JSON.stringify({
+								intent: "CAPTURE",
+								purchase_units: [
+									{
+										amount: {
+											currency_code: "USD",
+											value: "10"
+										}
+									}
+								],
+								application_context: {
+									shipping_preference: "NO_SHIPPING",
+									return_url: "https://3000-blush-gecko-fdpkqgz8.ws-us03.gitpod.io/paypalcapture",
+									cancel_url: ""
+								}
+							})
+						};
+						console.log("Order body string", createOrder.body);
+						console.log("Order body (formatted)", JSON.stringify(JSON.parse(createOrder.body), null, 4));
+						fetch("https://api.sandbox.paypal.com/v2/checkout/orders", createOrder)
+							.then(async function(response) {
+								return response.json();
+							})
+							.then(async data => {
+								console.log("Response data", data);
+								console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+								let orderId = await data.id;
+								console.log(data);
+								console.log("Order ID: ", orderId);
+								let refLink1 = "https://www.sandbox.paypal.com/checkoutnow?token=" + orderId;
+								console.log("Para link: ", refLink1);
+								setStore({ PayOrderId: orderId });
+								localStorage.setItem("PayOrderId", orderId);
+								setStore({ PayHRef: refLink1 });
+								//	localStorage.setItem("PayHRef", refLink1);
+								console.log("RefLink: ", refLinks);
+							})
+							.catch(err => {
+								console.log({ ...err });
+							});
+					})
+					.catch(function(error) {
+						let edata = error.message;
+						console.log("Error:", edata);
+					});
+			},
+			getPayPalStatus: async () => {
+				const store = getStore();
+				console.log("My store", store);
+				let accesstoken = localStorage.getItem("PayToken");
+				console.log("Token", accesstoken);
+				let OrderId = localStorage.getItem("PayOrderId");
+				await fetch("https://api.sandbox.paypal.com/v2/checkout/orders/" + OrderId + "/capture", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + accesstoken
+					}
+				})
+					.then(function(response) {
+						console.log("Response object", response);
+						return response.json();
+					})
+					.then(async data => {
+						console.log("Response data", data);
+						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+						console.log("Estado: ", data.status);
+						let estado = await data.status;
+						setStore({ PayStatus: estado });
+						fetch("https://api.sandbox.paypal.com/v2/checkout/orders/" + OrderId, {
+							method: "GET",
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: "Bearer " + accesstoken
+							}
+						})
+							.then(function(response) {
+								console.log("Response object", response);
+								return response.json();
+							})
+							.then(async data => {
+								console.log("Response data", data);
+								console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+								estado = await data.status;
+								setStore({ PayStatus: estado });
+							})
+							.catch(err => {
+								console.log({ ...err });
+							});
+					})
+					.catch(err => {
+						console.log({ ...err });
 					});
 			}
 		}
