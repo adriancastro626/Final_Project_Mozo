@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
-			mailURL: "https://3001-scarlet-goldfish-7hkit1oj.ws-us03.gitpod.io",
+			mailURL: "https://3001-brown-cat-m3a3qt0l.ws-us03.gitpod.io",
 			response: null,
 			products: [],
 			users: [],
@@ -300,7 +300,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			updateProduct: (productid, category, name, price, description, imageurl, available) => {
+			updateProduct: async (productid, category, name, price, description, imageurl, available) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a updateproduct ");
@@ -308,7 +308,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (available == "Disponible") state = true;
 				else state = false;
 
-				fetch(`${store.baseURL}/updateproduct`, {
+				await fetch(`${store.baseURL}/updateproduct`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -334,8 +334,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllProducts();
 			},
-			newProduct: (category, name, price, description, imageurl, available) => {
+			newProduct: async (category, name, price, description, imageurl, available) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a newproduct ");
@@ -343,7 +344,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (available == "Disponible") state = true;
 				else state = false;
 
-				fetch(`${store.baseURL}/newproduct`, {
+				await fetch(`${store.baseURL}/newproduct`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -368,6 +369,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllProducts();
 			},
 			deleteProduct: productid => {
 				const store = getStore();
@@ -387,6 +389,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+
+				getActions().getAllProducts();
 			},
 			getAllUsers: () => {
 				const store = getStore();
