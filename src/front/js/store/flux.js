@@ -488,11 +488,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(response => response.json())
 					.then(async data => {
-						console.log(data.access_token);
 						let accessToken = data.access_token;
 						setStore({ PayToken: accessToken });
 						localStorage.setItem("PayToken", accessToken);
-						console.log(store);
 						let createOrder = {
 							method: "POST",
 							headers: {
@@ -526,15 +524,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 								console.log("Response data", data);
 								console.log("Response data (formatted)", JSON.stringify(data, null, 4));
 								let orderId = await data.id;
-								console.log(data);
-								console.log("Order ID: ", orderId);
 								let refLink1 = "https://www.sandbox.paypal.com/checkoutnow?token=" + orderId;
-								console.log("Para link: ", refLink1);
 								setStore({ PayOrderId: orderId });
 								localStorage.setItem("PayOrderId", orderId);
 								setStore({ PayHRef: refLink1 });
-								//	localStorage.setItem("PayHRef", refLink1);
-								console.log("RefLink: ", refLinks);
 							})
 							.catch(err => {
 								console.log({ ...err });
@@ -547,9 +540,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getPayPalStatus: async () => {
 				const store = getStore();
-				console.log("My store", store);
 				let accesstoken = localStorage.getItem("PayToken");
-				console.log("Token", accesstoken);
 				let OrderId = localStorage.getItem("PayOrderId");
 				await fetch("https://api.sandbox.paypal.com/v2/checkout/orders/" + OrderId + "/capture", {
 					method: "POST",
@@ -565,7 +556,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(async data => {
 						console.log("Response data", data);
 						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
-						console.log("Estado: ", data.status);
 						let estado = await data.status;
 						setStore({ PayStatus: estado });
 						fetch("https://api.sandbox.paypal.com/v2/checkout/orders/" + OrderId, {

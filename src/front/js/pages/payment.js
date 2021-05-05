@@ -6,7 +6,7 @@ import { Container, Button, Row, Form, FormGroup, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export function Payment() {
-	const { store, actions } = useContext(Context);
+	const { store } = useContext(Context);
 	let Cobro = 6000;
 	const Cambio = 600;
 	let pagar = Cobro / Cambio;
