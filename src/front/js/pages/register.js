@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import PropTypes from "prop-types";
 import { Container, Button, Image, Row, Form, FormGroup, Col } from "react-bootstrap";
 import { BsEnvelope, BsPeopleCircle, BsFillLockFill } from "react-icons/bs";
 import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Login } from "./login";
+import { Toast } from "primereact/toast";
 
 export const Register = () => {
 	const { store, actions } = useContext(Context);
+	const toast = useRef(null);
+	const [response, setResponse] = useState(store.response);
 	const [Username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [type, setType] = useState("");
@@ -30,7 +33,6 @@ export const Register = () => {
 			event.preventDefault();
 			event.stopPropagation();
 		}
-
 		setValidated(true);
 	};
 
@@ -55,6 +57,7 @@ export const Register = () => {
 
 	return (
 		<Container>
+			<Toast ref={toast} />
 			<Row className="justify-content-center pt-5 mt-5 mr-1">
 				<Col className="col-md-4 formulary">
 					<FormGroup className="text-center pb-3">
@@ -98,13 +101,6 @@ export const Register = () => {
 								required
 							/>
 						</Form.Group>
-						<Form.Group controlId="formBasicPassword">
-							<Form.Label>
-								{" "}
-								<BsFillLockFill /> Confirmar Contraseña
-							</Form.Label>
-							<Form.Control type="password" placeholder="Contraseña" required />
-						</Form.Group>
 						<Form.Group id="formHorizontalRadios1" className="text-center">
 							<Form.Check
 								type="radio"
@@ -123,18 +119,39 @@ export const Register = () => {
 								onChange={e => setType(e.target.value)}
 							/>
 						</Form.Group>
-						<Link to="/register1">
-							<FormGroup className="mx-sm-4 pb-3 text-center">
-								<Button
-									variant="outline-success"
-									type="submit"
-									onClick={() => {
-										actions.signUp(Username, email, password, type);
-									}}>
-									Crear Usuario
-								</Button>
-							</FormGroup>
-						</Link>
+						{/* <Link to="/register1"> */}
+						<FormGroup className="mx-sm-4 pb-3 text-center">
+							<Button
+								type="reset"
+								variant="outline-success"
+								onClick={async () => {
+									await actions.signUp(Username, email, password, type);
+									await setResponse(store.response);
+									if (store.response == "OK") {
+										toast.current.show({
+											severity: "success",
+											summary: "Registro Correcto",
+											detail: "El usuario ha sido registrado",
+											life: 3000
+										});
+										await setUsername("");
+										await setPassword("");
+										await setType(false);
+										await setEmail("");
+										await setValidated(false);
+									} else {
+										toast.current.show({
+											severity: "error",
+											summary: "Registro Incorrecto",
+											detail: "El usuario no pudo ser registrado. Verifique los datos.",
+											life: 3000
+										});
+									}
+								}}>
+								Crear Usuario
+							</Button>
+						</FormGroup>
+						{/* </Link> */}
 					</Form>
 				</Col>
 			</Row>
