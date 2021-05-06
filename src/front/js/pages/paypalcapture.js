@@ -44,7 +44,8 @@ export function PayPalCapture() {
 			utotDiscount,
 			utotTax,
 			utotSubTotal,
-			utottotTotal
+			utottotTotal,
+			"Pagada"
 		);
 		estados = "ORDEN COMPLETADA";
 		estado1 = "Su orden es la #" + store.NewOrderID;

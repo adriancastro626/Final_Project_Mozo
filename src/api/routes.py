@@ -151,8 +151,10 @@ def changeOrderState(id):
         print("Request", values)    
         orderid = values["OrderID"]
         state = values["State"]
+        paystatus = values["PayStatus"]
         findOrder = Order.query.filter_by(OrderID= orderid).first()
         findOrder.State = state
+        findOrder.PayStatus = paystatus
         db.session.commit()
         response_body = {
             "status": "OK"
@@ -176,6 +178,7 @@ def newOrder():
         neworder = Order(OrderTypeID= values["OrderTypeID"], 
         OrderDate= values["OrderDate"], 
         State= values["State"], 
+        PayStatus= values["PayStatus"], 
         TotalQuantity= values["TotalQuantity"],
         EstimatedTime= 20,
         Notes= values["Notes"],

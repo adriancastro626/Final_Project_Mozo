@@ -248,7 +248,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				utotDiscount,
 				utotTax,
 				utotSubTotal,
-				utottotTotal
+				utottotTotal,
+				payStatus
 			) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
@@ -271,7 +272,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						Tax: utotTax,
 						Total: utottotTotal,
 						ClientName: "ClientName",
-						Cart: store.cart
+						Cart: store.cart,
+						PayStatus: payStatus
 					})
 				})
 					.then(resp => {
@@ -605,12 +607,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 								],
 								application_context: {
 									shipping_preference: "NO_SHIPPING",
+									user_action: "PAY_NOW",
+									//OJO este url
 									return_url:
-										"https://3000-chocolate-haddock-rigzpe3r.ws-us03.gitpod.io/paypalcapture",
+										"https://3000-magenta-rattlesnake-gmtg43n2.ws-us03.gitpod.io/paypalcapture",
 
 									//OJO este url
 
-									cancel_url: ""
+									cancel_url: "https://3000-magenta-rattlesnake-gmtg43n2.ws-us03.gitpod.io/payment"
 								}
 							})
 						};

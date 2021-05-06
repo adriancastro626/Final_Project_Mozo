@@ -117,7 +117,8 @@ export const Cart = () => {
 			utotDiscount,
 			utotTax,
 			utotSubTotal,
-			utottotTotal
+			utottotTotal,
+			"No pagada"
 		);
 		setDialog(true);
 	};

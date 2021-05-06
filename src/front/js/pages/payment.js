@@ -17,7 +17,8 @@ export function Payment() {
 	let Cobro = JSON.parse(guardado)[6];
 	console.log("Cobro:", Cobro);
 
-	const Cambio = store.TipoCambio;
+	const Cambio = localStorage.getItem("TipoCambio");
+	console.log("Cambio", Cambio);
 	let pagar = Cobro / Cambio;
 	pagar = pagar.toFixed(2);
 	return (
