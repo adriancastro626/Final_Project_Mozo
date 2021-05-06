@@ -438,6 +438,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllUsers();
 			},
 			updateUser: async (userid, name, email, type) => {
 				const store = getStore();
@@ -467,11 +468,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllUsers();
 			},
-			sendEmailRetrievePassword: email => {
+			sendEmailRetrievePassword: async email => {
 				const store = getStore();
 				console.log("mail ", email);
-				fetch(`${store.mailURL}/restore`, {
+				await fetch(`${store.mailURL}/restore`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -483,10 +485,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(res => {
 						if (!res.ok) {
-							// the "the throw Error will send the error to the "catch"
-							throw Error("Could not fetch the data for that resource");
+							throw Error("Could not fetch the data");
 						}
 						return res.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
 					})
 
 					.catch(err => {

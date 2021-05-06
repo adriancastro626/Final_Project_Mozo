@@ -36,7 +36,6 @@ MIGRATE = Migrate(app, db)
 db.init_app(app)
 
 #DONT FORGET TO INCLUDE IN THE ENV FILE
-#SENDGRID_API_KEY = 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
 
 #MAIL CONFIG
 app.config['SECRET_KEY'] = 'MOZOAppesgenial:)'
@@ -56,13 +55,13 @@ mail = Mail(app)
 s = URLSafeTimedSerializer('MOZOAppesgenial:)')
 @app.route('/restore', methods=['POST'])
 def index():
-    
-    email = request.json.get('Email')
-    token = s.dumps(email, salt='resetPassword')
+    try:
+        email = request.json.get('Email')
+        token = s.dumps(email, salt='resetPassword')
 
-    msg = Message('Reestablecer contraseña', recipients=[email])
+        msg = Message('Reestablecer contraseña', recipients=[email])
 
-    msg.html =msg.html = """<!doctype html>
+        msg.html =msg.html = """<!doctype html>
 <html lang="en-US">
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -132,12 +131,20 @@ def index():
    
 </body>
 </html>""".format(link="https://3000-teal-partridge-hepyyndi.ws-us03.gitpod.io/retrive/"+ token)
-    mail.send(msg)
+        mail.send(msg)
 
-    return jsonify({
-        "send": "Ok"
-
-    } ),200
+        response_body = {
+                "status": "OK"
+            }
+        status_code = 200 
+            
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @app.route('/resetpass/<token>', methods=["POST"])
 def reset_with_token(token):
