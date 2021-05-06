@@ -1,41 +1,36 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
 import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { Badge } from "primereact/badge";
 import { InputTextarea } from "primereact/inputtextarea";
-
-import { element } from "prop-types";
-import { Container, Col, Image, FormGroup, Form, Dropdown } from "react-bootstrap";
-
+import { Dialog } from "primereact/dialog";
+import { Container, Col, Image } from "react-bootstrap";
 import { RadioButton } from "primereact/radiobutton";
 import { Toolbar } from "primereact/toolbar";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
-import { Checkbox } from "primereact/checkbox";
 import { Toast } from "primereact/toast";
 import genericImage from "../../img/defaultFood.png";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 import "../../styles/managemenu.scss";
 
 export const ManageMenu = () => {
-	// let { value } = useParams();
 	const history = useHistory();
+	const toast = useRef(null);
 	const { store, actions } = useContext(Context);
 	const [action, setAction] = useState(""); //USE STATE TO MANAGE THE CRUD ACTION
 	const [response, setResponse] = useState(store.response);
 	const [dialog, setDialog] = useState(false);
 	const [dialogDelete, setDialogDelete] = useState(false);
-	const handleShow = () => {
-		setAction("Update");
-		setDialog(true);
+
+	const handleShow = async () => {
+		await setAction("Update");
+		await setDialog(true);
 	};
 	const handleHide = () => setDialog(false);
 
@@ -54,17 +49,15 @@ export const ManageMenu = () => {
 	const goBack = () => {
 		history.goBack();
 	};
-	console.log("mi store", store);
 
-	const onRowSelect = event => {
-		setSelection(event.data);
-		console.log("selection", selection);
-		setCategory(selection.Category);
-		setName(selection.Name);
-		setDescription(selection.Description);
-		setPrice(selection.Price);
-		setImageURL(selection.ImageURL);
-		setAvailable(selection.Available);
+	const onRowSelect = async event => {
+		await setSelection(event.data);
+		await setCategory(selection.Category);
+		await setName(selection.Name);
+		await setDescription(selection.Description);
+		await setPrice(selection.Price);
+		await setImageURL(selection.ImageURL);
+		await setAvailable(selection.Available);
 	};
 
 	const [name, setName] = useState(selection.Name);
@@ -79,24 +72,16 @@ export const ManageMenu = () => {
 		setCategory(e.value);
 	};
 
-	const [available, setAvailable] = useState(selection.Available);
+	const [available, setAvailable] = useState("");
 	const onAvailableChange = e => {
 		selection.Available = e.value;
 		setAvailable(e.value);
 	};
-	const toast = useRef(null);
-	const saveProduct = () => {
-		console.log("entre a save ", action);
-		console.log("category ", category);
-		console.log("name ", name);
-		console.log("price ", price);
-		console.log("description ", description);
-		console.log("imageurl ", imageurl);
-		console.log("available ", available);
+
+	const saveProduct = async () => {
 		if (action == "Update") {
-			actions.updateProduct(selection.ProductID, category, name, price, description, imageurl, available);
-			setResponse(store.response);
-			console.log(store.response, " response");
+			await actions.updateProduct(selection.ProductID, category, name, price, description, imageurl, available);
+			await setResponse(store.response);
 			if (store.response == "OK") {
 				toast.current.show({
 					severity: "success",
@@ -104,7 +89,7 @@ export const ManageMenu = () => {
 					detail: "El producto ha sido modificado",
 					life: 3000
 				});
-				handleHide();
+				await handleHide();
 			} else {
 				toast.current.show({
 					severity: "error",
@@ -114,14 +99,24 @@ export const ManageMenu = () => {
 				});
 			}
 		} else {
-			actions.newProduct(category, name, price, description, imageurl, available);
-			toast.current.show({
-				severity: "success",
-				summary: "Registro Correcto",
-				detail: "El producto ha sido agregado",
-				life: 3000
-			});
-			handleHide();
+			await actions.newProduct(category, name, price, description, imageurl, available);
+			await setResponse(store.response);
+			if (store.response == "OK") {
+				toast.current.show({
+					severity: "success",
+					summary: "Registro Correcto",
+					detail: "El producto ha sido agregado",
+					life: 3000
+				});
+				await handleHide();
+			} else {
+				toast.current.show({
+					severity: "error",
+					summary: "Registro Incorrecto",
+					detail: "El producto no pudo ser agregado. Verifique los datos.",
+					life: 3000
+				});
+			}
 		}
 	};
 
@@ -132,30 +127,28 @@ export const ManageMenu = () => {
 		</React.Fragment>
 	);
 
-	const editProduct = product => {
-		console.log("product selec", product);
-		setAction("Update");
-		setSelection(product);
-		setAvailable(product.Available);
-		setCategory(product.Category);
-		setName(product.Name);
-		setDescription(product.Description);
-		setPrice(product.Price);
-		setImageURL(product.ImageURL);
-		console.log("selec", selection);
-		setDialog(true);
+	const editProduct = async product => {
+		await setAction("Update");
+		await setSelection(product);
+		await setAvailable(product.Available);
+		await setCategory(product.Category);
+		await setName(product.Name);
+		await setDescription(product.Description);
+		await setPrice(product.Price);
+		await setImageURL(product.ImageURL);
+		await setDialog(true);
 	};
 
-	const newProduct = () => {
-		setAction("New");
-		setSelection("");
-		setCategory("");
-		setName("");
-		setDescription("");
-		setPrice("");
-		setImageURL("");
-		setAvailable("");
-		setDialog(true);
+	const newProduct = async () => {
+		await setAction("New");
+		await setSelection("");
+		await setCategory("");
+		await setName("");
+		await setDescription("");
+		await setPrice("");
+		await setImageURL("");
+		await setAvailable("");
+		await setDialog(true);
 	};
 
 	const actionsButtons = rowData => {
@@ -164,20 +157,20 @@ export const ManageMenu = () => {
 				<Button
 					icon="pi pi-pencil"
 					className="p-button-rounded p-button-success p-mr-2"
-					onClick={() => editProduct(rowData)}
+					onClick={async () => await editProduct(rowData)}
 				/>
 				<Button
 					icon="pi pi-trash"
 					className="p-button-rounded p-button-warning"
-					onClick={() => confirmDeleteProduct(rowData)}
+					onClick={async () => await confirmDeleteProduct(rowData)}
 				/>
 			</React.Fragment>
 		);
 	};
 
-	const confirmDeleteProduct = product => {
-		setSelection(product);
-		setDialogDelete(true);
+	const confirmDeleteProduct = async product => {
+		await setSelection(product);
+		await setDialogDelete(true);
 	};
 
 	const deleteProductDialogFooter = (
@@ -194,16 +187,25 @@ export const ManageMenu = () => {
 		</React.Fragment>
 	);
 
-	const deleteProduct = () => {
-		console.log("entre a delproduct");
-		actions.deleteProduct(selection.ProductID);
-		toast.current.show({
-			severity: "success",
-			summary: "Actualizacion Correcta",
-			detail: "El producto ha sido modificado",
-			life: 3000
-		});
-		hideDeleteProductDialog();
+	const deleteProduct = async () => {
+		await actions.deleteProduct(selection.ProductID);
+		await setResponse(store.response);
+		if (store.response == "OK") {
+			toast.current.show({
+				severity: "success",
+				summary: "Actualizacion Correcta",
+				detail: "El producto ha sido modificado",
+				life: 3000
+			});
+			await hideDeleteProductDialog();
+		} else {
+			toast.current.show({
+				severity: "error",
+				summary: "Registro Incorrecto",
+				detail: "El producto no pudo ser agregado. Verifique los datos.",
+				life: 3000
+			});
+		}
 	};
 
 	const leftToolbarButton = () => {
@@ -340,8 +342,8 @@ export const ManageMenu = () => {
 								inputId="availabletrue"
 								name="available"
 								value="Disponible"
-								onChange={onAvailableChange}
-								checked={available === "Disponible" ? true : false}
+								onChange={e => setAvailable(e.value)}
+								checked={available === "Disponible"}
 							/>
 							<label htmlFor="availabletrue">Disponible</label>
 						</div>
@@ -350,8 +352,8 @@ export const ManageMenu = () => {
 								inputId="availablefalse"
 								name="available"
 								value="No Disponible"
-								onChange={onAvailableChange}
-								checked={available === "No Disponible" ? true : false}
+								onChange={e => setAvailable(e.value)}
+								checked={available === "No Disponible"}
 							/>
 							<label htmlFor="availablefalse">No Disponible</label>
 						</div>
