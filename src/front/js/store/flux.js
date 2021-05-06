@@ -497,9 +497,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.error(err.message);
 					});
 			},
-			updatePassword: (mailToken, newpassword) => {
+			updatePassword: async (mailToken, newpassword) => {
 				const store = getStore();
-				fetch(`${store.mailURL}/resetpass/${mailToken}`, {
+				await fetch(`${store.mailURL}/resetpass/${mailToken}`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -515,6 +515,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							throw Error("Could not fetch the data for that resource");
 						}
 						return res.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
 					})
 
 					.catch(err => {

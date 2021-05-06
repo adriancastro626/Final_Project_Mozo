@@ -38,6 +38,7 @@ export const Retrive1 = () => {
 
 				<Modal.Footer className="justify-content-center">
 					<Button
+						type="reset"
 						variant="outline-dark"
 						onClick={async () => {
 							await actions.sendEmailRetrievePassword(email);

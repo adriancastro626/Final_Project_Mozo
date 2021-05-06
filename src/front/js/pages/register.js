@@ -119,7 +119,6 @@ export const Register = () => {
 								onChange={e => setType(e.target.value)}
 							/>
 						</Form.Group>
-						{/* <Link to="/register1"> */}
 						<FormGroup className="mx-sm-4 pb-3 text-center">
 							<Button
 								type="reset"
@@ -151,7 +150,6 @@ export const Register = () => {
 								Crear Usuario
 							</Button>
 						</FormGroup>
-						{/* </Link> */}
 					</Form>
 				</Col>
 			</Row>

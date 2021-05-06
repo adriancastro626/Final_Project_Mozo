@@ -150,24 +150,19 @@ def index():
 def reset_with_token(token):
     try:
         email = s.loads(token, salt='resetPassword', max_age=360000000000000)
+        values = request.json
+        user = User.query.filter_by(Email=email).first()
+        user.Password = values["Password"]
+        db.session.commit()
+        response_body = {
+         "status": "OK"
+        }
+        return jsonify(response_body), 200
     except SignatureExpired:
-        return jsonify({"msg": "Token no valido", "valid":False}), 401
-
-    values = request.json
-    user = User.query.filter_by(Email=email).first()
-    print(user)
-    user.Password = values["Password"]
-    db.session.commit()
-    response_body = {
-    "status": "OK"
-    ,"msg":"Contraseña actualizada"
-    }
-    # except:
-    #     response_body = {
-    #     "status": "ERROR"
-    #     ,"msg":"El link para reestablecer la contraseña es inválido o ha expirado."
-    #     }   
-    return jsonify("response_body"), 200
+        response_body = {
+         "status": "ERROR"
+        }
+        return jsonify(response_body), 401
 
 # if __name__ == 'main':
 #     app.run()
