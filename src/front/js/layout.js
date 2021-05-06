@@ -74,7 +74,6 @@ const Layout = () => {
 						</Route>
 						<Route exact path="/cart">
 							{store.login ? <NavbarMenu /> : <NavbarLogin />}
-
 							<Cart />
 						</Route>
 						<Route>

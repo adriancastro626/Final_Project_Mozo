@@ -58,15 +58,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			PayToken: "",
 			PayOrderDetails: [],
 			PayStatus: ""
-			//TipoCambio: 0,
-			//APagar: 0,
-			//APagarUSD: 0,
-			//Notess: "",
-			//utotProductss: 0,
-			//utotPricess: 0,
-			//utotDiscounts: 0,
-			//utotTaxs: 0,
-			//utotSubTotals: 0
 		},
 		actions: {
 			getToken: () => {
@@ -532,30 +523,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.error(err.message);
 					});
 			},
-			updatePassword: (mailToken, newpassword) => {
-				const store = getStore();
-				fetch(`${store.mailURL}/resetpass/${mailToken}`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-						//Authorization: `Bearer	${token}`
-					},
-					body: JSON.stringify({
-						Password: newpassword
-					})
-				})
-					.then(res => {
-						if (!res.ok) {
-							// the "the throw Error will send the error to the "catch"
-							throw Error("Could not fetch the data for that resource");
-						}
-						return res.json();
-					})
 
-					.catch(err => {
-						console.error(err.message);
-					});
-			},
 			getPayPalOrder: async () => {
 				const store = getStore();
 				const Cambio = localStorage.getItem("TipoCambio");
