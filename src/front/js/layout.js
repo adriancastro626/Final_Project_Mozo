@@ -46,9 +46,11 @@ const Layout = () => {
 							<Register />
 						</Route>
 						<Route exact path="/retrive1">
+							<NavbarLogin />
 							<Retrive1 />
 						</Route>
 						<Route exact path="/retrive/:token">
+							<NavbarLogin />
 							<Retrive />
 						</Route>
 						<Route exact path="/home">

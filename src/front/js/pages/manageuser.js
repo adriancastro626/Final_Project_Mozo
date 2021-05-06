@@ -1,29 +1,20 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { Container, Col, Image, FormGroup, Form, Dropdown } from "react-bootstrap";
+import { RadioButton } from "primereact/radiobutton";
+import { Toolbar } from "primereact/toolbar";
+import { InputText } from "primereact/inputtext";
+import { Toast } from "primereact/toast";
+import "../../styles/manageuser.scss";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { Badge } from "primereact/badge";
-import { InputTextarea } from "primereact/inputtextarea";
-
-import { element } from "prop-types";
-import { Container, Col, Image, FormGroup, Form, Dropdown } from "react-bootstrap";
-
-import { RadioButton } from "primereact/radiobutton";
-import { Toolbar } from "primereact/toolbar";
-import { InputNumber } from "primereact/inputnumber";
-import { InputText } from "primereact/inputtext";
-import { Checkbox } from "primereact/checkbox";
-import { Toast } from "primereact/toast";
-import genericImage from "../../img/defaultFood.png";
-import "../../styles/manageuser.scss";
 
 export const ManageUser = () => {
 	const history = useHistory();
@@ -55,12 +46,12 @@ export const ManageUser = () => {
 	};
 	console.log("mi store", store);
 
-	const onRowSelect = event => {
-		setSelection(event.data);
+	const onRowSelect = async event => {
+		await setSelection(event.data);
 		console.log("selection", selection);
-		setName(selection.UserName);
-		setEmail(selection.Email);
-		setType(selection.Type);
+		await setName(selection.UserName);
+		await setEmail(selection.Email);
+		await setType(selection.Type);
 	};
 
 	const [userid, setUserID] = useState(selection.UserID);
@@ -71,11 +62,11 @@ export const ManageUser = () => {
 		setType(e.value);
 	};
 	const toast = useRef(null);
-	const saveUser = () => {
+	const saveUser = async () => {
 		console.log("entre a save ", action);
 		if (action == "Update") {
-			actions.updateUser(selection.UserID, name, email, type);
-			setResponse(store.response);
+			await actions.updateUser(selection.UserID, name, email, type);
+			await setResponse(store.response);
 			console.log(store.response, " response");
 			if (store.response == "OK") {
 				toast.current.show({
@@ -84,8 +75,7 @@ export const ManageUser = () => {
 					detail: "El usuario ha sido modificado",
 					life: 3000
 				});
-				handleHide();
-				actions.getAllUsers();
+				await handleHide();
 			} else {
 				toast.current.show({
 					severity: "error",
@@ -104,11 +94,14 @@ export const ManageUser = () => {
 		</React.Fragment>
 	);
 
-	const editUser = user => {
+	const editUser = async user => {
 		console.log("user selec", user);
-		setAction("Update");
-		setSelection(user);
-		setDialog(true);
+		await setAction("Update");
+		await setSelection(user);
+		await setName(user.UserName);
+		await setEmail(user.Email);
+		await setType(user.Type);
+		await setDialog(true);
 	};
 
 	const actionsButtons = rowData => {
@@ -117,18 +110,19 @@ export const ManageUser = () => {
 				<Button
 					icon="pi pi-pencil"
 					className="p-button-rounded p-button-success p-mr-2"
-					onClick={() => editUser(rowData)}
+					onClick={async () => await editUser(rowData)}
 				/>
 				<Button
 					icon="pi pi-trash"
 					className="p-button-rounded p-button-warning"
-					onClick={() => confirmDeleteUser(rowData)}
+					onClick={async () => await confirmDeleteUser(rowData)}
 				/>
 			</React.Fragment>
 		);
 	};
 
 	const confirmDeleteUser = user => {
+		setSelection(user);
 		setDialogDelete(true);
 	};
 
@@ -139,24 +133,33 @@ export const ManageUser = () => {
 				label="S&iacute;"
 				icon="pi pi-check"
 				className="p-button-text"
-				onClick={() => {
-					deleteUser();
+				onClick={async () => {
+					await deleteUser();
 				}}
 			/>
 		</React.Fragment>
 	);
 
-	const deleteUser = () => {
-		console.log("entre a deluser");
-		actions.deleteUser(selection.UserID);
-		actions.getAllUsers();
-		toast.current.show({
-			severity: "success",
-			summary: "Eliminación Correcta",
-			detail: "El usuario ha sido eliminado",
-			life: 3000
-		});
-		hideDeleteUserDialog();
+	const deleteUser = async () => {
+		console.log("entre a deluser", selection.UserID);
+		await actions.deleteUser(selection.UserID);
+		await setResponse(store.response);
+		if (store.response == "OK") {
+			toast.current.show({
+				severity: "success",
+				summary: "Eliminación Correcta",
+				detail: "El usuario ha sido eliminado",
+				life: 3000
+			});
+			await hideDeleteUserDialog();
+		} else {
+			toast.current.show({
+				severity: "error",
+				summary: "Eliminación Incorrecto",
+				detail: "El usuario no pudo ser eliminado",
+				life: 3000
+			});
+		}
 	};
 
 	const leftToolbarButton = () => {
