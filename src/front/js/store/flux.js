@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
-			mailURL: "https://3001-brown-cat-m3a3qt0l.ws-us03.gitpod.io",
+			mailURL: "https://3001-teal-partridge-hepyyndi.ws-us03.gitpod.io",
 			response: null,
 			products: [],
 			users: [],
@@ -111,10 +111,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("token");
 			},
 
-			signUp: (Username, Email, Password, Type) => {
+			signUp: async (Username, Email, Password, Type) => {
 				const store = getStore();
 				console.log(Type, " mitype");
-				fetch(`${store.baseURL}/user`, {
+				await fetch(`${store.baseURL}/user`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -132,17 +132,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						setStore({ user: true });
+						setStore({ response: data.status });
+						console.log("mistoreuser ", store);
 					})
 
 					.catch(err => {
 						console.log("error", err);
 					});
 			},
-			getAllOrders: () => {
+			getAllOrders: async () => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre al get orders");
-				fetch(`${store.baseURL}/manageorder`, {
+				await fetch(`${store.baseURL}/manageorder`, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
@@ -160,11 +162,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			getOrderDetail: orderid => {
+			getOrderDetail: async orderid => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre al get order details ", orderid);
-				fetch(`${store.baseURL}/orderdetail/${orderid}`, {
+				await fetch(`${store.baseURL}/orderdetail/${orderid}`, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
@@ -214,11 +216,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore(store);
 				localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
 			},
-			changeOrderState: (orderid, newstate) => {
+			changeOrderState: async (orderid, newstate) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre al change order state ", newstate);
-				fetch(`${store.baseURL}/changeorderstate/${orderid}`, {
+				await fetch(`${store.baseURL}/changeorderstate/${orderid}`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -237,7 +239,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			newOrder: (
+			newOrder: async (
 				state,
 				notes,
 				orderdate,
@@ -251,7 +253,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a newOrder ", orderdate);
-				fetch(`${store.baseURL}/neworder`, {
+				await fetch(`${store.baseURL}/neworder`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -283,11 +285,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			getAllProducts: () => {
+			getAllProducts: async () => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre al get products");
-				fetch(`${store.baseURL}/managemenu`, {
+				await fetch(`${store.baseURL}/managemenu`, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
@@ -384,12 +386,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 				getActions().getAllProducts();
 			},
-			deleteProduct: productid => {
+			deleteProduct: async productid => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a deleteproduct ");
 
-				fetch(`${store.baseURL}/deleteproduct/${productid}`, {
+				await fetch(`${store.baseURL}/deleteproduct/${productid}`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -398,6 +400,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(resp => {
 						return resp.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
 					})
 					.catch(err => {
 						console.log("error", err);
@@ -426,11 +431,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			deleteUser: userid => {
+			deleteUser: async userid => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 
-				fetch(`${store.baseURL}/user/${userid}`, {
+				await fetch(`${store.baseURL}/user/${userid}`, {
 					method: "DELETE",
 					headers: {
 						"Content-Type": "application/json"
@@ -440,16 +445,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(resp => {
 						return resp.json();
 					})
+					.then(data => {
+						setStore({ response: data.status });
+					})
 					.catch(err => {
 						console.log("error", err);
 					});
 			},
-			updateUser: (userid, name, email, type) => {
+			updateUser: async (userid, name, email, type) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
 				console.log("entre a updateuser");
 
-				fetch(`${store.baseURL}/updateuser`, {
+				await fetch(`${store.baseURL}/updateuser`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"

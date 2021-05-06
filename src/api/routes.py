@@ -45,18 +45,29 @@ def allUsers():
 @api.route("/user", methods=["POST"])
 # @jwt_required() #this make privete the information, just for admins
 def createUsers():
+    try:
+        request_body_user = request.get_json()
 
-    request_body_user = request.get_json()
+        usertype = request_body_user["Type"]
+        if(usertype):
+            findUserType = UserTypes.query.filter_by(Position= usertype).first()        
 
-    usertype = request_body_user["Type"]
-    if(usertype):
-        findUserType = UserTypes.query.filter_by(Position= usertype).first()        
-
-    newUser = User(UserName=request_body_user["Usuario"], Email=request_body_user["Email"], Password=request_body_user["Password"],TypeID=findUserType.TypeID)
-    db.session.add(newUser)
-    db.session.commit()
-        
-    return jsonify(request_body_user), 200
+        newUser = User(UserName=request_body_user["Usuario"], Email=request_body_user["Email"], Password=request_body_user["Password"],TypeID=findUserType.TypeID)
+        db.session.add(newUser)
+        db.session.commit()
+            
+        response_body = {
+                "status": "OK"
+            }
+        status_code = 200 
+            
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @api.route("/user/<int:user_id>", methods=["PUT"])
 @jwt_required() #this make privete the information, just for admins
@@ -82,22 +93,29 @@ def editUser(user_id):
 @api.route("/updateuser", methods=["POST"])
 #@jwt_required() #this make privete the information, just for admins
 def updateUser():
-    values = request.json
-    usertype = values["Type"] 
+    try:
+        values = request.json
+        usertype = values["Type"] 
 
-    findUser= User.query.filter_by(UserID= values["UserID"]).first()
-    findUserType = UserTypes.query.filter_by(Position= usertype).first()        
+        findUser= User.query.filter_by(UserID= values["UserID"]).first()
+        findUserType = UserTypes.query.filter_by(Position= usertype).first()        
 
-    findUser.UserName = values["UserName"]
-    findUser.Email = values["Email"] 
-    findUser.TypeID = findUserType.TypeID
-    db.session.commit()
-    response_body = {
-        "status": "OK"
-    }
-    status_code = 200 
-    
-    return jsonify(response_body),200
+        findUser.UserName = values["UserName"]
+        findUser.Email = values["Email"] 
+        findUser.TypeID = findUserType.TypeID
+        db.session.commit()
+        response_body = {
+            "status": "OK"
+        }
+        status_code = 200 
+        
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @api.route("/user/<int:user_id>", methods=["DELETE"])
 #@jwt_required() #this make privete the information, just for admins
@@ -128,60 +146,74 @@ def get_OrderDetail(id):
 @api.route('/changeorderstate/<int:id>', methods=['POST'])
 #@jwt_required()
 def changeOrderState(id):
-    values = request.json
-    print("Request", values)    
-    orderid = values["OrderID"]
-    state = values["State"]
-    findOrder = Order.query.filter_by(OrderID= orderid).first()
-    findOrder.State = state
-    db.session.commit()
-    response_body = {
-        "status": "Ok"
-    }
-    status_code = 200 
-    
-    return jsonify(response_body),200
+    try:
+        values = request.json
+        print("Request", values)    
+        orderid = values["OrderID"]
+        state = values["State"]
+        findOrder = Order.query.filter_by(OrderID= orderid).first()
+        findOrder.State = state
+        db.session.commit()
+        response_body = {
+            "status": "OK"
+        }
+        status_code = 200 
+        
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @api.route('/neworder', methods=['POST'])
 #@jwt_required()
 def newOrder():
-    values = request.json
+    try:
+        values = request.json
 
-    neworder = Order(OrderTypeID= values["OrderTypeID"], 
-    OrderDate= values["OrderDate"], 
-    State= values["State"], 
-    TotalQuantity= values["TotalQuantity"],
-    EstimatedTime= 20,
-    Notes= values["Notes"],
-    SubTotal= values["SubTotal"],
-    Discount= values["Discount"],
-    Tax= values["Tax"],
-    Total= values["Total"],
-    ClientName= values["ClientName"])
+        neworder = Order(OrderTypeID= values["OrderTypeID"], 
+        OrderDate= values["OrderDate"], 
+        State= values["State"], 
+        TotalQuantity= values["TotalQuantity"],
+        EstimatedTime= 20,
+        Notes= values["Notes"],
+        SubTotal= values["SubTotal"],
+        Discount= values["Discount"],
+        Tax= values["Tax"],
+        Total= values["Total"],
+        ClientName= values["ClientName"])
 
-    db.session.add(neworder)
-    db.session.commit()
-
-    cart = values["Cart"]
-
-    for i in cart: 
-        neworderdetail = OrderDetail(OrderID=  neworder.OrderID, 
-        ProductID= i["ProductID"], 
-        Quantity= i["Quantity"],
-        SubTotal= i["SubTotal"],
-        Discount=i["Discount"],
-        Tax= i["Tax"],
-        Total= i["Total"])
-        db.session.add(neworderdetail)
+        db.session.add(neworder)
         db.session.commit()
 
-    response_body = {
-        "status": "Ok",
-        "NewOrderID": neworder.OrderID
-    }
-    status_code = 200 
-    
-    return jsonify(response_body),200
+        cart = values["Cart"]
+
+        for i in cart: 
+            neworderdetail = OrderDetail(OrderID=  neworder.OrderID, 
+            ProductID= i["ProductID"], 
+            Quantity= i["Quantity"],
+            SubTotal= i["SubTotal"],
+            Discount=i["Discount"],
+            Tax= i["Tax"],
+            Total= i["Total"])
+            db.session.add(neworderdetail)
+            db.session.commit()
+
+        response_body = {
+            "status": "OK",
+            "NewOrderID": neworder.OrderID
+        }
+        status_code = 200 
+        
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @api.route('/managemenu', methods=['GET'])
 #@jwt_required()
@@ -191,73 +223,92 @@ def get_AllProducts():
 @api.route('/newproduct', methods=['POST'])
 #@jwt_required()
 def newProduct():
-    values = request.json
+    try:
+        values = request.json
 
-    category = values["Category"]
-    if(category):
-        findCategory = Category.query.filter_by(Name= category).first()        
-    else:
-        findCategory = Category.query.filter_by(Name= "Todas").first()
+        category = values["Category"]
+        if(category):
+            findCategory = Category.query.filter_by(Name= category).first()        
+        else:
+            findCategory = Category.query.filter_by(Name= "Todas").first()
 
-    newproduct = Product(CategoryID= findCategory.CategoryID, 
-    Name= values["Name"], 
-    Price=  values["Price"] , 
-    Description=  values["Description"],
-    ImageURL=  values["ImageURL"] ,
-    Available= values["Available"])
+        newproduct = Product(CategoryID= findCategory.CategoryID, 
+        Name= values["Name"], 
+        Price=  values["Price"] , 
+        Description=  values["Description"],
+        ImageURL=  values["ImageURL"] ,
+        Available= values["Available"])
 
-    db.session.add(newproduct)
-    db.session.commit()
-    response_body = {
-        "status": "OK"
-    }
-    status_code = 200 
-    
-    return jsonify(response_body),200
+        db.session.add(newproduct)
+        db.session.commit()
+        response_body = {
+            "status": "OK"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @api.route('/updateproduct', methods=['POST'])
 #@jwt_required()
 def updateProduct():
-    values = request.json
-    productid = values["ProductID"]
-    category = values["Category"]
-    name = values["Name"] 
-    price = values["Price"] 
-    description = values["Description"]
-    imageurl = values["ImageURL"] 
-    available = values["Available"]
+    try:
+        values = request.json
+        productid = values["ProductID"]
+        category = values["Category"]
+        name = values["Name"] 
+        price = values["Price"] 
+        description = values["Description"]
+        imageurl = values["ImageURL"] 
+        available = values["Available"]
 
-    findProduct = Product.query.filter_by(ProductID= productid).first()
-    if(category):
-        findCategory = Category.query.filter_by(Name= category).first()        
-    else:
-        findCategory = Category.query.filter_by(Name= "Todas").first()
+        findProduct = Product.query.filter_by(ProductID= productid).first()
+        if(category):
+            findCategory = Category.query.filter_by(Name= category).first()        
+        else:
+            findCategory = Category.query.filter_by(Name= "Todas").first()
 
-    findProduct.CategoryID = findCategory.CategoryID
-    findProduct.Name = name
-    findProduct.Price = price
-    findProduct.Description = description
-    findProduct.ImageURL = imageurl
-    findProduct.Available = available
-    db.session.commit()
-    response_body = {
-        "status": "OK"
-    }
-    status_code = 200 
-    
-    return jsonify(response_body),200
+        findProduct.CategoryID = findCategory.CategoryID
+        findProduct.Name = name
+        findProduct.Price = price
+        findProduct.Description = description
+        findProduct.ImageURL = imageurl
+        findProduct.Available = available
+        db.session.commit()
+        response_body = {
+            "status": "OK"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @api.route("/deleteproduct/<int:producid>", methods=["POST"])
 def deleteProduct(producid):
-    delProduct = Product.query.get(producid)
-    if delProduct is None:
-        raise APIException('Producto no existe', status_code=404)
-    
-    delProduct.Available = False
-    db.session.commit()
+    try:
+        delProduct = Product.query.get(producid)
+        if delProduct is None:
+            raise APIException('Producto no existe', status_code=404)
+        
+        delProduct.Available = False
+        db.session.commit()
 
-    response_body = {
-        "status": "OK"
-    }
+        response_body = {
+            "status": "OK"
+        }
 
-    return jsonify(response_body), 200
+        return jsonify(response_body), 200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200

@@ -7,7 +7,6 @@ import { Login } from "./pages/login.js";
 import { Retrive1 } from "./pages/retrive1.js";
 import { Retrive } from "./pages/retrive2.js";
 import { Register } from "./pages/register.js";
-import { Register1 } from "./pages/register1.js";
 import { ManageOrder } from "./pages/manageorder.js";
 import { ManageMenu } from "./pages/managemenu.js";
 import { ManageUser } from "./pages/manageuser.js";
@@ -45,9 +44,6 @@ const Layout = () => {
 						<Route exact path="/register">
 							{store.login ? <NavbarMenu /> : <NavbarLogin />}
 							<Register />
-						</Route>
-						<Route exact path="/register1">
-							<Register1 />
 						</Route>
 						<Route exact path="/retrive1">
 							<Retrive1 />

@@ -1,34 +1,26 @@
 import React, { useState, useEffect, useContext } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Badge } from "primereact/badge";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
-
-import { element } from "prop-types";
-import { Container, Col, Image } from "react-bootstrap";
+import { Container, Col } from "react-bootstrap";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
 export const ManageOrder = () => {
-	// let { value } = useParams();
 	const history = useHistory();
 	const { store, actions } = useContext(Context);
 	const [orders, setOrders] = useState([]);
 	const [globalFilter, setGlobalFilter] = useState(null);
 
 	const [dialog, setDialog] = useState(false);
-	const handleShow = () => {
-		actions.getOrderDetail(selection.OrderID);
-		setDialog(true);
-	};
 	const handleHide = () => setDialog(false);
 
 	const [selection, setSelection] = useState("");
@@ -44,28 +36,28 @@ export const ManageOrder = () => {
 	const goBack = () => {
 		history.goBack();
 	};
-	console.log("mi store", store);
 
-	const ViewDataColumn = () => {
-		return <Button type="button" icon="pi pi-search" className="p-button-secondary" onClick={handleShow} />;
+	const onRowSelect = async event => {
+		await setSelection(event.data);
 	};
 
-	const onRowSelect = event => {
-		setSelection(event.data);
-		console.log("selection", selection);
+	const viewOrder = async order => {
+		await setSelection(order);
+		await actions.getOrderDetail(order.OrderID);
+		await setDialog(true);
 	};
 
 	const [NewState, setNewState] = useState(selection ? selection.State : "");
 	const [dialogOrderState, setDialogOrderState] = useState(false);
-	const handleShowOrderState = newstate => {
-		actions.changeOrderState(selection.OrderID, newstate);
-		setNewState(newstate);
-		setDialogOrderState(true);
+	const handleShowOrderState = async newstate => {
+		await actions.changeOrderState(selection.OrderID, newstate);
+		await setNewState(newstate);
+		await setDialogOrderState(true);
 	};
-	const handleHideOrderState = () => {
-		setDialogOrderState(false);
-		setDialog(false);
-		actions.getAllOrders();
+	const handleHideOrderState = async () => {
+		await setDialogOrderState(false);
+		await setDialog(false);
+		await actions.getAllOrders();
 	};
 
 	const header = (
@@ -76,6 +68,18 @@ export const ManageOrder = () => {
 			</span>
 		</div>
 	);
+
+	const actionsButtons = rowData => {
+		return (
+			<React.Fragment>
+				<Button
+					icon="pi pi-search"
+					className="p-button-rounded p-button-success p-mr-2"
+					onClick={async () => await viewOrder(rowData)}
+				/>
+			</React.Fragment>
+		);
+	};
 
 	return (
 		<Container>
@@ -203,10 +207,10 @@ export const ManageOrder = () => {
 					globalFilter={globalFilter}
 					emptyMessage="No se encontraron datos">
 					<Column
-						header="Ver"
-						body={ViewDataColumn}
 						headerStyle={{ width: "8em", textAlign: "center" }}
 						bodyStyle={{ textAlign: "center", overflow: "visible" }}
+						header="Acciones"
+						body={actionsButtons}
 					/>
 					<Column field="OrderID" header="# Orden" sortable />
 					<Column field="TotalQuantity" header="Cant de Productos" sortable />
