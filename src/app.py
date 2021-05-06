@@ -131,7 +131,7 @@ def index():
     </table>
    
 </body>
-</html>""".format(link="https://3000-brown-cat-m3a3qt0l.ws-us03.gitpod.io/retrive/"+ token)
+</html>""".format(link="https://3000-teal-partridge-hepyyndi.ws-us03.gitpod.io/retrive/"+ token)
     mail.send(msg)
 
     return jsonify({
