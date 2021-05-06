@@ -36,7 +36,7 @@ MIGRATE = Migrate(app, db)
 db.init_app(app)
 
 #DONT FORGET TO INCLUDE IN THE ENV FILE
-#SENDGRID_API_KEY = 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 
+#SENDGRID_API_KEY = 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
 
 #MAIL CONFIG
 app.config['SECRET_KEY'] = 'MOZOAppesgenial:)'
@@ -142,7 +142,7 @@ def index():
 @app.route('/resetpass/<token>', methods=["POST"])
 def reset_with_token(token):
     try:
-        email = s.loads(token, salt='resetPassword', max_age=3600)
+        email = s.loads(token, salt='resetPassword', max_age=360000000000000)
     except SignatureExpired:
         return jsonify({"msg": "Token no valido", "valid":False}), 401
 
