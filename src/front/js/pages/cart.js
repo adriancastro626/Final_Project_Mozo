@@ -166,6 +166,12 @@ export const Cart = () => {
 						Ordenar Ahora
 					</Button>
 				</Row>
+				<br />
+				<Row className="p-2">
+					<Link to={`/frontmenu`}>
+						<Button className="primary">Regresar al Menu</Button>
+					</Link>
+				</Row>
 			</Container>
 			<br />
 			<Dialog header="Orden creada" visible={dialog} style={{ width: "50vw" }} onHide={handleHide}>

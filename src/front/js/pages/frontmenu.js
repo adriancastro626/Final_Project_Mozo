@@ -39,32 +39,33 @@ export const Frontmenu = () => {
 											<div className="p-grid">
 												<div className="p-col">
 													<Badge pill variant="primary" className="text-left pb-0">
-														{element.Available}
+														<h6>{element.Available}</h6>
 													</Badge>{" "}
 												</div>
 												<div className="p-col" />
 												<div className="p-col">
 													<Badge variant="light" className="text-right pb-0 font-weight-bold">
-														{"₡" + element.Price}
+														<h3>{"₡" + element.Price}</h3>
 													</Badge>{" "}
 												</div>
 											</div>
-											<div>
+											<br />
+											<div lassName="mr-auto text-center">
 												<InputNumber
 													// size="sm"
 													value={element.Quantity}
 													onValueChange={e => setQuantity(e.value)}
 													mode="decimal"
-													className="text-center"
 													showButtons
 													buttonLayout="horizontal"
-													style={{ fontSize: "2em", width: "4rem" }}
-													decrementButtonClassName="size=sm"
-													incrementButtonClassName="size=sm"
-													incrementButtonIcon="pi pi-plus"
-													decrementButtonIcon="pi pi-minus"
+													style={{ height: "30px", width: "30px", text: "center" }}
+													// decrementButtonClassName="size=sm"
+													// incrementButtonClassName="size=sm"
+													// incrementButtonIcon="pi pi-plus"
+													// decrementButtonIcon="pi pi-minus"
 												/>
 											</div>
+											<br />
 											<div className="text-center mx-auto">
 												<Button
 													variant="success"

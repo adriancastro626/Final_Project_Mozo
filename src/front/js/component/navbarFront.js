@@ -11,21 +11,41 @@ export const NavbarFront = () => {
 			<Image src={`${genericImage}`} height="60" alt="MOZO Logo" style={{ display: "block", margin: "auto" }} />
 
 			<Dropdown>
-				<Button variant="success">
-					<i className="fas fa-shopping-cart" />
-					Orden
-				</Button>
+				<Link to="/cart">
+					<Button variant="light">
+						<i className="fas fa-shopping-cart" />
+						Ordenar
+					</Button>
+				</Link>
 
-				<Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+				<Dropdown.Toggle split variant="light" id="dropdown-split-basic" />
 
 				<Dropdown.Menu>
-					{store.cart && store.cart.length > 0
+					{store.cart && store.cart.length > 0 ? (
+						store.cart.map((element, index) => {
+							return (
+								<Dropdown.Item
+									key={index}
+									onClick={() => {
+										actions.deleteCarrito(index);
+									}}
+									className="dropdown-item">
+									{element.Product}, {element.Quantity}, {element.SubTotal}
+									<i className="fas fa-trash" />
+								</Dropdown.Item>
+							);
+						})
+					) : (
+						<p className="text-center">Carrito Vacio</p>
+					)}
+
+					{/* {store.cart && store.cart.length > 0
 						? store.cart.map((element, index) => (
 								<Dropdown.Item key={index}>
 									{element.Product}, {element.Quantity}, {element.SubTotal}
 								</Dropdown.Item>
 						  ))
-						: ""}
+						: ""} */}
 				</Dropdown.Menu>
 			</Dropdown>
 		</nav>

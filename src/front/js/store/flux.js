@@ -32,16 +32,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// },
 			],
 			cart: [
-				{
-					Quantity: 0,
-					ProductID: 1,
-					Product: "",
-					Price: 0,
-					Discount: 0,
-					SubTotal: 0,
-					Tax: 0,
-					Total: 0
-				}
+				// {
+				// 	Quantity: 0,
+				// 	ProductID: 1,
+				// 	Product: "",
+				// 	Price: 0,
+				// 	Discount: 0,
+				// 	SubTotal: 0,
+				// 	Tax: 0,
+				// 	Total: 0
+				// },
+				// {
+				// 	Quantity: 0,
+				// 	ProductID: 1,
+				// 	Product: "",
+				// 	Price: 0,
+				// 	Discount: 0,
+				// 	SubTotal: 0,
+				// 	Tax: 0,
+				// 	Total: 0
+				// }
 			],
 			NewOrderID: 0
 		},
