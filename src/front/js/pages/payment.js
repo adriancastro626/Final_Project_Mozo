@@ -10,7 +10,12 @@ export function Payment() {
 	useEffect(() => {
 		actions.getTipoCambio();
 	}, []);
-	let Cobro = localStorage.getItem("APagar");
+
+	var guardado = localStorage.getItem("datos");
+
+	console.log("objetoObtenido: ", JSON.parse(guardado));
+	let Cobro = JSON.parse(guardado)[6];
+	console.log("Cobro:", Cobro);
 
 	const Cambio = store.TipoCambio;
 	let pagar = Cobro / Cambio;

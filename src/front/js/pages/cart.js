@@ -125,7 +125,8 @@ export const Cart = () => {
 		setDialog(false);
 		history.push("/");
 	};
-	console.log("Mi nueva store", store);
+	const detalles = [Notes, utotProducts, utotPrices, utotDiscount, utotTax, utotSubTotal, utottotTotal];
+	console.log("Detalles", detalles);
 	return (
 		<Container className="border border-danger rounded">
 			<Table>
@@ -160,7 +161,7 @@ export const Cart = () => {
 			<Container className="d-flex align-items-center flex-column">
 				<Row className="p-2">
 					<Link to={`/payment`}>
-						<Button className="primary" onClick={actions.getPago(utottotTotal)}>
+						<Button className="primary" onClick={localStorage.setItem("datos", JSON.stringify(detalles))}>
 							Ordenar y Pagar Ahora
 						</Button>
 					</Link>

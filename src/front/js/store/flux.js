@@ -54,13 +54,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 			NewOrderID: 0,
-			PayOrderId: "",
+			PayOrderId: 0,
 			PayToken: "",
-			PayHRef: "",
-			PayStatus: "",
-			TipoCambio: "",
-			APagar: "",
-			APagarUSD: ""
+			PayOrderDetails: [],
+			PayStatus: ""
+			//TipoCambio: 0,
+			//APagar: 0,
+			//APagarUSD: 0,
+			//Notess: "",
+			//utotProductss: 0,
+			//utotPricess: 0,
+			//utotDiscounts: 0,
+			//utotTaxs: 0,
+			//utotSubTotals: 0
 		},
 		actions: {
 			getToken: () => {
@@ -542,17 +548,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getPayPalOrder: async () => {
 				const store = getStore();
-
 				const Cambio = localStorage.getItem("TipoCambio");
+				var guardado = localStorage.getItem("datos");
 
-				let pagar = localStorage.getItem("APagar");
-
+				console.log("objetoObtenido: ", JSON.parse(guardado));
+				let pagar = JSON.parse(guardado)[6];
+				console.log("A pagar", pagar);
 				let pagarUSD = pagar / Cambio;
 				pagarUSD = pagarUSD.toFixed(2);
 				console.log("Pago Colones", pagar);
 				console.log("Pago Tipo Cambio", pagarUSD);
 				console.log("Pago PayPal", pagarUSD);
-				//pagar = pagar.toFixed(2);
 				await fetch("https://api.sandbox.paypal.com/v1/oauth2/token", {
 					method: "POST",
 					headers: {
@@ -572,6 +578,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						let accessToken = data.access_token;
 						setStore({ PayToken: accessToken });
 						localStorage.setItem("PayToken", accessToken);
+						console.log("Access token:", accessToken);
 						let createOrder = {
 							method: "POST",
 							headers: {
@@ -613,6 +620,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 								setStore({ PayOrderId: orderId });
 								localStorage.setItem("PayOrderId", orderId);
 								setStore({ PayHRef: refLink1 });
+								console.log("Order Id:", orderId);
+								console.log("Página siguiente:", refLink1);
 							})
 							.catch(err => {
 								console.log({ ...err });
@@ -626,7 +635,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			removePayPal: () => {
 				localStorage.removeItem("PayToken");
 				localStorage.removeItem("PayOrderId");
-				//		localStorage.removeItem("APagar");
 			},
 			getPayPalStatus: async () => {
 				const store = getStore();
@@ -648,6 +656,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
 						let estado = await data.status;
 						setStore({ PayStatus: estado });
+						console.log("Estado", estado);
 						fetch("https://api.sandbox.paypal.com/v2/checkout/orders/" + OrderId, {
 							method: "GET",
 							headers: {
@@ -664,7 +673,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 								console.log("Response data (formatted)", JSON.stringify(data, null, 4));
 								estado = await data.status;
 								setStore({ PayStatus: estado });
-								//	await localStorage.removeItem("APagar");
 							})
 							.catch(err => {
 								console.log({ ...err });
@@ -674,18 +682,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log({ ...err });
 					});
 			},
-
-			//fdfdfdfdfdf
-			//removeAPagar: () => {
-			//		localStorage.removeItem("APagar");
-			//		localStorage.removeItem("TipoCambio");
-			//	},
-
-			getPago: utottotTotal => {
-				//  setStore({ APagar: utottotTotal });
-				localStorage.setItem("APagar", utottotTotal);
+			getInfo: detalles => {
+				console.log("PayOrderDetails", detalles);
+				localStorage.setItem("detalles", JSON.stringify(detalles));
+				console.log("details", detalles);
 			},
-
 			getTipoCambio: async () => {
 				fetch("https://tipodecambio.paginasweb.cr/api", {
 					method: "GET"
@@ -698,7 +699,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("Response data", data);
 						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
 						let cambio = await data.compra;
-						setStore({ TipoCambio: cambio });
+						//setStore({ TipoCambio: cambio });
 						localStorage.setItem("TipoCambio", cambio);
 						console.log("Tipo de cambio:", cambio);
 					})
