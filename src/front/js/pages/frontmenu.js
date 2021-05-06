@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes, { element } from "prop-types";
-import { Container, Button, Row, Card, CardDeck, Col, Badge } from "react-bootstrap";
+import { Container, Row, Card, CardDeck, Col, Badge } from "react-bootstrap";
+import { Button } from "primereact/button";
 import { BsEnvelope, BsPeopleCircle, BsFillLockFill } from "react-icons/bs";
+import { Tag } from "primereact/tag";
 import { Link, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Dialog } from "primereact/dialog";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { InputNumber } from "primereact/inputnumber";
+import "primeflex/primeflex.css";
 
 export const Frontmenu = () => {
 	const { store, actions } = useContext(Context);
@@ -27,17 +30,43 @@ export const Frontmenu = () => {
 									<Card>
 										<Card.Img variant="top" src={`${element.ImageURL}`} />
 										<Card.Body>
-											<Card.Title>{element.Name}</Card.Title>
-											<Card.Text>{element.Description}</Card.Text>
+											<Card.Title className="mr-auto text-center font-weight-bold text-uppercase">
+												{element.Name}
+											</Card.Title>
+											<Card.Text className="mr-auto text-center">{element.Description}</Card.Text>
 										</Card.Body>
 										<Card.Footer>
-											<div className="text-center pb-0">
-												<Badge pill variant="primary">
-													{element.Available}
-												</Badge>{" "}
-												<Badge variant="light">{element.Price}</Badge>{" "}
+											<div className="p-grid">
+												<div className="p-col">
+													<Badge pill variant="primary" className="text-left pb-0">
+														<h6>{element.Available}</h6>
+													</Badge>{" "}
+												</div>
+												<div className="p-col" />
+												<div className="p-col">
+													<Badge variant="light" className="text-right pb-0 font-weight-bold">
+														<h3>{"₡" + element.Price}</h3>
+													</Badge>{" "}
+												</div>
 											</div>
-											<div className="text-center pb-0">
+											<br />
+											<div lassName="mr-auto text-center">
+												<InputNumber
+													// size="sm"
+													value={element.Quantity}
+													onValueChange={e => setQuantity(e.value)}
+													mode="decimal"
+													showButtons
+													buttonLayout="horizontal"
+													style={{ height: "30px", width: "30px", text: "center" }}
+													// decrementButtonClassName="size=sm"
+													// incrementButtonClassName="size=sm"
+													// incrementButtonIcon="pi pi-plus"
+													// decrementButtonIcon="pi pi-minus"
+												/>
+											</div>
+											<br />
+											<div className="text-center mx-auto">
 												<Button
 													variant="success"
 													size="sm"
@@ -51,18 +80,6 @@ export const Frontmenu = () => {
 													}}>
 													Agregar
 												</Button>{" "}
-												<InputNumber
-													value={element.Quantity}
-													onValueChange={e => setQuantity(e.value)}
-													mode="decimal"
-													showButtons
-													buttonLayout="vertical"
-													style={{ width: "6em" }}
-													decrementButtonClassName="p-button-secondary"
-													incrementButtonClassName="p-button-secondary"
-													incrementButtonIcon="pi pi-plus"
-													decrementButtonIcon="pi pi-minus"
-												/>
 											</div>
 										</Card.Footer>
 									</Card>

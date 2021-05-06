@@ -32,26 +32,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// },
 			],
 			cart: [
-				{
-					Quantity: 2,
-					ProductID: 1,
-					Product: "Hamburguesa doble",
-					Price: 2000,
-					Discount: 500,
-					SubTotal: 1500,
-					Tax: 130,
-					Total: 1630
-				},
-				{
-					Quantity: 1,
-					ProductID: 6,
-					Product: "Coca Cola",
-					Price: 1500,
-					Discount: 350,
-					SubTotal: 1000,
-					Tax: 0,
-					Total: 1330
-				}
+				// {
+				// 	Quantity: 0,
+				// 	ProductID: 1,
+				// 	Product: "",
+				// 	Price: 0,
+				// 	Discount: 0,
+				// 	SubTotal: 0,
+				// 	Tax: 0,
+				// 	Total: 0
+				// },
+				// {
+				// 	Quantity: 0,
+				// 	ProductID: 1,
+				// 	Product: "",
+				// 	Price: 0,
+				// 	Discount: 0,
+				// 	SubTotal: 0,
+				// 	Tax: 0,
+				// 	Total: 0
+				// }
 			],
 			NewOrderID: 0
 		},
@@ -177,19 +177,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				let impuesto = sub * 0.13;
 				let bill = impuesto + sub;
 
-				let carrito = [
-					{
-						Quantity: Quantity,
-						ProductID: ProductID,
-						Product: Name,
-						Price: Price,
-						Discount: 0,
-						SubTotal: Price * Quantity,
-						Tax: impuesto,
-						Total: bill
-					}
-				];
+				let carrito = {
+					Quantity: Quantity,
+					ProductID: ProductID,
+					Product: Name,
+					Price: Price,
+					Discount: 0,
+					SubTotal: Price * Quantity,
+					Tax: impuesto,
+					Total: bill
+				};
+
 				console.log(carrito);
+
+				// for (var i = 0; i < data.length; i++) {
+				// 			if (data[i].Available == true) {
+				// 				data[i].Available = "Disponible";
+				// 			} else {
+				// 				data[i].Available = "No Disponible";
+				// 			}
+				// 		}
 
 				store.cart.push(carrito);
 				setStore(store);
