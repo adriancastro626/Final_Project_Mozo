@@ -33,24 +33,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 			cart: [
 				{
-					Quantity: 2,
+					Quantity: 0,
 					ProductID: 1,
-					Product: "Hamburguesa doble",
-					Price: 2000,
-					Discount: 500,
-					SubTotal: 1500,
-					Tax: 130,
-					Total: 1630
-				},
-				{
-					Quantity: 1,
-					ProductID: 6,
-					Product: "Coca Cola",
-					Price: 1500,
-					Discount: 350,
-					SubTotal: 1000,
+					Product: "",
+					Price: 0,
+					Discount: 0,
+					SubTotal: 0,
 					Tax: 0,
-					Total: 1330
+					Total: 0
 				}
 			],
 			NewOrderID: 0
@@ -175,18 +165,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 				let impuesto = sub * 0.13;
 				let bill = impuesto + sub;
 
-				let carrito = [
-					{
-						Quantity: Quantity,
-						ProductID: ProductID,
-						Product: Name,
-						Price: Price,
-						Discount: 0,
-						SubTotal: Price * Quantity,
-						Tax: impuesto,
-						Total: bill
-					}
-				];
+				let carrito = {
+					Quantity: Quantity,
+					ProductID: ProductID,
+					Product: Name,
+					Price: Price,
+					Discount: 0,
+					SubTotal: Price * Quantity,
+					Tax: impuesto,
+					Total: bill
+				};
+
 				console.log(carrito);
 
 				store.cart.push(carrito);
