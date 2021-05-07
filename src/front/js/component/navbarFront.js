@@ -14,8 +14,7 @@ export const NavbarFront = () => {
 			<Dropdown>
 				<Link to="/cart">
 					<Button variant="light">
-						<i className="fas fa-shopping-cart" />
-						Ordenar
+						<i className="fas fa-shopping-cart" /> Ir al Carrito
 					</Button>
 				</Link>
 
