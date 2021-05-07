@@ -162,10 +162,8 @@ def changeOrderState(id):
         print("Request", values)    
         orderid = values["OrderID"]
         state = values["State"]
-        paystatus = values["PayStatus"]
         findOrder = Order.query.filter_by(OrderID= orderid).first()
         findOrder.State = state
-        findOrder.PayStatus = paystatus
         db.session.commit()
         response_body = {
             "status": "OK"
@@ -203,6 +201,7 @@ def newOrder():
     db.session.commit()
 
     cart = values["Cart"]
+    print(cart)
 
     for i in cart: 
         neworderdetail = OrderDetail(OrderID=  neworder.OrderID, 

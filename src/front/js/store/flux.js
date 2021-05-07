@@ -3,7 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
-			PayPalURL: "https://3000-pink-yak-at5tdpc7.ws-us03.gitpod.io",
+			PayPalURL: "https://3000-aquamarine-tick-om042wvf.ws-us03.gitpod.io",
 			mailURL: "https://3001-teal-partridge-hepyyndi.ws-us03.gitpod.io",
 			response: null,
 			products: [],

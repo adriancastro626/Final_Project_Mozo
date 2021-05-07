@@ -29,7 +29,7 @@ export function PayPalCapture() {
 		//	localStorage.removeItem("datos");
 	} else {
 		estados = "PAGO NO REALIZADO";
-		enviar = "/cart";
+		enviar = "/frontmenu";
 		boton = "Regresar";
 		//	localStorage.removeItem("TipoCambio");
 		//	localStorage.removeItem("datos");
@@ -37,6 +37,8 @@ export function PayPalCapture() {
 	useEffect(async () => {
 		await actions.getPayPalStatus();
 		if (store.PayStatus === "COMPLETED") {
+			store.cart = JSON.parse(localStorage.getItem("cart"));
+			console.log("Store cart", store.cart);
 			await actions.newOrder(
 				"Nueva",
 				notes,
