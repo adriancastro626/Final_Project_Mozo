@@ -3,6 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
+			PayPalURL: "https://3000-pink-yak-at5tdpc7.ws-us03.gitpod.io",
 			mailURL: "https://3001-teal-partridge-hepyyndi.ws-us03.gitpod.io",
 			response: null,
 			products: [],
@@ -264,7 +265,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						Total: utottotTotal,
 						ClientName: "ClientName",
 						Cart: store.cart,
-						PayStatus: payStatus
+						PayState: payStatus
 					})
 				})
 					.then(resp => {
@@ -584,12 +585,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 									shipping_preference: "NO_SHIPPING",
 									user_action: "PAY_NOW",
 									//OJO este url
-									return_url:
-										"https://3000-magenta-rattlesnake-gmtg43n2.ws-us03.gitpod.io/paypalcapture",
+									return_url: `${store.PayPalURL}/paypalcapture`,
 
 									//OJO este url
 
-									cancel_url: "https://3000-magenta-rattlesnake-gmtg43n2.ws-us03.gitpod.io/payment"
+									cancel_url: `${store.PayPalURL}/payment`
 								}
 							})
 						};

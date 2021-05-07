@@ -135,7 +135,6 @@ class OrderDetail(db.Model):
     Total = db.Column(db.Numeric(18,2), nullable=False)
     order = db.relationship('Order')  
     product = db.relationship('Product')  
-    PayState=db.Column(db.String(50), nullable=False)
 
     def serialize(self):
         product_Detail = Product.query.filter_by(ProductID=self.ProductID).first()
