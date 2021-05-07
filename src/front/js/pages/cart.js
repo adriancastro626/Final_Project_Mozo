@@ -47,7 +47,7 @@ export const Cart = () => {
 
 	const totPrices = () => {
 		let total = 0;
-		store.cart.map(element => (total += element.Total));
+		store.cart.map(element => (total += element.Price * element.Quantity));
 		utotPrices = total;
 		return total;
 	};
@@ -84,23 +84,23 @@ export const Cart = () => {
 	let footerGroup = (
 		<ColumnGroup>
 			<Row>
-				<Column footer="Total:" colSpan={2} footerStyle={{ textAlign: "right" }} />
+				<Column footer="Total:" colSpan={3} footerStyle={{ textAlign: "right" }} />
 				<Column footer={formatCurrency(totPrices())} />
 			</Row>
 			<Row>
-				<Column footer="Descuento:" colSpan={2} footerStyle={{ textAlign: "right" }} />
+				<Column footer="Descuento:" colSpan={3} footerStyle={{ textAlign: "right" }} />
 				<Column footer={formatCurrency(totDiscount())} />
 			</Row>
 			<Row>
-				<Column footer="SubTotal:" colSpan={2} footerStyle={{ textAlign: "right" }} />
+				<Column footer="SubTotal:" colSpan={3} footerStyle={{ textAlign: "right" }} />
 				<Column footer={formatCurrency(totSubTotal())} />
 			</Row>
 			<Row>
-				<Column footer="I.V.A (13%):" colSpan={2} footerStyle={{ textAlign: "right" }} />
+				<Column footer="I.V.A (13%):" colSpan={3} footerStyle={{ textAlign: "right" }} />
 				<Column footer={formatCurrency(totTax())} />
 			</Row>
 			<Row>
-				<Column footer="Total a pagar:" colSpan={2} footerStyle={{ textAlign: "right" }} />
+				<Column footer="Total a pagar:" colSpan={3} footerStyle={{ textAlign: "right" }} />
 				<Column footer={formatCurrency(totTotal())} />
 			</Row>
 		</ColumnGroup>
@@ -146,6 +146,7 @@ export const Cart = () => {
 						<Column field="Product" header="Producto" />
 						<Column field="Quantity" header="Cant de Productos" />
 						<Column field="Price" header="Precio Unitario" />
+						<Column field="Total" header="Total" />
 					</DataTable>
 				</Col>
 			</Row>

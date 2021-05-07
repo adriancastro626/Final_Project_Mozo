@@ -16,7 +16,7 @@ export const NavbarFront = () => {
 				<Link to="/cart">
 					<Button variant="light">
 						<i className="fas fa-shopping-cart" />
-						Ordenar
+						&nbsp;Ordenar
 					</Button>
 				</Link>
 
@@ -29,7 +29,7 @@ export const NavbarFront = () => {
 								<Dropdown.Item
 									key={index}
 									onClick={() => {
-										actions.deleteCarrito(index);
+										actions.deleteCarrito(index, element.Total);
 									}}
 									className="dropdown-item">
 									<i className="fas fa-trash">
@@ -44,7 +44,7 @@ export const NavbarFront = () => {
 					)}
 					<div className="dropdown-divider" />
 					<Link to="/cart">
-						<p>Total a pagar: {store.totalOrder}</p>
+						<p className="dropdown-item">Total a pagar: {store.totalOrder}</p>
 					</Link>
 				</Dropdown.Menu>
 			</Dropdown>
