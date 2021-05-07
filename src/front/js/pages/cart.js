@@ -17,6 +17,9 @@ import { element } from "prop-types";
 import { Container, Col, Image, FormGroup, Form, Table } from "react-bootstrap";
 <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer />;
 export const Cart = () => {
+	useEffect(() => {
+		actions.removePayPal();
+	}, []);
 	const history = useHistory();
 	const goBack = () => {
 		history.goBack();
@@ -114,7 +117,8 @@ export const Cart = () => {
 			utotDiscount,
 			utotTax,
 			utotSubTotal,
-			utottotTotal
+			utottotTotal,
+			"No pagada"
 		);
 		setDialog(true);
 	};
@@ -122,7 +126,8 @@ export const Cart = () => {
 		setDialog(false);
 		history.push("/");
 	};
-
+	const detalles = [Notes, utotProducts, utotPrices, utotDiscount, utotTax, utotSubTotal, utottotTotal];
+	console.log("Detalles", detalles);
 	return (
 		<Container className="border border-danger rounded">
 			<Table>
@@ -157,7 +162,9 @@ export const Cart = () => {
 			<Container className="d-flex align-items-center flex-column">
 				<Row className="p-2">
 					<Link to={`/payment`}>
-						<Button className="primary">Ordenar y Pagar Ahora</Button>
+						<Button className="primary" onClick={localStorage.setItem("datos", JSON.stringify(detalles))}>
+							Ordenar y Pagar Ahora
+						</Button>
 					</Link>
 				</Row>
 				<br />

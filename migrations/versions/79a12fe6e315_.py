@@ -48,6 +48,7 @@ def upgrade():
     sa.Column('Discount', sa.Numeric(precision=18, scale=2), nullable=False),
     sa.Column('Tax', sa.Numeric(precision=18, scale=2), nullable=False),
     sa.Column('Total', sa.Numeric(precision=18, scale=2), nullable=False),
+    sa.Column('PayStatus', sa.String(length=50), nullable=False),
     sa.Column('ClientName', sa.String(length=100), nullable=True),
     sa.ForeignKeyConstraint(['OrderTypeID'], ['ordertype.OrderTypeID'], ),
     sa.PrimaryKeyConstraint('OrderID')
