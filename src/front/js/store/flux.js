@@ -53,7 +53,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// 	Total: 0
 				// }
 			],
-			NewOrderID: 0
+			NewOrderID: 0,
+			totalOrder: 0
 		},
 		actions: {
 			getToken: () => {
@@ -171,7 +172,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			addCarrito: (Quantity, ProductID, Name, Price) => {
+			addCarrito: async (Quantity, ProductID, Name, Price) => {
 				const store = getStore();
 				let sub = Price * Quantity;
 				let impuesto = sub * 0.13;
@@ -188,20 +189,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					Total: bill
 				};
 
-				console.log(carrito);
-
-				// for (var i = 0; i < data.length; i++) {
-				// 			if (data[i].Available == true) {
-				// 				data[i].Available = "Disponible";
-				// 			} else {
-				// 				data[i].Available = "No Disponible";
-				// 			}
-				// 		}
-
-				store.cart.push(carrito);
-				setStore(store);
-				localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
-				console.log(store);
+				await store.cart.push(carrito);
+				await setStore(store);
+				let totalorder = store.totalOrder;
+				totalorder = totalorder + bill;
+				console.log(totalorder);
+				await setStore({ totalOrder: totalorder });
 			},
 			//eliminar favorito
 			deleteCarrito: index => {

@@ -6,6 +6,7 @@ import { Context } from "../store/appContext";
 
 export const NavbarFront = () => {
 	const { store, actions } = useContext(Context);
+	const [totalOrder, settotalOrder] = useState(0);
 
 	return (
 		<nav className="navbar navbar-dark bg-dark mb-3 ">
@@ -31,22 +32,20 @@ export const NavbarFront = () => {
 										actions.deleteCarrito(index);
 									}}
 									className="dropdown-item">
-									{element.Product}, Cantidad {element.Quantity}, SubTotal {element.SubTotal}
+									<i className="fas fa-trash">
+										&nbsp;
+										{element.Product}: Cantidad {element.Quantity}, Total {element.Total}
+									</i>
 								</Dropdown.Item>
 							);
 						})
 					) : (
 						<p className="text-center">Carrito Vacio</p>
 					)}
-					<Dropdown.Item>{store.Total}</Dropdown.Item>
-
-					{/* {store.cart && store.cart.length > 0
-						? store.cart.map((element, index) => (
-								<Dropdown.Item key={index}>
-									{element.Product}, {element.Quantity}, {element.SubTotal}
-								</Dropdown.Item>
-						  ))
-						: ""} */}
+					<div className="dropdown-divider" />
+					<Link to="/cart">
+						<p>Total a pagar: {store.totalOrder}</p>
+					</Link>
 				</Dropdown.Menu>
 			</Dropdown>
 		</nav>
