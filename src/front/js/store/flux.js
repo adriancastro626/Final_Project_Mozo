@@ -202,11 +202,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				await setStore({ totalOrder: totalorder });
 			},
 			//eliminar favorito
-			deleteCarrito: index => {
+			deleteCarrito: async (index, total) => {
 				const store = getStore();
+				let totalorder = store.totalOrder - total;
+				await setStore({ totalOrder: totalorder });
 				store.cart.splice(index, 1);
-				setStore(store);
-				localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
+				await setStore(store);
 			},
 			changeOrderState: async (orderid, newstate) => {
 				const store = getStore();
