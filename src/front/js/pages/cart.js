@@ -126,7 +126,7 @@ export const Cart = () => {
 		setDialog(false);
 		history.push("/");
 	};
-	const detalles = [Notes, utotProducts, utotPrices, utotDiscount, utotTax, utotSubTotal, utottotTotal];
+	const detalles = [Notes, 2, utotPrices, utotDiscount, utotTax, utotSubTotal, utottotTotal];
 	console.log("Detalles", detalles);
 	return (
 		<Container className="border border-danger rounded">
