@@ -44,7 +44,7 @@ export const Cart = () => {
 
 	const totPrices = () => {
 		let total = 0;
-		store.cart.map(element => (total += element.Price));
+		store.cart.map(element => (total += element.Total));
 		utotPrices = total;
 		return total;
 	};
@@ -140,7 +140,7 @@ export const Cart = () => {
 					<DataTable value={store.cart ? store.cart : ""} footerColumnGroup={footerGroup}>
 						<Column field="Product" header="Producto" />
 						<Column field="Quantity" header="Cant de Productos" />
-						<Column field="Price" header="Precio" />
+						<Column field="Price" header="Precio Unitario" />
 					</DataTable>
 				</Col>
 			</Row>
