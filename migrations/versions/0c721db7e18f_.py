@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<< HEAD:migrations/versions/6863a4404094_.py
-Revision ID: 6863a4404094
+Revision ID: 0c721db7e18f
 Revises: 
-Create Date: 2021-05-06 23:37:37.826006
-=======
-Revision ID: 79a12fe6e315
-Revises: 
-Create Date: 2021-05-07 00:31:07.110522
->>>>>>> e20235f7c315188ae509165db7c94971e08d3e3e:migrations/versions/79a12fe6e315_.py
+Create Date: 2021-05-07 06:37:08.269154
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<< HEAD:migrations/versions/6863a4404094_.py
-revision = '6863a4404094'
-=======
-revision = '79a12fe6e315'
->>>>>>> e20235f7c315188ae509165db7c94971e08d3e3e:migrations/versions/79a12fe6e315_.py
+revision = '0c721db7e18f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -59,6 +49,7 @@ def upgrade():
     sa.Column('Tax', sa.Numeric(precision=18, scale=2), nullable=False),
     sa.Column('Total', sa.Numeric(precision=18, scale=2), nullable=False),
     sa.Column('ClientName', sa.String(length=100), nullable=True),
+    sa.Column('PayState', sa.String(length=50), nullable=False),
     sa.ForeignKeyConstraint(['OrderTypeID'], ['ordertype.OrderTypeID'], ),
     sa.PrimaryKeyConstraint('OrderID')
     )
