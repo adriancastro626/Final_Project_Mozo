@@ -160,7 +160,7 @@ export const ManageMenu = () => {
 					onClick={async () => await editProduct(rowData)}
 				/>
 				<Button
-					icon="pi pi-trash"
+					icon="pi pi-ban"
 					className="p-button-rounded p-button-warning"
 					onClick={async () => await confirmDeleteProduct(rowData)}
 				/>
@@ -370,7 +370,7 @@ export const ManageMenu = () => {
 				<div className="confirmation-content">
 					<i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: "2rem" }} />
 					<span>
-						&nbsp;Desea eliminar el producto: <b>{selection.Name}</b>?
+						&nbsp;Desea cambiar el estado del producto: <b>{selection.Name}</b>?
 					</span>
 				</div>
 			</Dialog>

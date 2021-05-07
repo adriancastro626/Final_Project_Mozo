@@ -29,7 +29,7 @@ export const NavbarFront = () => {
 								<Dropdown.Item
 									key={index}
 									onClick={() => {
-										actions.deleteCarrito(index);
+										actions.deleteCarrito(index, element.Total);
 									}}
 									className="dropdown-item">
 									<i className="fas fa-trash">
