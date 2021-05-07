@@ -5,10 +5,6 @@ import { Link } from "react-router-dom";
 
 export function PayPalCapture() {
 	const { store, actions } = useContext(Context);
-	useEffect(() => {
-		actions.getPayPalStatus();
-	}, []);
-
 	let estados = "";
 	let enviar = "";
 	let boton = "";
@@ -16,6 +12,54 @@ export function PayPalCapture() {
 	let estado2 = "";
 	let estado3 = "";
 	var guardado = localStorage.getItem("datos");
+
+	if (store.PayStatus === "") {
+		estados = "CONSULTANDO PAGO";
+		enviar = "/paypalcapture";
+		boton = "Espere";
+	} else if (store.PayStatus === "COMPLETED") {
+		estados = "ORDEN COMPLETADA";
+		estado1 = "Su orden es la #" + store.NewOrderID;
+		estado2 = "Gracias por su compra!";
+		estado3 = "Tiempo estimado de preparación: 20 minutos";
+
+		enviar = "/frontmenu";
+		boton = "Aceptar";
+		//	localStorage.removeItem("TipoCambio");
+		//	localStorage.removeItem("datos");
+	} else {
+		estados = "PAGO NO REALIZADO";
+		enviar = "/cart";
+		boton = "Regresar";
+		//	localStorage.removeItem("TipoCambio");
+		//	localStorage.removeItem("datos");
+	}
+	useEffect(async () => {
+		await actions.getPayPalStatus();
+		if (store.PayStatus === "COMPLETED") {
+			await actions.newOrder(
+				"Nueva",
+				notes,
+				new Date(),
+				utotProducts,
+				utotPrices,
+				utotDiscount,
+				utotTax,
+				utotSubTotal,
+				utottotTotal,
+				"Pagada"
+			);
+			estados = "ORDEN COMPLETADA";
+			estado1 = "Su orden es la #" + store.NewOrderID;
+			estado2 = "Gracias por su compra!";
+			estado3 = "Tiempo estimado de preparación: 20 minutos";
+
+			enviar = "/frontmenu";
+			boton = "Aceptar";
+			//	localStorage.removeItem("TipoCambio");
+			//	localStorage.removeItem("datos");
+		}
+	}, []);
 
 	console.log("objetoObtenido: ", JSON.parse(guardado));
 
@@ -30,39 +74,6 @@ export function PayPalCapture() {
 	useEffect(() => {
 		actions.removePayPal();
 	}, []);
-	if (store.PayStatus === "") {
-		estados = "CONSULTANDO PAGO";
-		enviar = "/paypalcapture";
-		boton = "Espere";
-	} else if (store.PayStatus === "COMPLETED") {
-		actions.newOrder(
-			"Nueva",
-			notes,
-			new Date(),
-			utotProducts,
-			utotPrices,
-			utotDiscount,
-			utotTax,
-			utotSubTotal,
-			utottotTotal,
-			"Pagada"
-		);
-		estados = "ORDEN COMPLETADA";
-		estado1 = "Su orden es la #" + store.NewOrderID;
-		estado2 = "Gracias por su compra!";
-		estado3 = "Tiempo estimado de preparación: 20 minutos";
-
-		enviar = "/";
-		boton = "Aceptar";
-		//	localStorage.removeItem("TipoCambio");
-		//	localStorage.removeItem("datos");
-	} else {
-		estados = "PAGO NO REALIZADO";
-		enviar = "/cart";
-		boton = "Regresar";
-		//	localStorage.removeItem("TipoCambio");
-		//	localStorage.removeItem("datos");
-	}
 
 	console.log("Mi store", store);
 	return (
