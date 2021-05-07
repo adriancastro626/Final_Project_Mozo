@@ -95,6 +95,7 @@ class Order(db.Model):
     Total = db.Column(db.Numeric(18,2), nullable=False)
     ClientName = db.Column(db.String(100), nullable=True)
     ordertype = db.relationship('OrderType')  
+    PayState=db.Column(db.String(50), nullable=False)
 
     def serialize(self):
         return {
@@ -102,7 +103,8 @@ class Order(db.Model):
             "OrderTypeID": self.OrderTypeID,
             "Notes": self.Notes,
             "State": self.State,
-            "TotalQuantity": self.TotalQuantity
+            "TotalQuantity": self.TotalQuantity,
+            "PayState": self.PayState
         }
     
     def getAllOrders():

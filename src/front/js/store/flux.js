@@ -3,6 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			baseURL: `${process.env.BACKEND_URL}/api`,
+			PayPalURL: "https://3000-aquamarine-tick-om042wvf.ws-us03.gitpod.io",
 			mailURL: "https://3001-teal-partridge-hepyyndi.ws-us03.gitpod.io",
 			response: null,
 			products: [],
@@ -54,6 +55,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// }
 			],
 			NewOrderID: 0,
+			PayOrderId: 0,
+			PayToken: "",
+			PayOrderDetails: [],
+			PayStatus: "",
 			totalOrder: 0
 		},
 		actions: {
@@ -196,6 +201,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log(totalorder);
 				await setStore({ totalOrder: totalorder });
 			},
+<<<<<<< HEAD
+=======
+			//eliminar favorito
+>>>>>>> f6b7dd2992ede9f6b83d28c962518ae9e824e8d4
 			deleteCarrito: async (index, total) => {
 				const store = getStore();
 				let totalorder = store.totalOrder - total;
@@ -235,7 +244,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				utotDiscount,
 				utotTax,
 				utotSubTotal,
-				utottotTotal
+				utottotTotal,
+				payStatus
 			) => {
 				const store = getStore();
 				let token = store.token; //localStorage.getItem("token");
@@ -258,7 +268,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						Tax: utotTax,
 						Total: utottotTotal,
 						ClientName: "ClientName",
-						Cart: store.cart
+						Cart: store.cart,
+						PayState: payStatus
 					})
 				})
 					.then(resp => {
@@ -522,6 +533,169 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					.catch(err => {
 						console.error(err.message);
+					});
+			},
+
+			getPayPalOrder: async () => {
+				const store = getStore();
+				const Cambio = localStorage.getItem("TipoCambio");
+				var guardado = localStorage.getItem("datos");
+
+				console.log("objetoObtenido: ", JSON.parse(guardado));
+				let pagar = JSON.parse(guardado)[6];
+				console.log("A pagar", pagar);
+				let pagarUSD = pagar / Cambio;
+				pagarUSD = pagarUSD.toFixed(2);
+				console.log("Pago Colones", pagar);
+				console.log("Pago Tipo Cambio", pagarUSD);
+				console.log("Pago PayPal", pagarUSD);
+				await fetch("https://api.sandbox.paypal.com/v1/oauth2/token", {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Accept-Language": "en_US",
+						"Content-Type": "application/x-www-form-urlencoded",
+						Authorization:
+							"Basic " +
+							btoa(
+								"ARuLXWvNlzWJ0yGtZ7NwK9VkmpV9Uf632YlZP8iL0qSPSQZjB9v6aFpznzW9S9z1RzF-hFqdeN4pcNqM:EMWPNB72gCPBFCgfrw095iGVmMGozc9zTeYQlyi2bKNSeoekwMRW_Q8OZVPDljADUvnXjP5ZevxklbRT"
+							)
+					},
+					body: "grant_type=client_credentials"
+				})
+					.then(response => response.json())
+					.then(async data => {
+						let accessToken = data.access_token;
+						setStore({ PayToken: accessToken });
+						localStorage.setItem("PayToken", accessToken);
+						console.log("Access token:", accessToken);
+						let createOrder = {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: "Bearer " + accessToken
+							},
+							body: JSON.stringify({
+								intent: "CAPTURE",
+								purchase_units: [
+									{
+										amount: {
+											currency_code: "USD",
+											value: pagarUSD
+										}
+									}
+								],
+								application_context: {
+									shipping_preference: "NO_SHIPPING",
+									user_action: "PAY_NOW",
+									//OJO este url
+									return_url: `${store.PayPalURL}/paypalcapture`,
+
+									//OJO este url
+
+									cancel_url: `${store.PayPalURL}/payment`
+								}
+							})
+						};
+						console.log("Order body string", createOrder.body);
+						console.log("Order body (formatted)", JSON.stringify(JSON.parse(createOrder.body), null, 4));
+						fetch("https://api.sandbox.paypal.com/v2/checkout/orders", createOrder)
+							.then(async function(response) {
+								return response.json();
+							})
+							.then(async data => {
+								console.log("Response data", data);
+								console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+								let orderId = await data.id;
+								let refLink1 = "https://www.sandbox.paypal.com/checkoutnow?token=" + orderId;
+								setStore({ PayOrderId: orderId });
+								localStorage.setItem("PayOrderId", orderId);
+								setStore({ PayHRef: refLink1 });
+								console.log("Order Id:", orderId);
+								console.log("Página siguiente:", refLink1);
+							})
+							.catch(err => {
+								console.log({ ...err });
+							});
+					})
+					.catch(function(error) {
+						let edata = error.message;
+						console.log("Error:", edata);
+					});
+			},
+			removePayPal: () => {
+				localStorage.removeItem("PayToken");
+				localStorage.removeItem("PayOrderId");
+			},
+			getPayPalStatus: async () => {
+				const store = getStore();
+				let accesstoken = localStorage.getItem("PayToken");
+				let OrderId = localStorage.getItem("PayOrderId");
+				await fetch("https://api.sandbox.paypal.com/v2/checkout/orders/" + OrderId + "/capture", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + accesstoken
+					}
+				})
+					.then(function(response) {
+						console.log("Response object", response);
+						return response.json();
+					})
+					.then(async data => {
+						console.log("Response data", data);
+						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+						let estado = await data.status;
+						setStore({ PayStatus: estado });
+						console.log("Estado", estado);
+						fetch("https://api.sandbox.paypal.com/v2/checkout/orders/" + OrderId, {
+							method: "GET",
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: "Bearer " + accesstoken
+							}
+						})
+							.then(function(response) {
+								console.log("Response object", response);
+								return response.json();
+							})
+							.then(async data => {
+								console.log("Response data", data);
+								console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+								estado = await data.status;
+								setStore({ PayStatus: estado });
+							})
+							.catch(err => {
+								console.log({ ...err });
+							});
+					})
+					.catch(err => {
+						console.log({ ...err });
+					});
+			},
+			getInfo: detalles => {
+				console.log("PayOrderDetails", detalles);
+				localStorage.setItem("detalles", JSON.stringify(detalles));
+				console.log("details", detalles);
+			},
+			getTipoCambio: async () => {
+				fetch("https://tipodecambio.paginasweb.cr/api", {
+					method: "GET"
+				})
+					.then(function(response) {
+						console.log("Response object", response);
+						return response.json();
+					})
+					.then(async data => {
+						console.log("Response data", data);
+						console.log("Response data (formatted)", JSON.stringify(data, null, 4));
+						let cambio = await data.compra;
+						//setStore({ TipoCambio: cambio });
+						localStorage.setItem("TipoCambio", cambio);
+						console.log("Tipo de cambio:", cambio);
+					})
+					.catch(err => {
+						console.log({ ...err });
 					});
 			}
 		}

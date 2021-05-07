@@ -51,10 +51,4 @@ export const NavbarFront = () => {
 	);
 };
 
-// function updateCart( totalOrder ) {
-// 	totalOrder.forEach( function( totalOrder ) {
-// 		updateToCart( item.Total, item.quantity ); // update database
-// 	});
-// 	// calculate the new totals
-// 	// refresh page
-// }
+

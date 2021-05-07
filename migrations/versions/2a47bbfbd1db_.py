@@ -1,5 +1,6 @@
 """empty message
 
+<<<<<<< HEAD:migrations/versions/79a12fe6e315_.py
 <<<<<<< HEAD:migrations/versions/6863a4404094_.py
 Revision ID: 6863a4404094
 Revises: 
@@ -9,6 +10,11 @@ Revision ID: 79a12fe6e315
 Revises: 
 Create Date: 2021-05-07 00:31:07.110522
 >>>>>>> e20235f7c315188ae509165db7c94971e08d3e3e:migrations/versions/79a12fe6e315_.py
+=======
+Revision ID: 2a47bbfbd1db
+Revises: 
+Create Date: 2021-05-07 04:54:52.483017
+>>>>>>> f6b7dd2992ede9f6b83d28c962518ae9e824e8d4:migrations/versions/2a47bbfbd1db_.py
 
 """
 from alembic import op
@@ -16,11 +22,15 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
+<<<<<<< HEAD:migrations/versions/79a12fe6e315_.py
 <<<<<<< HEAD:migrations/versions/6863a4404094_.py
 revision = '6863a4404094'
 =======
 revision = '79a12fe6e315'
 >>>>>>> e20235f7c315188ae509165db7c94971e08d3e3e:migrations/versions/79a12fe6e315_.py
+=======
+revision = '2a47bbfbd1db'
+>>>>>>> f6b7dd2992ede9f6b83d28c962518ae9e824e8d4:migrations/versions/2a47bbfbd1db_.py
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -59,6 +69,7 @@ def upgrade():
     sa.Column('Tax', sa.Numeric(precision=18, scale=2), nullable=False),
     sa.Column('Total', sa.Numeric(precision=18, scale=2), nullable=False),
     sa.Column('ClientName', sa.String(length=100), nullable=True),
+    sa.Column('PayState', sa.String(length=50), nullable=False),
     sa.ForeignKeyConstraint(['OrderTypeID'], ['ordertype.OrderTypeID'], ),
     sa.PrimaryKeyConstraint('OrderID')
     )
