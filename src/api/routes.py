@@ -120,14 +120,25 @@ def updateUser():
 @api.route("/user/<int:user_id>", methods=["DELETE"])
 #@jwt_required() #this make privete the information, just for admins
 def deleteUser(user_id):
+    try:
+        delUser = User.query.get(user_id)
+        if delUser is None:
+            raise APIException('Usuario no encontrado', status_code=404)
+        db.session.delete(delUser)
+        db.session.commit()
 
-    delUser = User.query.get(user_id)
-    if delUser is None:
-        raise APIException('Usuario no encontrado', status_code=404)
-    db.session.delete(delUser)
-    db.session.commit()
-
-    return jsonify("Usuario Eliminado"), 200
+        response_body = {
+            "status": "OK"
+        }
+        status_code = 200 
+        
+        return jsonify(response_body),200
+    except:
+        response_body = {
+            "status": "ERROR"
+        }
+        status_code = 200 
+        return jsonify(response_body),200
 
 @api.route("/forgot", methods=["GET, POST"])
 def retrivePassword():

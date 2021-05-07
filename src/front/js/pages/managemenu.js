@@ -201,8 +201,8 @@ export const ManageMenu = () => {
 		} else {
 			toast.current.show({
 				severity: "error",
-				summary: "Registro Incorrecto",
-				detail: "El producto no pudo ser agregado. Verifique los datos.",
+				summary: "Actualizacion Incorrecto",
+				detail: "El producto no pudo ser modificado. Verifique los datos.",
 				life: 3000
 			});
 		}

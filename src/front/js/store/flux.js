@@ -32,32 +32,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// },
 			],
 			cart: [
-				{
-					Quantity: 2,
-					ProductID: 1,
-					Product: "Hamburguesa doble",
-					Price: 2000,
-					Discount: 500,
-					SubTotal: 1500,
-					Tax: 130,
-					Total: 1630
-				},
-				{
-					Quantity: 1,
-					ProductID: 6,
-					Product: "Coca Cola",
-					Price: 1500,
-					Discount: 350,
-					SubTotal: 1000,
-					Tax: 0,
-					Total: 1330
-				}
+				// {
+				// 	Quantity: 0,
+				// 	ProductID: 1,
+				// 	Product: "",
+				// 	Price: 0,
+				// 	Discount: 0,
+				// 	SubTotal: 0,
+				// 	Tax: 0,
+				// 	Total: 0
+				// },
+				// {
+				// 	Quantity: 0,
+				// 	ProductID: 1,
+				// 	Product: "",
+				// 	Price: 0,
+				// 	Discount: 0,
+				// 	SubTotal: 0,
+				// 	Tax: 0,
+				// 	Total: 0
+				// }
 			],
 			NewOrderID: 0,
 			PayOrderId: 0,
 			PayToken: "",
 			PayOrderDetails: [],
-			PayStatus: ""
+			PayStatus: "",
+			totalOrder: 0
 		},
 		actions: {
 			getToken: () => {
@@ -175,30 +176,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("error", err);
 					});
 			},
-			addCarrito: (Quantity, ProductID, Name, Price) => {
+			addCarrito: async (Quantity, ProductID, Name, Price) => {
 				const store = getStore();
 				let sub = Price * Quantity;
 				let impuesto = sub * 0.13;
 				let bill = impuesto + sub;
 
-				let carrito = [
-					{
-						Quantity: Quantity,
-						ProductID: ProductID,
-						Product: Name,
-						Price: Price,
-						Discount: 0,
-						SubTotal: Price * Quantity,
-						Tax: impuesto,
-						Total: bill
-					}
-				];
-				console.log(carrito);
+				let carrito = {
+					Quantity: Quantity,
+					ProductID: ProductID,
+					Product: Name,
+					Price: Price,
+					Discount: 0,
+					SubTotal: Price * Quantity,
+					Tax: impuesto,
+					Total: bill
+				};
 
-				store.cart.push(carrito);
-				setStore(store);
-				localStorage.setItem("cart", JSON.stringify({ cart: store.cart }));
-				console.log(store);
+				await store.cart.push(carrito);
+				await setStore(store);
+				let totalorder = store.totalOrder;
+				totalorder = totalorder + bill;
+				console.log(totalorder);
+				await setStore({ totalOrder: totalorder });
 			},
 			//eliminar favorito
 			deleteCarrito: index => {
@@ -444,6 +444,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllUsers();
 			},
 			updateUser: async (userid, name, email, type) => {
 				const store = getStore();
@@ -473,11 +474,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(err => {
 						console.log("error", err);
 					});
+				getActions().getAllUsers();
 			},
-			sendEmailRetrievePassword: email => {
+			sendEmailRetrievePassword: async email => {
 				const store = getStore();
 				console.log("mail ", email);
-				fetch(`${store.mailURL}/restore`, {
+				await fetch(`${store.mailURL}/restore`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -489,19 +491,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then(res => {
 						if (!res.ok) {
-							// the "the throw Error will send the error to the "catch"
-							throw Error("Could not fetch the data for that resource");
+							throw Error("Could not fetch the data");
 						}
 						return res.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
 					})
 
 					.catch(err => {
 						console.error(err.message);
 					});
 			},
-			updatePassword: (mailToken, newpassword) => {
+			updatePassword: async (mailToken, newpassword) => {
 				const store = getStore();
-				fetch(`${store.mailURL}/resetpass/${mailToken}`, {
+				await fetch(`${store.mailURL}/resetpass/${mailToken}`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -517,6 +521,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							throw Error("Could not fetch the data for that resource");
 						}
 						return res.json();
+					})
+					.then(data => {
+						setStore({ response: data.status });
 					})
 
 					.catch(err => {
