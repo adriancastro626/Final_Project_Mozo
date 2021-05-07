@@ -50,26 +50,22 @@ export const Frontmenu = () => {
 												</div>
 											</div>
 											<br />
-											<div lassName="mr-auto text-center">
+											<div className="mr-auto text-center">
 												<InputNumber
-													// size="sm"
+													size="sm"
 													value={element.Quantity}
 													onValueChange={e => setQuantity(e.value)}
-													mode="decimal"
+													type="number"
+													className="quantity text-center"
+													min="0"
 													showButtons
-													buttonLayout="horizontal"
-													style={{ height: "30px", width: "30px", text: "center" }}
-													// decrementButtonClassName="size=sm"
-													// incrementButtonClassName="size=sm"
-													// incrementButtonIcon="pi pi-plus"
-													// decrementButtonIcon="pi pi-minus"
+													buttonLayout="vertical"
+													style={{ width: "70px", text: "center" }}
 												/>
 											</div>
 											<br />
 											<div className="text-center mx-auto">
 												<Button
-													variant="success"
-													size="sm"
 													onClick={() => {
 														actions.addCarrito(
 															Quantity,

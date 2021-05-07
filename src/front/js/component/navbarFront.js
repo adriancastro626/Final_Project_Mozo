@@ -15,8 +15,9 @@ export const NavbarFront = () => {
 			<Dropdown>
 				<Link to="/cart">
 					<Button variant="light">
-						<i className="fas fa-shopping-cart" />
-						&nbsp;Ordenar
+
+						<i className="fas fa-shopping-cart" /> Ir al Carrito
+
 					</Button>
 				</Link>
 
@@ -34,7 +35,7 @@ export const NavbarFront = () => {
 									className="dropdown-item">
 									<i className="fas fa-trash">
 										&nbsp;
-										{element.Product}: Cantidad {element.Quantity}, Total {element.Total}
+										{element.Product}: Cantidad {element.Quantity}, SubTotal {element.Total}
 									</i>
 								</Dropdown.Item>
 							);

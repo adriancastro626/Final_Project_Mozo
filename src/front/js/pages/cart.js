@@ -163,7 +163,12 @@ export const Cart = () => {
 			<Container className="d-flex align-items-center flex-column">
 				<Row className="p-2">
 					<Link to={`/payment`}>
-						<Button className="primary" onClick={localStorage.setItem("datos", JSON.stringify(detalles))}>
+						<Button
+							className="primary"
+							onClick={
+								(localStorage.setItem("datos", JSON.stringify(detalles)),
+								localStorage.setItem("cart", JSON.stringify(store.cart)))
+							}>
 							Ordenar y Pagar Ahora
 						</Button>
 					</Link>

@@ -39,8 +39,8 @@ export function Payment() {
 							<PayPalOrder />
 						</FormGroup>
 						<FormGroup className="text-center mx-sm-4 pb-3">
-							<Link to="/cart">
-								<Button variant="outline-danger">Regresar a mi Pedido</Button>
+							<Link to="/frontmenu">
+								<Button variant="outline-danger">Regresar al men&uacute;</Button>
 							</Link>
 						</FormGroup>
 					</Form>
