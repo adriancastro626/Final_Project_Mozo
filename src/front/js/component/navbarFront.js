@@ -15,7 +15,9 @@ export const NavbarFront = () => {
 			<Dropdown>
 				<Link to="/cart">
 					<Button variant="light">
+
 						<i className="fas fa-shopping-cart" /> Ir al Carrito
+
 					</Button>
 				</Link>
 
@@ -43,7 +45,7 @@ export const NavbarFront = () => {
 					)}
 					<div className="dropdown-divider" />
 					<Link to="/cart">
-						<p>Total a pagar: {store.totalOrder}</p>
+						<p className="dropdown-item">Total a pagar: {store.totalOrder}</p>
 					</Link>
 				</Dropdown.Menu>
 			</Dropdown>
