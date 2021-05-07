@@ -201,7 +201,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log(totalorder);
 				await setStore({ totalOrder: totalorder });
 			},
+<<<<<<< HEAD
+=======
 			//eliminar favorito
+>>>>>>> f6b7dd2992ede9f6b83d28c962518ae9e824e8d4
 			deleteCarrito: async (index, total) => {
 				const store = getStore();
 				let totalorder = store.totalOrder - total;
